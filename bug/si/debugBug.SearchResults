@@ -1,7 +1,0 @@
----- SQLDriverConnect Matches (6 in 5 files) ----
-bugSQLParamData.c (d:\work\esgyn\tests\odbc\newcoast\bug):    returncode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR*)connectStr, SQL_NTS, (SQLTCHAR*)OutString, sizeof(OutString), &olen, SQL_DRIVER_NOPROMPT);
-bugTenantName.c (d:\work\esgyn\tests\odbc\newcoast\bug):    returncode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR*)connectStr, SQL_NTS, (SQLTCHAR*)OutString, sizeof(OutString), &olen, SQL_DRIVER_NOPROMPT);
-M-7691.c (d:\work\esgyn\tests\odbc\newcoast\bug):    retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR *)szConnect, sizeof(szConnect), (SQLTCHAR *)szInfo, sizeof(szInfo), (SQLSMALLINT *)&len, SQL_DRIVER_NOPROMPT);
-M-7691.c (d:\work\esgyn\tests\odbc\newcoast\bug):        printf("SQLDriverConnect fail. line %d\n", __LINE__);
-SQLTablePrivileges.c (d:\work\esgyn\tests\odbc\newcoast\bug):    retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR*)szConnStrIn, SQL_NTS, (SQLTCHAR*)szConnStrOut, sizeof(szConnStrOut), &cbConnStrOut, SQL_DRIVER_NOPROMPT);
-Util.c (d:\work\esgyn\tests\odbc\newcoast\bug):    returncode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR*)connectStr, SQL_NTS, (SQLTCHAR*)OutString, sizeof(OutString), &olen, SQL_DRIVER_NOPROMPT);

@@ -1,8 +1,0 @@
-[sql_data]
-retcode        =SQL_SUCCESS
-ignore_fail    =TRUE
-checkout       =FALSE
-
-[sql_data_1]
-retcode        =SQL_SUCCESS
-checkout       =FALSE
