@@ -1,0 +1,25 @@
+[config]
+CATALOG          =TRAFODION
+DSN              =traf
+user             =trafodion
+password         =traf123
+schema           =ODBCTEST
+#DSN              =MySQL
+#user             =root
+#password         =123456
+#schema           =test
+init_table       =FALSE
+interval         =5
+isMultithreading =FALSE
+isConnectInfo    =TRUE
+isMultiTask      =FALSE
+test_times       =1
+connect_string   =DataLang=4
+#test case:SQLColumns,SQLTables,testLoadDirect,testLoadAtExec,testLobUpdate,testRowset,testStmt,testSqlFile,testSelect,cleanupTable
+test_case        =testStmt
+
+[table]
+stmt              =BEGIN WORK;CREATE TABLE T1105(COL INT, COL1 CHAR(10));INSERT INTO T1105 VALUES(1,'TESTING');COMMIT;SELECT * FROM T1105;BEGIN WORK;INSERT INTO T1105 VALUES(2,'TESTING');ROLLBACK;SELECT * FROM T1105;DROP TABLE T1105
+stmt_ignore_fail  =FALSE
+stmt_checkout     =TRUE
+stmt_result       =1;TESTING

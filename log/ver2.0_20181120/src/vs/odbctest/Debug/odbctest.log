@@ -1,0 +1,1000 @@
+﻿生成启动时间为 2018/11/20 14:54:41。
+     1>项目“D:\work\esgyn\tests\odbc\newcoast\src\vs\odbctest\odbctest.vcxproj”在节点 2 上(Rebuild 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\case\testLoad.cpp ..\..\case\testLoadAtExec.cpp ..\..\case\testODBC.cpp ..\..\case\testSQL.cpp ..\..\case\testSQLColumns.cpp ..\..\case\testSQLTables.cpp ..\..\main\main.cpp ..\..\util\config.cpp ..\..\util\global.cpp ..\..\util\util.cpp
+         util.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         global.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         config.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         main.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         testSQLTables.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         testSQLColumns.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         testSQL.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         testODBC.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         testLoadAtExec.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         testLoad.cpp
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(56): warning C4005: “__T”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(206) : 参见“__T”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(61): warning C4005: “_tmain”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(211) : 参见“_tmain”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(64): warning C4005: “_tprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(218) : 参见“_tprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(65): warning C4005: “_ftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(236) : 参见“_ftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(66): warning C4005: “_stprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(242) : 参见“_stprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(67): warning C4005: “_vftprintf”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(262) : 参见“_vftprintf”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(68): warning C4005: “_tfopen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(554) : 参见“_tfopen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(70): warning C4005: “_putts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(340) : 参见“_putts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(71): warning C4005: “_fputts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(320) : 参见“_fputts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(72): warning C4005: “_fputtc”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(317) : 参见“_fputtc”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(73): warning C4005: “_tperror”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(558) : 参见“_tperror”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(74): warning C4005: “_fgetts”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(316) : 参见“_fgetts”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(81): warning C4005: “_tcsftime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(503) : 参见“_tcsftime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(82): warning C4005: “_tctime”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(495) : 参见“_tctime”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(85): warning C4005: “_tstof”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(361) : 参见“_tstof”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(86): warning C4005: “_itot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(386) : 参见“_itot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(87): warning C4005: “_ltot”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(387) : 参见“_ltot”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(88): warning C4005: “_tstoi”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(364) : 参见“_tstoi”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(92): warning C4005: “_tcsupr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(650) : 参见“_tcsupr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(95): warning C4005: “_tcscat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(401) : 参见“_tcscat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(96): warning C4005: “_tcsncat”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(409) : 参见“_tcsncat”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(97): warning C4005: “_tcschr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(403) : 参见“_tcschr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(98): warning C4005: “_tcscpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(404) : 参见“_tcscpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(99): warning C4005: “_tcslen”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(407) : 参见“_tcslen”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(100): warning C4005: “_tcsncpy”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(413) : 参见“_tcsncpy”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(101): warning C4005: “_tcsstr”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(420) : 参见“_tcsstr”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(102): warning C4005: “_tcstok”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(421) : 参见“_tcstok”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(103): warning C4005: “_tcsdup”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(430) : 参见“_tcsdup”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(104): warning C4005: “_tcscmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(441) : 参见“_tcscmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(105): warning C4005: “_tcsicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(442) : 参见“_tcsicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(106): warning C4005: “_tcsncmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(445) : 参见“_tcsncmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(107): warning C4005: “_tcsnicmp”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(448) : 参见“_tcsnicmp”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(111): warning C4005: “_tcscspn”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(406) : 参见“_tcscspn”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(112): warning C4005: “_totupper”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(710) : 参见“_totupper”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\utchar.h(113): warning C4005: “_totlower”: 宏重定义
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\tchar.h(712) : 参见“_totlower”的前一个定义
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C2146: 语法错误: 缺少“;”(在标识符“DataSource”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(37): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C2146: 语法错误: 缺少“;”(在标识符“Server”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(38): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C2146: 语法错误: 缺少“;”(在标识符“Port”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(39): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C2146: 语法错误: 缺少“;”(在标识符“UserID”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(40): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C2146: 语法错误: 缺少“;”(在标识符“Password”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(41): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C2146: 语法错误: 缺少“;”(在标识符“Database”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(42): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C2146: 语法错误: 缺少“;”(在标识符“Catalog”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(43): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C2146: 语法错误: 缺少“;”(在标识符“Schema”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(44): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C2146: 语法错误: 缺少“;”(在标识符“szResult”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(115): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C2146: 语法错误: 缺少“;”(在标识符“szConnStr”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(232): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(265): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2143: 语法错误 : 缺少“;”(在“*”的前面)
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C4430: 缺少类型说明符 - 假定为 int。注意:  C++ 不支持默认 int
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(266): error C2061: 语法错误: 标识符“UChar”
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): error C2065: “headKey”: 未声明的标识符
+     1>d:\work\esgyn\tests\odbc\newcoast\src\util\util.h(274): fatal error C1903: 无法从以前的错误中恢复；正在停止编译
+         正在生成代码...
+     1>已完成生成项目“D:\work\esgyn\tests\odbc\newcoast\src\vs\odbctest\odbctest.vcxproj”(Rebuild 个目标)的操作 - 失败。
+
+生成失败。
+
+已用时间 00:00:06.07

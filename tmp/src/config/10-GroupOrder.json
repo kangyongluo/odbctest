@@ -1,0 +1,97 @@
+{
+    "test_config":{
+         "CATALOG":"TRAFODION",
+         "DSN":"traf",
+         "user":"trafodion",
+         "password":"traf123",
+         "schema":"ODBCTEST",
+         "init_table":"FALSE",
+         "interval":1,
+         "isMultithreading":"FALSE",
+         "test_table":"",
+         "isConnectInfo":"TRUE",
+         "isMultiTask":"FALSE",
+         "test_times":1
+    },
+    "test_list":[
+        {
+            "test_name":"testSQL",
+            "isTest":"TRUE"
+        }
+    ],
+    "sql_list":[
+        {
+             "sql":"CREATE TABLE T1(COL INT,COL1 CHAR(10))",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO T1 VALUES(1,'AAA')",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO T1 VALUES(1,'BBB')",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO T1 VALUES(1,'CCC')",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO T1 VALUES(2,'DDD')",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO T1 VALUES(2,'EEE')",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO T1 VALUES(3,'FFF')",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"SELECT COL,COUNT(COL1) FROM T1 GROUP BY COL",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "2","2"
+             ],
+			 "result1":[
+                "3","1"
+             ],
+			 "result2":[
+                "1","3"
+             ]
+        },
+		{
+             "sql":"SELECT COL1 FROM T1 WHERE COL=1 ORDER BY COL1",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "AAA"
+             ],
+			 "result1":[
+                "BBB"
+             ],
+			 "result2":[
+                "CCC"
+             ]
+        },
+		{
+             "sql":"SELECT COL1 FROM T1 WHERE COL=1 ORDER BY COL1 DESC",
+             "retcode":"SQL_SUCCESS",
+			 "result":[
+                "AAA"
+             ],
+			 "result1":[
+                "BBB"
+             ],
+			 "result2":[
+                "CCC"
+             ]
+        },
+		{
+             "sql":"DROP TABLE T1",
+             "retcode":"SQL_SUCCESS"
+        }
+    ]
+}

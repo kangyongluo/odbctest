@@ -1,0 +1,1031 @@
+######################################################
+[config]
+CATALOG          =TRAFODION
+DSN              =traf
+user             =db__root
+password         =traf123
+schema           =ODBCTEST
+init_table       =FALSE
+interval         =5
+isMultithreading =FALSE
+isConnectInfo    =TRUE
+isMultiTask      =TRUE
+test_times       =1
+connect_string   =DataLang=4
+#test case:SQLColumns,SQLTables,testLoadDirect,testLoadAtExec,testLobUpdate,testRowset,testStmt,testSqlFile,testSelect,cleanupTable
+test_case        =SQLColumns,SQLTables,testSelect,testStmt
+#test_case        =testSelect
+
+######################################################
+#Regression test table information and sql test
+#[table]
+######################################################
+#Configuration test "testSqlFile"
+#sql_file         =test.sql
+#data_file        =test.data
+#retcode          =SQL_SUCCESS
+#cqd_sqlfile      =cqd traf_blob_as_varchar 'off'
+#cqd_sqlfil       =cqd traf_clob_as_varchar 'off'
+#Configuration test table info
+#table_name        =TB_TEST_1 
+#sql_type          = SQL_CHAR
+#sql_c_type         =SQL_C_CHAR
+#column_name      =C1
+#column_size       =50
+#decimal_digits    =0
+#Length of actual data inserted
+#data_size         =50
+#data_digits       =0
+#lob_table         =FALSE
+#lob_columns       =0
+######################################################
+#Configuration test "testStmt"
+#stmt              =get tables;
+#stmt_ignore_fail  =FALSE
+#stmt_checkout     =FALSE
+#stmt_result_null  =FALSE
+#stmt_times        =1
+#stmt_interval     =1
+#stmt_cqd          =
+######################################################
+#Configuration test "testRowset" 
+#rowset_batch_size  =2
+#rowset_batch_num   =1
+#rowset_begin_value =0
+#rowset_type        =INSERT,UPSERT,UPSERT WITH NO CONFLICT CHECK,UPSERT USING LOAD
+#rowset_threads     =1
+#rowset_cqd         =
+#rowset_file        =cc.jpg
+######################################################
+#Configuration test "testSelect" 
+#select_stmt          =select * from TB_TEST_1
+#select_times         =1
+#select_interval      =1
+#select_ignore_fail   =TRUE
+#select_checkout      =TRUE
+#select_result_null   =FALSE
+#Configuration select result
+#select_save_result   =TRUE
+#select_save_file     =test.jpg
+#select_save_column_id    =0
+#select_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+#select_calc_crc     =FALSE
+######################################################
+#Configuration test "testLoadDirect"
+#load_direct_rows              = 1
+#load_direct_begin_value  =0
+#load_direct_insert         =INSERT,UPSERT,UPSERT WITH NO CONFLICT CHECK,UPSERT USING LOAD
+#load_direct_threads      =1
+#load_direct_cqd          =
+#load_direct_file         =cc.jpg
+#load_direct_file_crc     =FALSE
+######################################################
+#load_at_exec_rows        = 1
+#load_at_exec_begin_value = 0
+#load_at_exec_type        = SQL_DATA_AT_EXEC
+#load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+#load_at_exec_put_batch   = 4096
+#load_at_exec_insert      =INSERT
+#load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+#load_at_exec_file        =cc1.jpg
+#load_at_exec_threads     =1
+######################################################
+#lobupdate_rows        = 1
+#lobupdate_begin_value = 1
+#lobupdate_insert      =INSERT
+#lobupdate_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+#lobupdate_threads     = 1
+#lobupdate_file        =cc.jpg
+#lobupdate_put_batch   =4096
+######################################################
+
+[table]
+sql_file         =test.sql
+cqd              =cqd traf_blob_as_varchar 'off'
+#cqd              =cqd traf_clob_as_varchar 'off'
+table_name        =TB_TEST_1 
+
+[table_1]
+table_name        =TB_TEST_1
+sql_type          = SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_NUMERIC,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_TYPE_TIMESTAMP,SQL_TYPE_TIMESTAMP,SQL_VARCHAR,SQL_NUMERIC,SQL_VARCHAR,SQL_NUMERIC,SQL_VARCHAR,SQL_VARCHAR,SQL_NUMERIC,SQL_VARCHAR,SQL_VARCHAR,SQL_NUMERIC,SQL_NUMERIC,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP
+sql_c_type         =SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_TIMESTAMP,SQL_C_TIMESTAMP,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP
+column_size       =40,40,40,40,40,4,64,50,64,64,0,0,0,40,4,20,4,100,100,4,64,64,4,3,40,40,40,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =40,40,40,40,40,4,64,50,64,64,0,0,0,40,4,20,4,100,100,4,64,64,4,3,40,40,40,0
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =TRANS_TRACK_ID,NODE_INS_ID,ACTIVE_INS_ID,NODE_TRACK_ID,WORK_ID,TRANS_FLAG,ACTOR_ID,ACTOR_NAME,AUTHORIZER_ID,AUTHORIZER_NAME,CREATE_TIME,HANDLE_TIME,OVER_TIME,MSG,MSG_TYPE,RESULT_FLAG,BACK_FLAG,CONDITION,CONDITION_VALUE,CONDITION_RESULT,RESSIGNM_PERSON_ID,RESSIGNM_PERSON_NAME,COMPLETE_TYPE,REVOKE_FLAG,PRE_TRANS_TRACK_ID,PROCESS_ID,MAIN_PROCESS_INS_ID,MODIFY_DATE
+
+stmt              =get tables
+stmt_times         =1000
+stmt_interval     =5
+stmt_ignore_fail  =TRUE
+stmt_checkout     =FALSE
+stmt_result_null  =FALSE
+
+[table_2]
+table_name        =TB_TEST_2
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_CHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =24800,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+select_stmt          =select count(*) from TB_TEST_2;select B_LOB from TB_TEST_2 where ID<20;select B_LOB from TB_TEST_2 where ID>=20 AND ID<50;select B_LOB from TB_TEST_2 where ID>=50 AND ID<100;select B_LOB from TB_TEST_2 where ID>=100 AND ID<200;
+select_times         =200 
+select_interval      =2 
+select_ignore_fail  =TRUE 
+select_checkout     =TRUE
+select_result_null  =FALSE
+#Configuration select result
+select_calc_crc     =FALSE
+
+load_batch_size   =10
+load_batch_num    =500
+load_begin_value  =0
+load_threads      =1
+load_type         =INSERT
+
+[table_3]
+table_name        =TB_TEST_3
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_4]
+table_name        =TB_TEST_4
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_5]
+table_name        =TB_TEST_5
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_6]
+table_name        =TB_TEST_6
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_7]
+table_name        =TB_TEST_7
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_8]
+table_name        =TB_TEST_8
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_9]
+table_name        =TB_TEST_9
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_10]
+table_name        =TB_TEST_10
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_11]
+table_name        =TB_TEST_11
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_12]
+table_name        =TB_TEST_12
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_13]
+table_name        =TB_TEST_13
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_14]
+table_name        =TB_TEST_14
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_15]
+table_name        =TB_TEST_15
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_16]
+table_name        =TB_TEST_16
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_17]
+table_name        =TB_TEST_17
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_18]
+table_name        =TB_TEST_18
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_19]
+table_name        =TB_TEST_19
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_20]
+table_name        =TB_TEST_20
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_21]
+table_name        =TB_TEST_21
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_22]
+table_name        =TB_TEST_22
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_23]
+table_name        =TB_TEST_23
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_24]
+table_name        =TB_TEST_24
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_25]
+table_name        =TB_TEST_25
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_26]
+table_name        =TB_TEST_26
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_27]
+table_name        =TB_TEST_27
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_28]
+table_name        =TB_TEST_28
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_29]
+table_name        =TB_TEST_29
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_30]
+table_name        =TB_TEST_30
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_31]
+table_name        =TB_TEST_31
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_32]
+table_name        =TB_TEST_32
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_33]
+table_name        =TB_TEST_33
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_34]
+table_name        =TB_TEST_34
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_35]
+table_name        =TB_TEST_35
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_36]
+table_name        =TB_TEST_36
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_37]
+table_name        =TB_TEST_37
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_38]
+table_name        =TB_TEST_38
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_39]
+table_name        =TB_TEST_39
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_40]
+table_name        =TB_TEST_40
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_41]
+table_name        =TB_TEST_41
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_42]
+table_name        =TB_TEST_42
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_43]
+table_name        =TB_TEST_43
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_44]
+table_name        =TB_TEST_44
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_45]
+table_name        =TB_TEST_45
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_46]
+table_name        =TB_TEST_46
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_47]
+table_name        =TB_TEST_47
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_48]
+table_name        =TB_TEST_48
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_49]
+table_name        =TB_TEST_49
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_50]
+table_name        =TB_TEST_50
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_61]
+table_name        =TB_TEST_61
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_62]
+table_name        =TB_TEST_62
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_63]
+table_name        =TB_TEST_63
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_64]
+table_name        =TB_TEST_64
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_65]
+table_name        =TB_TEST_65
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_66]
+table_name        =TB_TEST_66
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_67]
+table_name        =TB_TEST_67
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_68]
+table_name        =TB_TEST_68
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_69]
+table_name        =TB_TEST_69
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_70]
+table_name        =TB_TEST_70
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_71]
+table_name        =TB_TEST_71
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_72]
+table_name        =TB_TEST_72
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_73]
+table_name        =TB_TEST_73
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_74]
+table_name        =TB_TEST_74
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_75]
+table_name        =TB_TEST_75
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_76]
+table_name        =TB_TEST_76
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_77]
+table_name        =TB_TEST_77
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_78]
+table_name        =TB_TEST_78
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_79]
+table_name        =TB_TEST_79
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_80]
+table_name        =TB_TEST_80
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_81]
+table_name        =TB_TEST_81
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_82]
+table_name        =TB_TEST_82
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_83]
+table_name        =TB_TEST_83
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_84]
+table_name        =TB_TEST_84
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_85]
+table_name        =TB_TEST_85
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_86]
+table_name        =TB_TEST_86
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_87]
+table_name        =TB_TEST_87
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_88]
+table_name        =TB_TEST_88
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_89]
+table_name        =TB_TEST_89
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_90]
+table_name        =TB_TEST_90
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_91]
+table_name        =TB_TEST_91
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_92]
+table_name        =TB_TEST_92
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_93]
+table_name        =TB_TEST_93
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_94]
+table_name        =TB_TEST_94
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_95]
+table_name        =TB_TEST_95
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_96]
+table_name        =TB_TEST_96
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_97]
+table_name        =TB_TEST_97
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_98]
+table_name        =TB_TEST_98
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_99]
+table_name        =TB_TEST_99
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10
+
+[table_100]
+table_name        =TB_TEST_100
+sql_type          =SQL_INTEGER,SQL_CHAR,SQL_TYPE_DATE,SQL_TYPE_TIME,SQL_TYPE_TIMESTAMP,SQL_CHAR,SQL_TINYINT,SQL_SMALLINT,SQL_INTEGER,SQL_BIGINT
+sql_c_type         =SQL_C_ULONG,SQL_C_CHAR,SQL_C_TYPE_DATE,SQL_C_TYPE_TIME,SQL_C_TYPE_TIMESTAMP,SQL_C_CHAR,SQL_C_STINYINT,SQL_C_SSHORT,SQL_C_ULONG,SQL_C_SBIGINT
+column_size       =0,1000,0,0,0,0,0,0,0,0
+decimal_digits    =0,0,0,0,0,0,0,0,0,0
+data_size         =0,800,0,0,0,0,0,0,0,0
+data_digits       =0,0,0,0,0,0,0,0,0,0
+column_name      =C1,C2,C3,C4,C5,C6,C7,C8,C9,C10

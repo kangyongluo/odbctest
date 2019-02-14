@@ -1,0 +1,172 @@
+[config]
+CATALOG          =TRAFODION
+#DSN              =traf
+#user             =trafodion
+#password         =traf123
+#schema           =ODBCTEST
+DSN              =MySQL
+user             =root
+password         =123456
+schema           =test
+init_table       =FALSE
+interval         =5
+isMultithreading =FALSE
+isConnectInfo    =TRUE
+#isMultiTask      =TRUE
+test_times       =1
+connect_string   =DataLang=4
+#test case:SQLColumns,SQLTables,SQLBindParameter,SQLPutData,testRowset,testStmt,testSqlFile,testSelect,cleanupTable
+#test_case        =cleanupTable,SQLBindParameter,testSelect
+test_case        =testSqlFile,SQLBindParameter,testSelect
+
+######################################################
+#Regression test table information and sql test
+#[table]
+######################################################
+#Configuration test "testSqlFile"
+#sql_file         =test.sql
+#data_file        =test.data
+#retcode          =SQL_SUCCESS
+#cqd_sqlfile      =cqd traf_blob_as_varchar 'off'
+#cqd_sqlfil       =cqd traf_clob_as_varchar 'off'
+#Configuration test table info
+#table_name        =TB_TEST_1 
+#sql_type          = SQL_CHAR
+#sql_c_type         =SQL_C_CHAR
+#column_name      =C1
+#column_size       =50
+#decimal_digits    =0
+#Length of actual data inserted
+#data_size         =50
+#data_digits       =0
+#lob_table         =FALSE
+#lob_columns       =0
+######################################################
+#Configuration test "testStmt"
+#stmt              =get tables;
+#stmt_ignore_fail  =FALSE
+#stmt_checkout     =FALSE
+#stmt_result_null  =FALSE
+#stmt_times        =1
+#stmt_interval     =1
+#stmt_cqd          =
+######################################################
+#Configuration test "testRowset" 
+#rowset_batch_size  =2
+#rowset_batch_num   =1
+#rowset_begin_value =0
+#rowset_type        =INSERT,UPSERT,UPSERT WITH NO CONFLICT CHECK,UPSERT USING LOAD
+#rowset_threads     =1
+#rowset_cqd         =
+#rowset_file        =cc.jpg
+######################################################
+#Configuration test "testSelect" 
+#select_stmt          =select * from TB_TEST_1
+#select_times         =1
+#select_interval      =1
+#select_ignore_fail   =TRUE
+#select_checkout      =TRUE
+#select_result_null   =FALSE
+#Configuration select result
+#select_save_result   =TRUE
+#select_save_file     =test.jpg
+#select_save_column_id    =0
+#select_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+#select_calc_crc     =FALSE
+######################################################
+#Configuration test "SQLBindParameter"
+#SQLBindParameter insert row = load_batch_size * load_batch_num * load_threads
+#SQLBindParameter_batch_size   =1
+#SQLBindParameter_batch_num    =1
+#SQLBindParameter_begin_value  =0
+#SQLBindParameter_type         =INSERT,UPSERT,UPSERT WITH NO CONFLICT CHECK,UPSERT USING LOAD
+#SQLBindParameter_threads      =1
+#SQLBindParameter_cqd          =
+#SQLBindParameter_file         =cc.jpg
+#SQLBindParameter_file_crc     =FALSE
+######################################################
+#SQLPutData_file         =cc.jpg
+#SQLPutData_batch_size   =1
+#SQLPutData_batch_num    =5
+#SQLPutData_begin_value  =0
+#SQLPutData_load_threads =1
+#SQLPutData_columns_id   =0
+#SQLPutData_load_type    =INSERT
+#SQLPutData_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000' 
+#SQLPutData_batch_nbytes  =4096
+#SQLPutData_type  =SQL_DATA_AT_EXEC
+#SQLPutData_type  =SQL_LEN_DATA_AT_EXEC
+######################################################
+#Regression test table information and sql test
+[table]
+sql_file         =blob.sql
+#sqlfile_cqd      =cqd traf_blob_as_varchar 'off'
+sqlfile_cqd      =cqd traf_blob_as_varchar 'on'
+#sqlfile_cqd     =cqd traf_clob_as_varchar 'on'
+#sqlfile_cqd     =cqd traf_clob_as_varchar 'off'
+table_name        =TB_CLIP_VARCHAR
+
+
+[table_1]
+table_name        =TB_CLIP_VARCHAR
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_CHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =4096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+stmt              =show tables
+stmt_times         =1
+stmt_interval          =1
+stmt_ignore_fail  =TRUE
+stmt_checkout     =FALSE
+stmt_result_null  =FALSE
+stmt_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+stmt_times        =1
+
+select_stmt          =select B_LOB from TB_CLIP_VARCHAR where ID<10;select B_LOB from TB_CLIP_VARCHAR where ID>=10 AND ID<20
+select_times         =1 
+select_interval      =1 
+select_ignore_fail  =TRUE 
+select_checkout     =TRUE
+select_result_null  =FALSE
+#Configuration select result
+select_save_result       =TRUE
+select_save_file         =test.jpg
+select_save_column_id    =0
+select_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+select_calc_crc     =TRUE
+
+
+SQLBindParameter_batch_size   =8
+SQLBindParameter_batch_num    =1
+SQLBindParameter_begin_value  =0
+SQLBindParameter_threads      =1
+SQLBindParameter_type         =INSERT
+SQLBindParameter_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+#SQLBindParameter_file         =cc.jpg 
+
+rowset_batch_size   =2
+rowset_batch_num    =2
+rowset_begin_value  =0
+rowset_threads      =1
+rowset_type         =INSERT
+rowset_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000' 
+
+SQLPutData_file         =cc.jpg
+SQLPutData_batch_size   =1
+SQLPutData_batch_num    =5
+SQLPutData_begin_value  =0
+SQLPutData_load_threads =1
+SQLPutData_columns_id   =0
+SQLPutData_load_type    =INSERT
+SQLPutData_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000' 
+SQLPutData_batch_nbytes  = 4096
+#SQLPutData_type        =SQL_DATA_AT_EXEC
+SQLPutData_type         =SQL_LEN_DATA_AT_EXEC
+#SQLPutData_load_crc    =TRUE

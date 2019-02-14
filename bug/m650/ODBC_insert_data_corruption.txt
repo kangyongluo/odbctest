@@ -1,0 +1,197 @@
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 60800001 1 1 insert
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+INSERT INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+Function SQLExecute(hstmt) returned SQL_ERROR
+Diagnostics associated with statmement handle:
+
+	SQL Diag 1
+	Native Error: 0
+	SQL State: 22008
+	Message:[Trafodion ODBC Driver] DATETIME FIELD OVERFLOW. Incorrect Format or Data. Row: 1 Column: 4
+
+Xuji ODBC insertion  Test FAILED!!!
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 60800001 2 1 insert
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+INSERT INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+ Done: 1 out of 1  times inserted 2 rows: Begin Val :  60800001.000000 .
+Time taken : 0 milliseconds
+[trafodion@ip-172-31-43-204 xujiForLinux]$ sqlci -i selectTest
+EsgynDB Advanced Conversational Interface 2.1.0
+Copyright (c) 2015-2016 Esgyn Corporation
+>>select count(*) from xuji.e_mp_day_energy_p;
+
+(EXPR)              
+--------------------
+
+                   0
+
+--- 1 row(s) selected.
+>>exit;
+
+End of MXCI Session
+
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 60800001 3 1 insert
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+INSERT INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+ Done: 1 out of 1  times inserted 3 rows: Begin Val :  60800001.000000 .
+Time taken : 0 milliseconds
+[trafodion@ip-172-31-43-204 xujiForLinux]$ sqlci -i selectTestEsgynDB Advanced Conversational Interface 2.1.0
+Copyright (c) 2015-2016 Esgyn Corporation
+>>select count(*) from xuji.e_mp_day_energy_p;
+
+(EXPR)              
+--------------------
+
+                   2
+
+--- 1 row(s) selected.
+>>exit;
+
+End of MXCI Session
+
+----------------------------------------------------------------------------------------------------
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 460800001 1 1  upsert
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+UPSERT INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+Function SQLExecute(hstmt) returned SQL_ERROR
+Diagnostics associated with statmement handle:
+
+	SQL Diag 1
+	Native Error: 0
+	SQL State: 22008
+	Message:[Trafodion ODBC Driver] DATETIME FIELD OVERFLOW. Incorrect Format or Data. Row: 1 Column: 4
+
+Xuji ODBC insertion  Test FAILED!!!
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 460800001 2 1  upsert
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+UPSERT INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+ Done: 1 out of 1  times inserted 2 rows: Begin Val :  460800001.000000 .
+Time taken : 0 milliseconds
+[trafodion@ip-172-31-43-204 xujiForLinux]$ sqlci -i selectTest
+EsgynDB Advanced Conversational Interface 2.1.0
+Copyright (c) 2015-2016 Esgyn Corporation
+>>select count(*) from xuji.e_mp_day_energy_p;
+
+(EXPR)              
+--------------------
+
+                   2
+
+--- 1 row(s) selected.
+>>exit;
+
+End of MXCI Session
+
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 460800010 3 1  upsert
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+UPSERT INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+ Done: 1 out of 1  times inserted 3 rows: Begin Val :  460800010.000000 .
+Time taken : 0 milliseconds
+[trafodion@ip-172-31-43-204 xujiForLinux]$ sqlci -i selectTest
+EsgynDB Advanced Conversational Interface 2.1.0
+Copyright (c) 2015-2016 Esgyn Corporation
+>>select count(*) from xuji.e_mp_day_energy_p;
+
+(EXPR)              
+--------------------
+
+                   4
+
+--- 1 row(s) selected.
+>>exit;
+
+End of MXCI Session
+--------------------------------------------------------------------------------------------------
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 860800001 1 1 upsertusingload
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+UPSERT USING LOAD INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+Function SQLExecute(hstmt) returned SQL_ERROR
+Diagnostics associated with statmement handle:
+
+	SQL Diag 1
+	Native Error: 0
+	SQL State: 22008
+	Message:[Trafodion ODBC Driver] DATETIME FIELD OVERFLOW. Incorrect Format or Data. Row: 1 Column: 4
+
+Xuji ODBC insertion  Test FAILED!!!
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 860800001 2 1 upsertusingload
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+UPSERT USING LOAD INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+ Done: 1 out of 1  times inserted 2 rows: Begin Val :  860800001.000000 .
+Time taken : 0 milliseconds
+[trafodion@ip-172-31-43-204 xujiForLinux]$ sqlci -i selectTest
+EsgynDB Advanced Conversational Interface 2.1.0
+Copyright (c) 2015-2016 Esgyn Corporation
+>>select count(*) from xuji.e_mp_day_energy_p;
+
+(EXPR)              
+--------------------
+
+                   4
+
+--- 1 row(s) selected.
+>>exit;
+
+End of MXCI Session
+
+[trafodion@ip-172-31-43-204 xujiForLinux]$ ./xu1 Default_DataSource trafodion traf123 860800001 3 1 upsertusingload
+Using Connect String: DSN=Default_DataSource;UID=trafodion;PWD=traf123;
+Successfully connected using SQLDriverConnect.
+UPSERT USING LOAD INTO TRAFODION.XUJI.E_MP_DAY_ENERGY_P (meter_id, data_date, day_ene_id,metering_time, PAP_E , PAP_E1, PAP_E2, PAP_E3, PAP_E4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+ Done: 1 out of 1  times inserted 3 rows: Begin Val :  860800001.000000 .
+Time taken : 0 milliseconds
+[trafodion@ip-172-31-43-204 xujiForLinux]$ sqlci -i selectTest
+EsgynDB Advanced Conversational Interface 2.1.0
+Copyright (c) 2015-2016 Esgyn Corporation
+>>select count(*) from xuji.e_mp_day_energy_p;
+
+(EXPR)              
+--------------------
+
+                   5
+
+--- 1 row(s) selected.
+>>exit;
+
+End of MXCI Session
+
+[trafodion@ip-172-31-43-204 xujiForLinux]$ 
+
+
+----------------------------------------------
+create schema xuji;
+CREATE TABLE TRAFODION.XUJI.E_MP_DAY_ENERGY_P
+  (
+    METER_ID                         LARGEINT  NO DEFAULT NOT NULL NOT
+      DROPPABLE NOT SERIALIZED
+  , DATA_DATE                        DATE NO DEFAULT NOT NULL NOT DROPPABLE NOT
+      SERIALIZED
+  , DAY_ENE_ID                       LARGEINT NO DEFAULT NOT NULL NOT
+      DROPPABLE NOT SERIALIZED
+  , METERING_TIME                    DATE NO DEFAULT NOT NULL NOT DROPPABLE NOT
+      SERIALIZED
+  , PAP_E                            NUMERIC(9, 4) DEFAULT NULL NOT SERIALIZED
+  , PAP_E1                           NUMERIC(9, 4) DEFAULT NULL NOT SERIALIZED
+  , PAP_E2                           NUMERIC(9, 4) DEFAULT NULL NOT SERIALIZED
+  , PAP_E3                           NUMERIC(9, 4) DEFAULT NULL NOT SERIALIZED
+  , PAP_E4                           NUMERIC(9, 4) DEFAULT NULL NOT SERIALIZED
+  , PRIMARY KEY (METER_ID ASC, DATA_DATE ASC, DAY_ENE_ID ASC)
+  )
+  SALT USING 350 PARTITIONS
+       ON (METER_ID)
+ ATTRIBUTES ALIGNED FORMAT
+  HBASE_OPTIONS
+  (
+    DATA_BLOCK_ENCODING = 'FAST_DIFF',
+    COMPRESSION = 'SNAPPY',
+    MEMSTORE_FLUSH_SIZE = '1073741824'
+  )
+;

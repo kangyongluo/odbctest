@@ -1,0 +1,4 @@
+ftp:
+user:admin
+pwd:123456
+afdddddddddddddddddd

@@ -1,0 +1,22 @@
+---- SQLGetData Matches (21 in 3 files) ----
+loadData.c (d:\work\esgyn\tests\odbc\newcoast\src\driver):                    retcode = SQLGetData(hstmt, 1, SQL_C_TCHAR, szBuf, sizeof(szBuf), &len);
+loadData.c (d:\work\esgyn\tests\odbc\newcoast\src\driver):                        LogMsgEx(fpLog, NONE, _T("Call SQLGetData. %d %d batch %d\n"), lobDataLen, lobDataOffset, batchLen);
+loadData.c (d:\work\esgyn\tests\odbc\newcoast\src\driver):                        retcode = SQLGetData(hstmt, 1, SQL_C_TCHAR, pLobData, batchLen, &len);
+loadData.c (d:\work\esgyn\tests\odbc\newcoast\src\driver):                                LogMsgEx(fpLog, NONE, _T("Call SQLGetData fail.\n"));
+Odbcdriver.c (d:\work\esgyn\tests\odbc\newcoast\src\driver):                returnCode = SQLGetData(hstmt, i, SQL_C_CHAR, (SQLPOINTER)buf, sizeof(buf), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, CONFIG_GET_DATA_SIZE - 1, &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLCHAR), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLCHAR), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLSMALLINT), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLINTEGER), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLBIGINT), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLREAL), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLDOUBLE), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(DATE_STRUCT), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(TIME_STRUCT), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(TIMESTAMP_STRUCT), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQL_INTERVAL_STRUCT), &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, SQL_C_TCHAR, (SQLPOINTER)pData, CONFIG_GET_DATA_SIZE - 1, &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, SQL_C_TCHAR, (SQLPOINTER)pData, CONFIG_GET_DATA_SIZE - 1, &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, SQL_C_TCHAR, (SQLPOINTER)pData, CONFIG_GET_DATA_SIZE - 1, &len);
+testSQL.cpp (d:\work\esgyn\tests\odbc\newcoast\src\case):                    retcode = SQLGetData(hstmt, i, SQL_C_TCHAR, (SQLPOINTER)szBuf, sizeof(szBuf) - 1, &len);

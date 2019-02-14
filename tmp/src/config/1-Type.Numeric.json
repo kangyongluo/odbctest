@@ -1,0 +1,544 @@
+{
+    "test_config":{
+         "CATALOG":"TRAFODION",
+         "DSN":"traf",
+         "user":"trafodion",
+         "password":"traf123",
+         "schema":"ODBCTEST",
+         "init_table":"FALSE",
+         "interval":1,
+         "isMultithreading":"FALSE",
+         "test_table":"",
+         "isConnectInfo":"TRUE",
+         "isMultiTask":"FALSE",
+         "test_times":1
+    },
+    "test_list":[
+        {
+            "test_name":"testSQL",
+            "isTest":"TRUE"
+        }
+    ],
+    "sql_list":[
+        {
+             "sql":"CREATE TABLE TYPE001(COL INTEGER)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE002(COL INT)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE003(COL SMALLINT)",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"CREATE TABLE TYPE004(COL BIGINT)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE005(COL REAL)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE006(COL DOUBLE PRECISION)",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"CREATE TABLE TYPE007(COL FLOAT)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE008(COL DECIMAL(18, 10))",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE009(COL NUMERIC(18, 10))",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"CREATE TABLE TYPE010(COL DATE)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE011(COL TIMESTAMP)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE001 VALUES(2147483647)",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO TYPE001 VALUES(-2147483647)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT * FROM TYPE001",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result":[
+                "2147483647"
+             ],
+			 "result1":[
+                "-2147483647"
+             ]
+        },
+        {
+             "sql":"INSERT INTO TYPE002 VALUES(2147483647)",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO TYPE002 VALUES(-2147483647)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT * FROM TYPE002",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result":[
+                "2147483647"
+             ],
+			 "result1":[
+                "-2147483647"
+             ]
+        },
+        {
+             "sql":"INSERT INTO TYPE003 VALUES(32767)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE003 VALUES(-32767)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT * FROM TYPE003",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result":[
+                "32767"
+             ],
+			 "result1":[
+                "-32767"
+             ]
+        },
+        {
+             "sql":"INSERT INTO TYPE004 VALUES(9223372036854775807)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE004 VALUES(-9223372036854775807)",
+             "retcode":"SQL_SUCCESS"
+			 
+        },
+        {
+             "sql":"SELECT * FROM TYPE004",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result":[
+                "9223372036854775807"
+             ],
+			 "result1":[
+                "-9223372036854775807"
+             ]
+        },
+        {
+             "sql":"INSERT INTO TYPE005 VALUES(3.4E+38)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE005 VALUES(-3.4E+38);",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT * FROM TYPE005",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result":[
+                "3.4E+38"
+             ],
+			 "result1":[
+                "-3.4E+38"
+             ]
+        },
+        {
+             "sql":"INSERT INTO TYPE007 VALUES(1.7E+84)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE007 VALUES(-1.7E+84)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT * FROM TYPE007",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result":[
+                "1.7E+84"
+             ],
+			 "result1":[
+                "-1.7E+84"
+             ]
+        },
+        {
+             "sql":"INSERT INTO TYPE008 VALUES(99999999.9999999999)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE008 VALUES(-99999999.9999999999)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT * FROM TYPE008",
+             "retcode":"SQL_SUCCESS",
+             "checkout":"TRUE",
+             "result":[
+                "99999999.9999999999"
+             ],
+			 "result1":[
+                "-99999999.9999999999"
+             ]
+        },
+        {
+             "sql":"INSERT INTO TYPE009 VALUES(99999999.9999999999)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE009 VALUES(-99999999.9999999999)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT * FROM TYPE009",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "99999999.9999999999"
+             ],
+			 "result1":[
+                "-99999999.9999999999"
+             ]
+        },
+        {
+             "sql":"CREATE TABLE TYPE012(COL0 INT,COL1 INT)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE013(COL0 FLOAT(3))",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE014(COL0 DECIMAL,COL1 DECIMAL)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE014 VALUES(34.54, 49.34)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE014 VALUES(123.985, 345.123)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE015(COL0 DECIMAL(3,1))",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE016(COL0 INT,COL1 INT)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE016 VALUES(12, 25)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE016 VALUES(35, 45)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE012 VALUES(123.456, 23)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE013 VALUES(1.23456789012345678)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE014 VALUES(-100000000000000000000000000000000000000, 123.2)",
+             "retcode":"SQL_ERROR",
+             "ignore_fail":"TRUE"
+        },
+        {
+             "sql":"INSERT INTO TYPE014 VALUES(100000000000000000000000000000000000000, 34.45)",
+             "retcode":"SQL_ERROR",
+             "ignore_fail":"TRUE"
+        },
+        {
+             "sql":"INSERT INTO TYPE015 VALUES(12.89)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT COL0+COL1 FROM TYPE016",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "37"
+             ],
+			 "result1":[
+                "80"
+             ]
+        },
+        {
+             "sql":"SELECT COL1-COL0 FROM TYPE016",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "13"
+             ],
+			 "result1":[
+                "10"
+             ]
+        },
+        {
+             "sql":"SELECT COL0*COL1 FROM TYPE016",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "300"
+             ],
+			 "result1":[
+                "1575"
+             ]
+        },
+        {
+             "sql":"SELECT COL0/COL1 FROM TYPE016",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "0.48"
+             ],
+			 "result1":[
+                "0.777777777777778"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE016 WHERE COL0=COL1",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+        {
+             "sql":"SELECT * FROM TYPE016 WHERE COL0<>COL1",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "12","25"
+             ],
+			 "result1":[
+                "35","45"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE016 WHERE COL0<COL1",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "12","25"
+             ],
+			 "result1":[
+                "35","45"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE016 WHERE COL0<=COL1",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "12","25"
+             ],
+			 "result1":[
+                "35","45"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE016 WHERE COL0>COL1",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+        {
+             "sql":"SELECT * FROM TYPE016 WHERE COL0>=COL1",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+        {
+             "sql":"SELECT * FROM TYPE012",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "123","23"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE013",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "1.23"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE015",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "12.9"
+             ]
+        },
+        {
+             "sql":"CREATE TABLE TYPE017(COL DECIMAL)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE017 VALUES(-1)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE017 VALUES(0)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE017 VALUES(1)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE017 VALUES(2)",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT ABS(COL) FROM TYPE017",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "1"
+             ],
+			 "result1":[
+                "0"
+             ],
+			 "result2":[
+                "1"
+             ],
+			 "result3":[
+                "2"
+             ]
+			 
+        },
+        {
+             "sql":"SELECT AVG(COL) FROM TYPE017",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "0.5"
+             ]
+        },
+        {
+             "sql":"SELECT COUNT(COL) FROM TYPE017",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "4"
+             ]
+        },
+        {
+             "sql":"SELECT SUM(COL) FROM TYPE017",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "2"
+             ]
+        },
+        {
+             "sql":"SELECT MAX(COL) FROM TYPE017",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "2"
+             ]
+        },
+        {
+             "sql":"SELECT MIN(COL) FROM TYPE017",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "-1"
+             ]
+        },
+        {
+             "sql":"DROP TABLE TYPE001",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE002",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE003",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE004",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE005",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE006",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE007",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE008",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE009",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE010",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE011",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE012",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE013",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE014",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE015",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE016",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE017",
+             "retcode":"SQL_SUCCESS"
+        }
+    ]
+}

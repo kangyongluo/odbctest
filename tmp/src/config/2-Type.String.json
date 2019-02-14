@@ -1,0 +1,162 @@
+{
+    "test_config":{
+         "CATALOG":"TRAFODION",
+         "DSN":"traf",
+         "user":"trafodion",
+         "password":"traf123",
+         "schema":"ODBCTEST",
+         "init_table":"FALSE",
+         "interval":1,
+         "isMultithreading":"FALSE",
+         "test_table":"",
+         "isConnectInfo":"TRUE",
+         "isMultiTask":"FALSE",
+         "test_times":1
+    },
+    "test_list":[
+        {
+            "test_name":"testSQL",
+            "isTest":"TRUE"
+        }
+    ],
+    "sql_list":[
+        {
+             "sql":"CREATE TABLE TYPE201(COL CHAR(255))",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"INSERT INTO TYPE201 VALUES('char')",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"CREATE TABLE TYPE202(COL LONG VARCHAR(2000))",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO TYPE202 VALUES('database testing')",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"SELECT * FROM TYPE201",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "char"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE202",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "database testing"
+             ]
+        },
+		{
+             "sql":"SELECT CHAR_LENGTH(COL) from TYPE201",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "255"
+             ]
+        },
+        {
+             "sql":"SELECT OCTET_LENGTH(COL) from TYPE202",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "16"
+             ]
+        },
+        {
+             "sql":"SELECT SUBSTR(COL ,2 , 2) from TYPE201",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "ha"
+             ]
+        },
+        {
+             "sql":"SELECT CONCAT('memory',' database') FROM TYPE202",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "memory database"
+             ]
+        },
+        {
+             "sql":"SELECT UPPER('hello world') FROM TYPE202",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "HELLO WORLD"
+             ]
+        },
+        {
+             "sql":"SELECT LOWER('HELLO WORLD') FROM TYPE202",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "hello world"
+             ]
+        },
+        {
+             "sql":"SELECT TRIM( '  Hello World  ') FROM TYPE202",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "Hello World"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE202 WHERE COL=COL",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "database testing"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE202 WHERE COL<>COL",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+        {
+             "sql":"SELECT * FROM TYPE202 WHERE COL<COL",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+        {
+             "sql":"SELECT * FROM TYPE202 WHERE COL<=COL",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "database testing"
+             ]
+        },
+        {
+             "sql":"SELECT * FROM TYPE202 WHERE COL>COL",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+        {
+             "sql":"SELECT * FROM TYPE202 WHERE COL>=COL",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "database testing"
+             ]
+        },
+		{
+             "sql":"DROP TABLE TYPE201",
+             "retcode":"SQL_SUCCESS"
+        },
+        {
+             "sql":"DROP TABLE TYPE202",
+             "retcode":"SQL_SUCCESS"
+        }
+    ]
+}

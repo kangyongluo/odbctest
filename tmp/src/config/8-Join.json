@@ -1,0 +1,123 @@
+{
+    "test_config":{
+         "CATALOG":"TRAFODION",
+         "DSN":"traf",
+         "user":"trafodion",
+         "password":"traf123",
+         "schema":"ODBCTEST",
+         "init_table":"FALSE",
+         "interval":1,
+         "isMultithreading":"FALSE",
+         "test_table":"",
+         "isConnectInfo":"TRUE",
+         "isMultiTask":"FALSE",
+         "test_times":1
+    },
+    "test_list":[
+        {
+            "test_name":"testSQL",
+            "isTest":"TRUE"
+        }
+    ],
+    "sql_list":[
+        {
+             "sql":"CREATE TABLE T81(bookname char(10),price float)",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO T81 VALUES('delphi',50.11)",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"CREATE TABLE T82(bookname char(10),author char(10))",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"INSERT INTO T82 VALUES('java','tom')",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 INNER JOIN T82 ON T81.BOOKNAME=T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 LEFT OUTER JOIN T82 ON T81.BOOKNAME=T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "","50.11"
+             ]
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 RIGHT OUTER JOIN T82 ON T81.BOOKNAME=T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "tom",""
+             ]
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 FULL JOIN T82 ON T81.BOOKNAME=T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "","50.11"
+             ],
+			 "result1":[
+                "tom",""
+             ]
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 INNER JOIN T82 ON T81.BOOKNAME=T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 INNER JOIN T82 ON T81.BOOKNAME<>T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "tom","50.11"
+             ]
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 INNER JOIN T82 ON T81.BOOKNAME<T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "tom","50.11"
+             ]
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 INNER JOIN T82 ON T81.BOOKNAME<=T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+             "result":[
+                "tom","50.11"
+             ]
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 INNER JOIN T82 ON T81.BOOKNAME>T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+		{
+             "sql":"SELECT AUTHOR,PRICE FROM T81 INNER JOIN T82 ON T81.BOOKNAME>=T82.BOOKNAME",
+             "retcode":"SQL_SUCCESS",
+			 "checkout":"TRUE",
+			 "result_null":"TRUE"
+        },
+		{
+             "sql":"DROP TABLE T81",
+             "retcode":"SQL_SUCCESS"
+        },
+		{
+             "sql":"DROP TABLE T82",
+             "retcode":"SQL_SUCCESS"
+        }
+    ]
+}
