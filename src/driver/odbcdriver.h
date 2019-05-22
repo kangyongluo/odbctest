@@ -72,7 +72,7 @@ extern void LogAllErrorsEx(FILE *fpLog,
                   SQLHANDLE hstmt
                   );
 extern TrueFalse FullConnectWithOptions(TestInfo *pTestInfo, int Options);
-extern TrueFalse FullConnectWithOptionsEx(TestInfo *pTestInfo, int Options, TCHAR *connStrEx);
+extern TrueFalse FullConnectWithOptionsEx(TestInfo *pTestInfo, int Options, TCHAR *connStrEx, FILE *fpLog);
 extern int FullDisconnectEx(FILE *fpLog, TestInfo *pTestInfo);
 extern int addInfoSessionEx(SQLHSTMT hstmt, FILE *fpLog);
 extern int cleanupTableData(TestInfo *pTestInfo, TCHAR *szTableName, FILE *fpLog);

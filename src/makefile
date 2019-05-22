@@ -1,39 +1,32 @@
-cxx=g++
-CPPFLAGS=-o -Wall -Dunixcli -g -w 
-INCLUDE=-I./util/ -I./driver  -I./case
+VERSION = 2
+PATCHLEVEL = 0
+SUBLEVEL = 0
+EXTRAVERSION = 0
 
-ODBC_VERSION =UNIXODBC
+ACA_RELEASE=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL).$(EXTRAVERSION)
 
-ifeq ($(ODBC_VERSION), UNIXODBC)
-LINKLIB=-lodbc -lpthread -DUNIXODBC
-else
-LIBPATH+=-L/home/kangyong/lib64
-LINKLIB=-ltrafodbc64 -lpthread -licuuc -licudata -liconv
-endif
+include makefile.inc
 
-OBJS = ./util/util.cpp
-OBJS += ./util/config.cpp
-OBJS += ./util/global.cpp
-OBJS += ./driver/odbcdriver.c
-OBJS += ./driver/SQLColumns.c
-OBJS += ./driver/loadData.c
-OBJS += ./driver/SQLTables.c
-OBJS += ./driver/SQLGetFunctions.c
-OBJS += ./driver/SQLColAttribute.c
-OBJS += ./driver/SQLGetTypeInfo.c
-OBJS += ./case/testSQL.cpp
-OBJS += ./case/testSQLColumns.cpp
-OBJS += ./case/testSQLTables.cpp
-OBJS += ./case/testLoad.cpp
-OBJS += ./case/testODBC.cpp
-OBJS += ./main/main.cpp
 
 SUBDIRS=util driver case main
+APP=odbctest
 
-all:odbctest 
-odbctest: $(OBJS)
-	$(CXX) $^ $(CPPFLAGS) $(INCLUDE) $(LIBPATH) $(LINKLIB) -o $@ 
-	mv odbctest bin
-	rm -rf *.o
+all:$(APP)
+$(APP):	
+	@for d in $(SUBDIRS); do (cd $$d && $(MAKE)); done
+
 clean:
-	rm -rf *.o *.d odbctest *.a
+	@for d in $(SUBDIRS); do (cd $$d && $(MAKE) clean); done	
+	rm -rf lib/*.a
+
+help:
+	@echo "Auth Server makefile."
+	@echo "version : $(ACA_RELEASE)"
+	@echo
+	@echo "Syntax:"
+	@echo "	aca	-- make all auth source code. It is default make."
+	@echo "	clean	-- make clean all auth source code."
+	@echo "	install	-- make all auth source code, and then install programs to DESDIR."
+	@echo "	uninstall -- uninstall programs from DESDIR."
+	@echo "	help	-- print this help."
+

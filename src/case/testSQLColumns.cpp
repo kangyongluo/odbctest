@@ -2,7 +2,7 @@
 #include "../util/config.h"
 #include "../util/global.h"
 #include "../driver/odbcdriver.h"
-#include "../case/testcase.h"
+#include "../case/testCase.h"
 
 #define CONFIG_SQL_COLUMNS_VIEW_TABLE_HEAD                  _T("VIEW")
 #define CONFIG_SQL_COLUMNS_MATERIALIZED_VIEW_TABLE_HEAD     _T("MATERIALIZED_VIEW")

@@ -52,6 +52,7 @@ class CTesSQL
         int doSelect(TestInfo *pTestInfo);
         int doCleanupTable(TestInfo *pTestInfo);
         int doSqlTest(TestInfo *pTestInfo, char *pCase);
+        FILE *fileLogs(void);
     private:
         BOOL isStmtResultNotNull(TCHAR *sql);
     private:

@@ -105,6 +105,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <StackReserveSize>1073741824</StackReserveSize>
       <StackCommitSize>1073741824</StackCommitSize>
+      <HeapReserveSize>134217728</HeapReserveSize>
+      <HeapCommitSize>134217728</HeapCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

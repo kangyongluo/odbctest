@@ -1,32 +1,69 @@
-﻿生成启动时间为 2018/12/3 18:34:08。
-     1>项目“D:\work\esgyn\tests\odbc\newcoast\src\vs\odbctest\odbctest.vcxproj”在节点 2 上(Build 个目标)。
+﻿生成启动时间为 2019/5/21 10:15:59。
+     1>项目“D:\work\esgyn\tests\odbc\odbctest\src\vs\odbctest\odbctest.vcxproj”在节点 2 上(Rebuild 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TC /errorReport:prompt ..\..\driver\loadData.c
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt ..\..\case\testLoad.cpp ..\..\case\testODBC.cpp ..\..\case\testSQL.cpp ..\..\case\testSQLColumns.cpp ..\..\case\testSQLTables.cpp ..\..\main\main.cpp ..\..\util\config.cpp ..\..\util\global.cpp ..\..\util\util.cpp
+         util.cpp
+     1>..\..\util\util.cpp(319): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+     1>..\..\util\util.cpp(328): warning C4267: “=”: 从“size_t”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\util\util.cpp(333): warning C4267: “=”: 从“size_t”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\util\util.cpp(334): warning C4267: “=”: 从“size_t”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\util\util.cpp(476): warning C4244: “参数”: 从“SQLULEN”转换到“int”，可能丢失数据
+     1>..\..\util\util.cpp(479): warning C4244: “参数”: 从“SQLSMALLINT”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\util\util.cpp(479): warning C4244: “参数”: 从“SQLULEN”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\util\util.cpp(483): warning C4244: “参数”: 从“SQLSMALLINT”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\util\util.cpp(483): warning C4244: “参数”: 从“SQLULEN”转换到“SQLCHAR”，可能丢失数据
+         global.cpp
+         config.cpp
+     1>..\..\util\config.cpp(1045): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+     1>..\..\util\config.cpp(1053): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+     1>..\..\util\config.cpp(1060): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+     1>..\..\util\config.cpp(1075): warning C4018: “<=”: 有符号/无符号不匹配
+         main.cpp
+         testSQLTables.cpp
+         testSQLColumns.cpp
+         testSQL.cpp
+     1>..\..\case\testSQL.cpp(352): warning C4244: “参数”: 从“SQLINTEGER”转换到“SQLSMALLINT”，可能丢失数据
+     1>..\..\case\testSQL.cpp(561): warning C4244: “参数”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
+         testODBC.cpp
+         testLoad.cpp
+         正在生成代码...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TC /errorReport:prompt ..\..\driver\loadData.c ..\..\driver\odbcdriver.c ..\..\driver\SQLColAttribute.c ..\..\driver\SQLColumns.c ..\..\driver\SQLGetFunctions.c ..\..\driver\SQLGetTypeInfo.c ..\..\driver\SQLTables.c
+         SQLTables.c
+         SQLGetTypeInfo.c
+         SQLGetFunctions.c
+         SQLColumns.c
+     1>..\..\driver\SQLColumns.c(81): warning C4996: 'SQLSetConnectOption': ODBC API: SQLSetConnectOption is deprecated. Please use SQLSetConnectAttr instead.
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\sql.h(838) : 参见“SQLSetConnectOption”的声明
+     1>..\..\driver\SQLColumns.c(85): warning C4996: 'SQLSetConnectOption': ODBC API: SQLSetConnectOption is deprecated. Please use SQLSetConnectAttr instead.
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\sql.h(838) : 参见“SQLSetConnectOption”的声明
+         SQLColAttribute.c
+         odbcdriver.c
          loadData.c
-     1>..\..\driver\loadData.c(312): warning C4244: “函数”: 从“SQLLEN”转换到“int”，可能丢失数据
-     1>..\..\driver\loadData.c(317): warning C4244: “函数”: 从“SQLLEN”转换到“SQLSMALLINT”，可能丢失数据
-     1>..\..\driver\loadData.c(341): warning C4244: “=”: 从“double”转换到“SQLCHAR”，可能丢失数据
-     1>..\..\driver\loadData.c(344): warning C4244: “=”: 从“double”转换到“SQLCHAR”，可能丢失数据
-     1>..\..\driver\loadData.c(432): warning C4244: “函数”: 从“SQLLEN”转换到“SQLCHAR”，可能丢失数据
-     1>..\..\driver\loadData.c(438): warning C4244: “函数”: 从“SQLLEN”转换到“int”，可能丢失数据
-     1>..\..\driver\loadData.c(443): warning C4244: “函数”: 从“SQLLEN”转换到“SQLSMALLINT”，可能丢失数据
-     1>..\..\driver\loadData.c(475): warning C4244: “+=”: 从“SQLULEN”转换到“int”，可能丢失数据
-     1>..\..\driver\loadData.c(589): warning C4244: “+=”: 从“SQLULEN”转换到“int”，可能丢失数据
-     1>..\..\driver\loadData.c(820): warning C4244: “函数”: 从“SQLLEN”转换到“SQLSMALLINT”，可能丢失数据
-     1>..\..\driver\loadData.c(1319): warning C4244: “=”: 从“SQLLEN”转换到“int”，可能丢失数据
-     1>..\..\driver\loadData.c(1612): warning C4244: “=”: 从“SQLLEN”转换到“int”，可能丢失数据
-     1>..\..\driver\loadData.c(1855): warning C4244: “函数”: 从“SQLLEN”转换到“SQLSMALLINT”，可能丢失数据
-     1>..\..\driver\loadData.c(1928): warning C4244: “函数”: 从“SQLINTEGER”转换到“SQLUSMALLINT”，可能丢失数据
-     1>..\..\driver\loadData.c(2026): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
-     1>..\..\driver\loadData.c(2029): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
-     1>..\..\driver\loadData.c(2037): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
-     1>..\..\driver\loadData.c(2048): warning C4244: “函数”: 从“SQLLEN”转换到“int”，可能丢失数据
-     1>..\..\driver\loadData.c(2117): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
-     1>..\..\driver\loadData.c(2122): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
-     1>..\..\driver\loadData.c(2166): warning C4244: “函数”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
-     1>..\..\driver\loadData.c(1723): warning C4101: “batchLen”: 未引用的局部变量
+     1>..\..\driver\loadData.c(319): warning C4244: “函数”: 从“SQLLEN”转换到“int”，可能丢失数据
+     1>..\..\driver\loadData.c(324): warning C4244: “函数”: 从“SQLLEN”转换到“SQLSMALLINT”，可能丢失数据
+     1>..\..\driver\loadData.c(348): warning C4244: “=”: 从“double”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\driver\loadData.c(351): warning C4244: “=”: 从“double”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\driver\loadData.c(439): warning C4244: “函数”: 从“SQLLEN”转换到“SQLCHAR”，可能丢失数据
+     1>..\..\driver\loadData.c(445): warning C4244: “函数”: 从“SQLLEN”转换到“int”，可能丢失数据
+     1>..\..\driver\loadData.c(450): warning C4244: “函数”: 从“SQLLEN”转换到“SQLSMALLINT”，可能丢失数据
+     1>..\..\driver\loadData.c(482): warning C4244: “+=”: 从“SQLULEN”转换到“int”，可能丢失数据
+     1>..\..\driver\loadData.c(596): warning C4244: “+=”: 从“SQLULEN”转换到“int”，可能丢失数据
+     1>..\..\driver\loadData.c(852): warning C4244: “函数”: 从“SQLLEN”转换到“SQLSMALLINT”，可能丢失数据
+     1>..\..\driver\loadData.c(1366): warning C4244: “=”: 从“SQLLEN”转换到“int”，可能丢失数据
+     1>..\..\driver\loadData.c(1669): warning C4244: “=”: 从“SQLLEN”转换到“int”，可能丢失数据
+     1>..\..\driver\loadData.c(1881): warning C4244: “函数”: 从“SQLLEN”转换到“SQLSMALLINT”，可能丢失数据
+     1>..\..\driver\loadData.c(1954): warning C4244: “函数”: 从“SQLINTEGER”转换到“SQLUSMALLINT”，可能丢失数据
+     1>..\..\driver\loadData.c(2052): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
+     1>..\..\driver\loadData.c(2055): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
+     1>..\..\driver\loadData.c(2063): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
+     1>..\..\driver\loadData.c(2074): warning C4244: “函数”: 从“SQLLEN”转换到“int”，可能丢失数据
+     1>..\..\driver\loadData.c(2144): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
+     1>..\..\driver\loadData.c(2149): warning C4244: “=”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
+     1>..\..\driver\loadData.c(2193): warning C4244: “函数”: 从“SQLLEN”转换到“unsigned int”，可能丢失数据
+     1>..\..\driver\loadData.c(1749): warning C4101: “batchLen”: 未引用的局部变量
+         正在生成代码...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\work\esgyn\tests\odbc\newcoast\src\vs\x64\Debug\odbctest.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\work\esgyn\tests\odbc\newcoast\src\vs\x64\Debug\odbctest.pdb" /SUBSYSTEM:CONSOLE /STACK:"1073741824","1073741824" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\work\esgyn\tests\odbc\newcoast\src\vs\x64\Debug\odbctest.lib" /MACHINE:X64 x64\Debug\testLoad.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\work\esgyn\tests\odbc\odbctest\src\vs\x64\Debug\odbctest.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\work\esgyn\tests\odbc\odbctest\src\vs\x64\Debug\odbctest.pdb" /SUBSYSTEM:CONSOLE /HEAP:"134217728","134217728" /STACK:"1073741824","1073741824" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\work\esgyn\tests\odbc\odbctest\src\vs\x64\Debug\odbctest.lib" /MACHINE:X64 x64\Debug\testLoad.obj
          x64\Debug\testODBC.obj
          x64\Debug\testSQL.obj
          x64\Debug\testSQLColumns.obj
@@ -42,9 +79,9 @@
          x64\Debug\config.obj
          x64\Debug\global.obj
          x64\Debug\util.obj
-         odbctest.vcxproj -> D:\work\esgyn\tests\odbc\newcoast\src\vs\x64\Debug\odbctest.exe
-     1>已完成生成项目“D:\work\esgyn\tests\odbc\newcoast\src\vs\odbctest\odbctest.vcxproj”(Build 个目标)的操作。
+         odbctest.vcxproj -> D:\work\esgyn\tests\odbc\odbctest\src\vs\x64\Debug\odbctest.exe
+     1>已完成生成项目“D:\work\esgyn\tests\odbc\odbctest\src\vs\odbctest\odbctest.vcxproj”(Rebuild 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:04.01
+已用时间 00:00:16.96

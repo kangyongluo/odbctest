@@ -17,7 +17,6 @@ class CConfig
         int scanTestSqlFile(void);
         int scanTestTable(void);
         void reset(void);
-    private:
         int readTable(char *pSection, sTestTableInfo *psTestTableInfo);
         int readLoadDirectInfo(char *pSection, sLoadDataInfo *psLoadDataInfo);
         int readRowsetInfo(char *pSection, sLoadDataInfo *psLoadDataInfo);
@@ -26,6 +25,7 @@ class CConfig
         int readStmt(char *pSection, sSqlStmt *psStmtInfo);
         int readSelect(char *pSection, sSqlStmt *psStmtInfo);
         int readSqlFile(char *pSection, sSqlStmt *psSqlFileInfo);
+    private:
         int findSQL(FILE *fp, char *sql, unsigned int nsize);
         void setDefaultTable(void);
     private:

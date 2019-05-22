@@ -21,7 +21,10 @@ CTesSQL::CTesSQL(TCHAR *szKey)
     mBeginVal = 0;
     pGlobalCfg = &gTestGlobal.mcfg;
 }
-
+FILE *CTesSQL::fileLogs(void)
+{
+    return fpLog;
+}
 CTesSQL::~CTesSQL()
 {
     closeLog(fpLog);
@@ -120,7 +123,7 @@ int CTesSQL::checkColAttribute(TestInfo *pTestInfo,
                 }
             }
             else{
-                //LogMsgEx(fpLog, NONE, _T("%d,%d,%s\n"), mAttrInfo.pcbDesc, mAttrInfo.len, mAttrInfo.szRgbDesc);
+                LogMsgEx(fpLog, NONE, _T("%d,%d,%s\n"), mAttrInfo.pcbDesc, mAttrInfo.len, mAttrInfo.szRgbDesc);
             }
 		}
 	}
@@ -137,7 +140,6 @@ int CTesSQL::checkColumns(TestInfo *pTestInfo,
     SQLHANDLE hdbc = pTestInfo->hdbc;
  	SQLHANDLE hstmt = pTestInfo->hstmt;
     sSQLColumnsInfo mColInfo;
-    int i;
     int ret = 0;
     TCHAR   szBuf[128];
     
@@ -273,6 +275,8 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
     unsigned int crc = 0;
     unsigned int crc1 = 0;
     int totalTimes = 0;
+    int extraTime = 0;
+    int prepareTime = 0;
     int ret = 0;
     char szBuf[256] = {0};
     char szSelect[CONFIG_SELECT_STMT_MAX][256] = {0};
@@ -280,6 +284,7 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
     char *result;
     SQLINTEGER idCols = 0;
 
+    gettimeofday(&tv3,NULL);
     memcpy(&sTestInfo, pTestInfo, sizeof(TestInfo));
     
     _stprintf(szBuf, _T("DSN=%s;UID=%s;PWD=%s;%s"), 
@@ -288,7 +293,7 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
                         sTestInfo.Password, 
                         pGlobalCfg->szConnStr);
     LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
-    if(!FullConnectWithOptionsEx(&sTestInfo, CONNECT_ODBC_VERSION_3, pGlobalCfg->szConnStr)){
+    if(!FullConnectWithOptionsEx(&sTestInfo, CONNECT_ODBC_VERSION_3, pGlobalCfg->szConnStr, fpLog)){
         LogMsgEx(fpLog, NONE, _T("Unable to connect\n"));
         return -1;
     }
@@ -308,12 +313,17 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
     }
     sTestInfo.hstmt = hstmt;
    
-    SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
+    /*retcode = SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
+    if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
+        LogMsgEx(fpLog, NONE,_T("call \"set FETCHSIZE 1\" fail.\n"));
+        LogAllErrorsEx(fpLog, henv, hdbc, hstmt); 
+    }*/
 
     LogMsgEx(fpLog, NONE, _T(".........................................\n"));
     addInfoSessionEx(hstmt, fpLog);
     if(psStmt->isCheckColAttr){
         sSQLTypeInfo mTypeInfo;
+        LogMsgEx(fpLog, NONE, _T("Call SQLGetTypeInfo to get type infomation......\n"));
         for(idCols = 0; idCols < psTestTableInfo->columNum; idCols++){
             if(exeSQLGetTypeInfo(hstmt, psTestTableInfo->sqlType[idCols], &mTypeInfo) != 0){
                 LogMsgEx(fpLog, NONE, _T("cols:%d call exeSQLGetTypeInfo fail.\n"), idCols + 1);
@@ -321,12 +331,20 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
                 ret = -1;
             }
             else{
+                LogMsgEx(fpLog, NONE, _T("col:%d sql type:%s\n"), idCols + 1, mTypeInfo.szTypeName);
+                LogMsgEx(fpLog, NONE, _T("col:%d expect sql type:%d actual:%d\n"), idCols + 1, psTestTableInfo->sqlType[idCols], mTypeInfo.sqlType);
                 if(mTypeInfo.sqlType != psTestTableInfo->sqlType[idCols]){
-                    LogMsgEx(fpLog, NONE, _T("col:%d expect sql type:%d actual:%d\n"), idCols + 1, psTestTableInfo->sqlType[idCols], mTypeInfo.sqlType);
+                    LogMsgEx(fpLog, NONE, _T("Actual value does not match expected value\n"));
                     ret = -1;
+                }
+                LogMsgEx(fpLog, NONE, _T("col:%d column size:%d\n"), idCols + 1, mTypeInfo.columnSize);
+                LogMsgEx(fpLog, NONE, _T("col:%d other attributes:\n"), idCols + 1);
+                for(i = 0; i < CONFIG_SQL_TYPE_INFO_RESULT_MAX; i++){
+                    LogMsgEx(fpLog, NONE, _T("\t%s\n"), mTypeInfo.szTypeAttr[i]);
                 }
             }
         }
+        LogMsgEx(fpLog, NONE, _T("Call SQLColumns to get columns infomation......\n"));
         for(idCols = 0; idCols < psTestTableInfo->columNum; idCols++){
             if(checkColumns(&sTestInfo, 
                             psStmt, 
@@ -358,6 +376,8 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
         FullDisconnectEx(fpLog, &sTestInfo);
         return -1;
     }
+    gettimeofday(&tv4,NULL);
+    prepareTime = (tv4.tv_sec*1000 + tv4.tv_usec/1000) - (tv3.tv_sec*1000 + tv3.tv_usec/1000);
     memset(szSelect, 0, sizeof(szSelect));
     sprintf((char *)pData, "%s", psStmt->szSql);
     result = strtok((char *)pData, ";");
@@ -382,6 +402,7 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
         }
         crcTimes = 0;
         totalTimes = 0;
+        extraTime = 0;
         totalRows = 0;
         cols = 0;
         minLen = 0;
@@ -392,49 +413,80 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
         {
             for (i = 1; i <= cols; i++)
             {
+                gettimeofday(&tv3,NULL);
+                gettimeofday(&tv4,NULL);
                 if(psStmt->isCheckColAttr){
+                    LogMsgEx(fpLog, NONE, _T("Call SQLColAttribute to get columns attribute......\n"));
                     if(checkColAttribute(&sTestInfo, psStmt, psTestTableInfo, i - 1) != 0){
                         //LogMsgEx(fpLog, NONE, _T("cols:%d check column attribute fail.\n"), i);
                     }
                 }
                 switch(psStmt->sqlCType[i-1]){
                 case SQL_C_TCHAR:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_TCHAR, ...)\n"), i); 
+                    gettimeofday(&tv4,NULL);
                 case SQL_C_BINARY:
+                    if(psStmt->sqlCType[i-1] == SQL_C_BINARY)LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_BINARY, ...)\n"), i); 
                 case SQL_C_WCHAR:
+                    if(psStmt->sqlCType[i-1] == SQL_C_WCHAR)LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_BINARY, ...)\n"), i); 
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, CONFIG_GET_DATA_SIZE - 1, &len);
                     break;
                 case SQL_C_BIT:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_BIT, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLCHAR), &len);
                     break;
                 case SQL_C_STINYINT:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_STINYINT, ...)\n"), i);
                 case SQL_C_UTINYINT:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_UTINYINT, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLCHAR), &len);
                     break;
                 case SQL_C_SSHORT:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_SSHORT, ...)\n"), i);
                 case SQL_C_USHORT:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_USHORT, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLSMALLINT), &len);
                     break;
                 case SQL_C_SLONG:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_SLONG, ...)\n"), i);
                 case SQL_C_ULONG:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_ULONG, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLINTEGER), &len);
                     break;
                 case SQL_C_SBIGINT:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_SBIGINT, ...)\n"), i);
                 case SQL_C_UBIGINT:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_UBIGINT, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLBIGINT), &len);
                     break;
                 case SQL_C_FLOAT:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_FLOAT, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLREAL), &len);
                     break;
                 case SQL_C_DOUBLE:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_DOUBLE, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQLDOUBLE), &len);
                     break;
                 case SQL_C_TYPE_DATE:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_TYPE_DATE, ...)\n"), i);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(DATE_STRUCT), &len);
                     break;
                 case SQL_C_TYPE_TIME:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_TYPE_TIME, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(TIME_STRUCT), &len);
                     break;
                 case SQL_C_TYPE_TIMESTAMP:
+                    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetData(hstmt, %d, SQL_C_TYPE_TIMESTAMP, ...)\n"), i);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(TIMESTAMP_STRUCT), &len);
                     break;
                 case SQL_INTERVAL_YEAR:
@@ -450,19 +502,24 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
                 case SQL_INTERVAL_HOUR_TO_MINUTE:
                 case SQL_INTERVAL_HOUR_TO_SECOND:
                 case SQL_INTERVAL_MINUTE_TO_SECOND:
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, psStmt->sqlCType[i-1], (SQLPOINTER)pData, sizeof(SQL_INTERVAL_STRUCT), &len);
                     break;
                 case SQL_C_NUMERIC:
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, SQL_C_TCHAR, (SQLPOINTER)pData, CONFIG_GET_DATA_SIZE - 1, &len);
                     break;
                 case SQL_C_GUID:
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, SQL_C_TCHAR, (SQLPOINTER)pData, CONFIG_GET_DATA_SIZE - 1, &len);
                     break;
                 default:
                     printf("[file %s line %d].....%d , %d.....\n", __FILE__, __LINE__, psStmt->sqlCType[i], SQL_C_BINARY);
+                    gettimeofday(&tv4,NULL);
                     retcode = SQLGetData(hstmt, i, SQL_C_TCHAR, (SQLPOINTER)pData, CONFIG_GET_DATA_SIZE - 1, &len);
                     break;
                 }
+                extraTime += (tv4.tv_sec*1000 + tv4.tv_usec/1000) - (tv3.tv_sec*1000 + tv3.tv_usec/1000);
                 if (retcode == SQL_SUCCESS){
                     if(maxLen == 0 && minLen == 0) maxLen = minLen = len;
                     if(maxLen <= len) maxLen = len;
@@ -513,6 +570,9 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
                         gettimeofday(&tv4,NULL);
                         crcTimes += (tv4.tv_sec*1000 + tv4.tv_usec/1000) - (tv3.tv_sec*1000 + tv3.tv_usec/1000);
                     }
+                    else if(len == -1){
+                        LogMsgEx(fpLog, NONE, _T("The result of column %d is NULL\n"), i);
+                    }
                 }
                 else if(i == 1){
                     LogMsgEx(fpLog, TIME_STAMP, _T("Can not get data...\n")); 
@@ -535,11 +595,13 @@ int CTesSQL::testSelect(TestInfo *pTestInfo,
         }
         gettimeofday(&tv2,NULL);
         totalTimes = (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000);
-        LogMsgEx(fpLog, TIME_STAMP, _T("Summary select: execute times:%d (ms) select time:%d (ms) times/rows:%d (ms/row) crc time:%d (ms) total rows:%d cols:%d min:%d btyes max:%d bytes\n"), 
+        LogMsgEx(fpLog, TIME_STAMP, _T("Summary select: init time:%d (ms) execute times:%d (ms) select time:%d (ms) times/rows:%d (ms/row) crc time:%d (ms) extra time:%d (ms) total rows:%d cols:%d min:%d btyes max:%d bytes\n"), 
+                    prepareTime,
                     totalTimes,
-                    totalTimes - crcTimes,
+                    (totalTimes - (crcTimes + extraTime)),
                     (totalRows > 0) ? ((totalTimes - crcTimes) / totalRows) : (totalTimes - crcTimes),
                     crcTimes,
+                    extraTime,
                     totalRows,
                     cols,
                     minLen,
@@ -576,7 +638,7 @@ int CTesSQL::testSQL(TestInfo *pTestInfo, sSqlStmt *psSqlStmt, sTestTableInfo *p
                         sTestInfo.Password, 
                         pGlobalCfg->szConnStr);
     LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
-    if(!FullConnectWithOptionsEx(&sTestInfo, CONNECT_ODBC_VERSION_3, pGlobalCfg->szConnStr)){
+    if(!FullConnectWithOptionsEx(&sTestInfo, CONNECT_ODBC_VERSION_3, pGlobalCfg->szConnStr, fpLog)){
         LogMsgEx(fpLog, NONE, _T("Unable to connect\n"));
         return -1;
     }
@@ -595,7 +657,7 @@ int CTesSQL::testSQL(TestInfo *pTestInfo, sSqlStmt *psSqlStmt, sTestTableInfo *p
         }
     }
     sTestInfo.hstmt = hstmt;
-    SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
+    //SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
     LogMsgEx(fpLog, NONE, _T(".........................................\n"));
     addInfoSessionEx(hstmt, fpLog);
     LogMsgEx(fpLog, NONE, _T(".........................................\n"));
@@ -772,7 +834,7 @@ int CTesSQL::doStmt(TestInfo *pTestInfo)
         }
     };
     gettimeofday(&tv2,NULL);
-    LogMsgEx(fpLog, TIME_STAMP, _T("Statement test complete. Summary: test %s   time:%d ms\n"), 
+    LogMsgEx(fpLog, TIME_STAMP, _T("Statement test is complete. Summary: test %s   time:%d ms\n"), 
                     (totalFail == 0) ? "pass" : "fail",
                     (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000));
     delete pConfig;
@@ -822,7 +884,7 @@ int CTesSQL::doSqlFile(TestInfo *pTestInfo)
         }
     };
     gettimeofday(&tv2,NULL);
-    LogMsgEx(fpLog, TIME_STAMP, _T("Sql file test complete. Summary: test %s   time:%d ms\n"), 
+    LogMsgEx(fpLog, TIME_STAMP, _T("Sql file test is complete. Summary: test %s   time:%d ms\n"), 
                     (totalFail == 0) ? "pass" : "fail",
                     (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000));
     delete pConfig;
@@ -877,7 +939,7 @@ int CTesSQL::doSelect(TestInfo *pTestInfo)
         }
     };
     gettimeofday(&tv2,NULL);
-    LogMsgEx(fpLog, TIME_STAMP, _T("Select test complete. Summary: test %s   time:%d ms\n"), 
+    LogMsgEx(fpLog, TIME_STAMP, _T("Select test is complete. Summary: test %s   time:%d ms\n"), 
                     (totalFail == 0) ? "pass" : "fail",
                     (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000));
     delete pConfig;
@@ -943,7 +1005,7 @@ int CTesSQL::doSqlTest(TestInfo *pTestInfo, char *pCase)
     }
     
     gettimeofday(&tv2,NULL);
-    LogMsgEx(fpLog, TIME_STAMP, _T("SQL test complete. Summary: test %s   time:%d ms\n\n"), 
+    LogMsgEx(fpLog, TIME_STAMP, _T("SQL test is complete. Summary: test %s   time:%d ms\n\n"), 
                     (ret == 0) ? "pass" : "fail",
                     (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000));
 

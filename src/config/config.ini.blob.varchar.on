@@ -1,0 +1,1217 @@
+[config]
+CATALOG          =TRAFODION
+DSN              =traf
+user             =trafodion
+password         =traf123
+schema           =ODBCTEST
+#DSN              =mysql
+#user             =root
+#password         =123456
+#schema           =test
+init_table       =FALSE
+interval         =5
+isMultithreading =FALSE
+isConnectInfo    =TRUE
+#isMultiTask      =TRUE
+test_times       =1
+#connect_string   =DataLang=4
+#test case:SQLColumns,SQLTables,testLoadDirect,testLoadAtExec,testLobUpdate,testRowset,testStmt,testSqlFile,testSelect,cleanupTable
+#test_case        =cleanupTable,testLoadDirect,testSelect
+#test_case        =testSqlFile,testLoadDirect,testSelect
+#test_case        =testLoadDirect,testSelect
+#test_case        =testSelect
+
+[case]
+#init table
+case_type         =testSqlFile
+sql_file         =blob.sql
+sqlfile_cqd      =cqd traf_blob_as_varchar 'on'
+table_name        =TB_BLOB
+
+#insert NULL data by SQL_C_TCHAR
+#SQLPrepare --- SQLBindParameter --- SQLExecute
+[case_1]
+case_type         =testLoadDirect
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =-1,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_direct_rows        = 1
+load_direct_begin_value = 0
+load_direct_insert      =INSERT
+load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_direct_threads     =1
+
+[case_2]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=0
+select_c_type        =SQL_C_TCHAR
+select_times         =1 
+select_interval      =1 
+select_ignore_fail   =TRUE 
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =FALSE
+
+[case_3]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=0
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =FALSE
+
+#insert NULL data by SQL_C_BINARY
+#SQLPrepare --- SQLBindParameter --- SQLExecute
+[case_4]
+case_type         =testLoadDirect
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =-1,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+
+lob_columns      =0
+load_direct_rows        = 1
+load_direct_begin_value = 1
+load_direct_insert      =INSERT
+load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_direct_threads     =1
+
+[case_5]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=1
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =FALSE
+[case_6]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=1
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =FALSE
+
+#insert string data by SQL_C_TCHAR
+#SQLPrepare --- SQLBindParameter --- SQLExecute
+[case_7]
+case_type         =testLoadDirect
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_direct_rows        = 1
+load_direct_begin_value = 2
+load_direct_insert      =INSERT
+load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+
+[case_8]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=2
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =TRUE
+
+[case_9]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=2
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =TRUE
+
+
+#insert string data by SQL_C_BINARY
+#SQLPrepare --- SQLBindParameter --- SQLExecute
+[case_10]
+case_type         =testLoadDirect
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_direct_rows        = 1
+load_direct_begin_value = 3
+load_direct_insert      =INSERT
+load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+
+[case_11]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=3
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =TRUE
+
+[case_12]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=3
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =TRUE
+
+#insert file data by SQL_C_TCHAR
+#SQLPrepare --- SQLBindParameter --- SQLExecute
+[case_13]
+case_type         =testLoadDirect
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_direct_rows        = 1
+load_direct_begin_value = 4
+load_direct_insert      =INSERT
+load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_direct_file        =cc1.jpg
+
+[case_14]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=4
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_4.jpg
+select_calc_crc      =TRUE
+
+[case_15]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=4
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_4.jpg
+select_calc_crc      =TRUE
+
+
+#insert file data by SQL_C_BINARY
+#SQLPrepare --- SQLBindParameter --- SQLExecute
+[case_16]
+case_type         =testLoadDirect
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_direct_rows        = 1
+load_direct_begin_value = 5
+load_direct_insert      =INSERT
+load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_direct_file        =cc1.jpg
+
+[case_17]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=5
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_5.jpg
+select_calc_crc      =TRUE
+
+[case_18]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=5
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_5.jpg
+select_calc_crc      =TRUE
+
+#insert NULL data by SQL_C_TCHAR 
+#SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_19]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =-1,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 6
+load_at_exec_type        = SQL_DATA_AT_EXEC
+#load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_file        =cc1.jpg
+load_at_exec_threads     =1
+
+[case_20]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=6
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_6.jpg
+select_calc_crc      =TRUE
+
+[case_21]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=6
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_6.jpg
+select_calc_crc      =TRUE
+
+
+
+#insert NULL data by SQL_C_BINARY 
+#SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_22]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =-1,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 7
+load_at_exec_type        = SQL_DATA_AT_EXEC
+#load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_file        =cc1.jpg
+load_at_exec_threads     =1
+
+[case_23]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=7
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_7.jpg
+select_calc_crc      =TRUE
+
+[case_24]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=7
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_7.jpg
+select_calc_crc      =TRUE
+
+
+#insert NULL data by SQL_C_TCHAR 
+#SQLPrepare --- SQLBindParameter(...,SQL_LEN_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_25]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =-1,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 8
+#load_at_exec_type        = SQL_DATA_AT_EXEC
+load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_file        =cc1.jpg
+load_at_exec_threads     =1
+
+[case_26]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=8
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_8.jpg
+select_calc_crc      =TRUE
+
+[case_27]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=8
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_8.jpg
+select_calc_crc      =TRUE
+
+
+
+#insert NULL data by SQL_C_BINARY 
+#SQLPrepare --- SQLBindParameter(...,SQL_LEN_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_28]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =-1,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 9
+#load_at_exec_type        = SQL_DATA_AT_EXEC
+load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_file        =cc1.jpg
+load_at_exec_threads     =1
+
+[case_29]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=9
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_9.jpg
+select_calc_crc      =TRUE
+
+[case_30]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=9
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_9.jpg
+select_calc_crc      =TRUE
+
+
+
+#insert string data by SQL_C_TCHAR 
+#SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_31]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 10
+load_at_exec_type        = SQL_DATA_AT_EXEC
+#load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_threads     =1
+
+[case_32]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=10
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_10.jpg
+select_calc_crc      =TRUE
+
+[case_33]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=10
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_10.jpg
+select_calc_crc      =TRUE
+
+#insert string data by SQL_C_BINARY 
+#SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_34]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 11
+load_at_exec_type        = SQL_DATA_AT_EXEC
+#load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_threads     =1
+
+[case_35]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=11
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_11.jpg
+select_calc_crc      =TRUE
+
+[case_36]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=11
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_11.jpg
+select_calc_crc      =TRUE
+
+
+#insert string data by SQL_C_TCHAR 
+#SQLPrepare --- SQLBindParameter(...,SQL_LEN_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_37]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 12
+#load_at_exec_type        = SQL_DATA_AT_EXEC
+load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_threads     =1
+
+[case_38]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=12
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_12.jpg
+select_calc_crc      =TRUE
+
+[case_39]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=12
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_12.jpg
+select_calc_crc      =TRUE
+
+
+#insert string data by SQL_C_BINARY 
+#SQLPrepare --- SQLBindParameter(...,SQL_LEN_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_40]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 13
+#load_at_exec_type        = SQL_DATA_AT_EXEC
+load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_threads     =1
+
+[case_41]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=13
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_13.jpg
+select_calc_crc      =TRUE
+
+[case_42]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=13
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_13.jpg
+select_calc_crc      =TRUE
+
+#insert file data by SQL_C_TCHAR 
+#SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_43]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 14
+load_at_exec_type        = SQL_DATA_AT_EXEC
+#load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_file        =cc1.jpg
+load_at_exec_threads     =1
+
+[case_44]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=14
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_14.jpg
+select_calc_crc      =TRUE
+
+[case_45]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=14
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_14.jpg
+select_calc_crc      =TRUE
+
+
+
+#insert file data by SQL_C_BINARY 
+#SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_46]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 15
+load_at_exec_type        = SQL_DATA_AT_EXEC
+#load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_file        =cc1.jpg
+load_at_exec_threads     =1
+
+[case_47]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=15
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_15.jpg
+select_calc_crc      =TRUE
+
+[case_48]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=15
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_15.jpg
+select_calc_crc      =TRUE
+
+#insert file data by SQL_C_TCHAR 
+#SQLPrepare --- SQLBindParameter(...,SQL_LEN_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_49]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 16
+#load_at_exec_type        = SQL_DATA_AT_EXEC
+load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_file        =cc1.jpg
+load_at_exec_threads     =1
+
+[case_50]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=16
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_16.jpg
+select_calc_crc      =TRUE
+
+[case_51]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=16
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_16.jpg
+select_calc_crc      =TRUE
+
+#insert file data by SQL_C_BINARY 
+#SQLPrepare --- SQLBindParameter(...,SQL_LEN_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
+[case_52]
+case_type         =testLoadAtExec
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+load_at_exec_rows        = 1
+load_at_exec_begin_value = 17
+#load_at_exec_type        = SQL_DATA_AT_EXEC
+load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
+load_at_exec_put_batch   = 4096
+load_at_exec_insert      =INSERT
+load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+load_at_exec_file        =cc1.jpg
+load_at_exec_threads     =1
+
+[case_53]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=17
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_char_id_16.jpg
+select_calc_crc      =TRUE
+
+[case_54]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID=17
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_16.jpg
+select_calc_crc      =TRUE
+
+#rowset:insert NULL data by SQL_C_TCHAR 
+[case_55]
+case_type         =testRowset
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =-1,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =-1,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+rowset_batch_size  =5
+rowset_batch_num   =10
+rowset_begin_value =1000
+rowset_insert      =INSERT
+rowset_threads     =1
+
+[case_56]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=1000 AND ID<=1500
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =FALSE
+
+[case_57]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=1000 AND ID<=1500
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =FALSE
+
+#rowset:insert NULL data by SQL_C_BINARY
+[case_58]
+case_type         =testRowset
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =-1,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+rowset_batch_size  =5
+rowset_batch_num   =10
+rowset_begin_value =2000
+rowset_insert      =INSERT
+rowset_threads     =1
+
+[case_59]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=2000 AND ID<=2500
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =FALSE
+
+[case_60]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=2000 AND ID<=2500
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =FALSE
+
+#rowset:insert string data by SQL_C_TCHAR 
+[case_61]
+case_type         =testRowset
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =14096,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+rowset_batch_size  =5
+rowset_batch_num   =10
+rowset_begin_value =3000
+rowset_insert      =INSERT
+rowset_threads     =1
+
+[case_62]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=3000 AND ID<=3500
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =FALSE
+select_calc_crc      =TRUE
+
+[case_63]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=3000 AND ID<=3500
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =FALSE
+select_calc_crc      =TRUE
+
+#rowset:insert string data by SQL_C_BINARY
+[case_64]
+case_type         =testRowset
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =14096,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+rowset_batch_size  =5
+rowset_batch_num   =10
+rowset_begin_value =4000
+rowset_insert      =INSERT
+rowset_threads     =1
+
+[case_65]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=4000 AND ID<=4500
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =TRUE
+
+[case_66]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=4000 AND ID<=4500
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =FALSE
+select_calc_crc      =TRUE
+
+#rowset:insert file data by SQL_C_TCHAR 
+[case_67]
+case_type         =testRowset
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_TCHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =14096,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+rowset_file        =cc1.jpg
+rowset_batch_size  =5
+rowset_batch_num   =10
+rowset_begin_value =5000
+rowset_insert      =INSERT
+rowset_threads     =1
+
+[case_68]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=5000 AND ID<=5500
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_5000.jpg
+select_calc_crc      =FALSE
+
+[case_69]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=5000 AND ID<=5500
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_5000.jpg
+select_calc_crc      =FALSE
+
+#rowset:insert file data by SQL_C_BINARY
+[case_70]
+case_type         =testRowset
+table_name        =TB_BLOB
+sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
+sql_c_type         =SQL_C_BINARY,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
+column_size       =14096,0,255,255,255,0,0,0,0,255,1024,64
+decimal_digits    =0,0,0,0,0,0,0,0,0,0,0,0
+data_size         =14096,0,200,200,200,0,0,0,0,200,10,60
+data_digits       =0,0,0,0,0,0,0,0,0,0,0,0
+column_name      =B_LOB,ID,DATABASENAME,INSTANCENAME,USERNAME,CREATETIME,FDBVERSIONMAJOR,FDBVERSIONMINOR,FDBVERSIONBUGFIX,FDEPROVIDERNAME,FDEDESCRIPTION,UID
+cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+lob_table        =TRUE
+lob_columns      =0
+
+rowset_file        =cc1.jpg
+rowset_batch_size  =5
+rowset_batch_num   =10
+rowset_begin_value =6000
+rowset_insert      =INSERT
+rowset_threads     =1
+
+[case_71]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=6000 AND ID<=6500
+select_c_type        =SQL_C_TCHAR
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_6000.jpg
+select_calc_crc      =FALSE
+
+[case_72]
+case_type            =testSelect
+select_stmt          =select B_LOB from TB_BLOB where ID>=6000 AND ID<=6500
+select_c_type        =SQL_C_BINARY
+select_times         =1
+select_interval      =1
+select_ignore_fail   =TRUE
+select_checkout      =TRUE
+select_result_null   =FALSE
+select_save_result   =TRUE
+select_save_file     =clob_binary_id_6000.jpg
+select_calc_crc      =FALSE

@@ -12,41 +12,41 @@ void LogAllErrors(SQLHANDLE henv,
     TCHAR	State[STATE_SIZE];
 	SDWORD	NativeError;
     RETCODE returncode;
-	BOOL MsgDisplayed;
+	BOOL MsgDisplayed = FALSE;
     int errorCount = 0;
-
-	MsgDisplayed = 0;
 
    /* Log any henv error messages */
    returncode = SQLError((SQLHANDLE)henv, (SQLHANDLE)NULL, (SQLHANDLE)NULL, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    while((returncode == SQL_SUCCESS) ||
          (returncode == SQL_SUCCESS_WITH_INFO)){
 		State[STATE_SIZE-1]=NULL_STRING;
-        if((MsgDisplayed++) > 10){
-            MsgDisplayed = 0;
+        if((errorCount++) > 10){
+            errorCount = 0;
             break;
         }
+        MsgDisplayed = TRUE;
       printf("   State: %s\n"
 							  "   Native Error: %ld\n"
                 "   Error: %s\n",State,NativeError,buf);
       returncode = SQLError((SQLHANDLE)henv, (SQLHANDLE)NULL, (SQLHANDLE)NULL, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    }
-
+    errorCount = 0;
    /* Log any hdbc error messages */
    returncode = SQLError((SQLHANDLE)NULL, (SQLHANDLE)hdbc, (SQLHANDLE)NULL, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    while((returncode == SQL_SUCCESS) ||
          (returncode == SQL_SUCCESS_WITH_INFO)){
 		State[STATE_SIZE-1]=NULL_STRING;
-        if((MsgDisplayed++) > 10){
-            MsgDisplayed = 0;
+        if((errorCount++) > 10){
+            errorCount = 0;
             break;
         }
+        MsgDisplayed = TRUE;
         printf("   State: %s\n"
 							  "   Native Error: %ld\n"
                 "   Error: %s\n",State,NativeError,buf);
       returncode = SQLError((SQLHANDLE)NULL, (SQLHANDLE)hdbc, (SQLHANDLE)NULL, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    }
-
+    errorCount = 0;
    /* Log any hstmt error messages */
    returncode = SQLError((SQLHANDLE)NULL, (SQLHANDLE)NULL, (SQLHANDLE)hstmt, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    while((returncode == SQL_SUCCESS) ||
@@ -56,6 +56,7 @@ void LogAllErrors(SQLHANDLE henv,
             MsgDisplayed = 0;
             break;
         }
+        MsgDisplayed = TRUE;
         printf("   State: %s\n"
 							  "   Native Error: %ld\n"
                 "   Error: %s\n",State,NativeError,buf);
@@ -77,10 +78,8 @@ void LogAllErrorsEx(FILE *fpLog,
     TCHAR	State[STATE_SIZE];
 	SDWORD	NativeError;
     RETCODE returncode;
-	BOOL MsgDisplayed;
+	BOOL MsgDisplayed = FALSE;
     int errorCount = 0;
-
-	MsgDisplayed = 0;
 
    /* Log any henv error messages */
    returncode = SQLError((SQLHANDLE)henv, (SQLHANDLE)NULL, (SQLHANDLE)NULL, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
@@ -91,12 +90,13 @@ void LogAllErrorsEx(FILE *fpLog,
             MsgDisplayed = 0;
             break;
         }
+        MsgDisplayed = TRUE;
       LogMsgEx(fpLog, NONE, _T("   State: %s\n")
 							  _T("   Native Error: %ld\n")
                 _T("   Error: %s\n"),State,NativeError,buf);
       returncode = SQLError((SQLHANDLE)henv, (SQLHANDLE)NULL, (SQLHANDLE)NULL, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    }
-
+    errorCount = 0;
    /* Log any hdbc error messages */
    returncode = SQLError((SQLHANDLE)NULL, (SQLHANDLE)hdbc, (SQLHANDLE)NULL, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    while((returncode == SQL_SUCCESS) ||
@@ -106,12 +106,13 @@ void LogAllErrorsEx(FILE *fpLog,
             MsgDisplayed = 0;
             break;
         }
+        MsgDisplayed = TRUE;
         LogMsgEx(fpLog, NONE, _T("   State: %s\n")
 							  _T("   Native Error: %ld\n")
                 _T("   Error: %s\n"),State,NativeError,buf);
       returncode = SQLError((SQLHANDLE)NULL, (SQLHANDLE)hdbc, (SQLHANDLE)NULL, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    }
-
+    errorCount = 0;
    /* Log any hstmt error messages */
    returncode = SQLError((SQLHANDLE)NULL, (SQLHANDLE)NULL, (SQLHANDLE)hstmt, (SQLTCHAR*)State, &NativeError, (SQLTCHAR*)buf, MAX_STRING_SIZE, NULL);
    while((returncode == SQL_SUCCESS) ||
@@ -121,6 +122,7 @@ void LogAllErrorsEx(FILE *fpLog,
             MsgDisplayed = 0;
             break;
         }
+        MsgDisplayed = TRUE;
         LogMsgEx(fpLog, NONE, _T("   State: %s\n")
 							  _T("   Native Error: %ld\n")
                 _T("   Error: %s\n"),State,NativeError,buf);
@@ -226,7 +228,7 @@ TrueFalse FullConnectWithOptions(TestInfo *pTestInfo, int Options)
 	/* Connection established */
 	return (TRUE);
 }  /* FullConnectWithOptions() */
-TrueFalse FullConnectWithOptionsEx(TestInfo *pTestInfo, int Options, TCHAR *connStrEx)
+TrueFalse FullConnectWithOptionsEx(TestInfo *pTestInfo, int Options, TCHAR *connStrEx, FILE *fpLog)
 {
     RETCODE returncode;
     SQLHANDLE henv = SQL_NULL_HANDLE;
@@ -292,6 +294,8 @@ TrueFalse FullConnectWithOptionsEx(TestInfo *pTestInfo, int Options, TCHAR *conn
 #endif
     if ((returncode != SQL_SUCCESS) && (returncode != SQL_SUCCESS_WITH_INFO))
 	{
+	    LogMsgEx(fpLog, NONE,_T("[%s:%d]Call SQLConnect fail.\n"), __FILE__, __LINE__);
+	    LogAllErrorsEx(fpLog, henv, hdbc, SQL_NULL_HANDLE);
 		// Free up handles since we hit a problem.
 		if (Options&CONNECT_ODBC_VERSION_2){
 			/* Cleanup.  No need to check return codes since we are already failing */

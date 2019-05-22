@@ -35,6 +35,7 @@ class CTestODBC
         ~CTestODBC();
     public:
         void runTest(void);
+        void runCases(void);
     private:
         testThreadPara mtestThreadPara;
 #ifdef unixcli

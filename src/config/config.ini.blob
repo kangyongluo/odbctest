@@ -1,13 +1,13 @@
 [config]
 CATALOG          =TRAFODION
-#DSN              =traf
-#user             =trafodion
-#password         =traf123
-#schema           =ODBCTEST
-DSN              =MySQL
-user             =root
-password         =123456
-schema           =test
+DSN              =traf
+user             =trafodion
+password         =traf123
+schema           =SEABASE
+#DSN              =MySQL
+#user             =root
+#password         =123456
+#schema           =test
 init_table       =FALSE
 interval         =5
 isMultithreading =FALSE
@@ -108,11 +108,11 @@ sql_file         =blob.sql
 sqlfile_cqd      =cqd traf_blob_as_varchar 'on'
 #sqlfile_cqd     =cqd traf_clob_as_varchar 'on'
 #sqlfile_cqd     =cqd traf_clob_as_varchar 'off'
-table_name        =TB_CLIP_VARCHAR
+table_name        =TB_BLOB
 
 
 [table_1]
-table_name        =TB_CLIP_VARCHAR
+table_name        =TB_BLOB
 sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
 sql_c_type         =SQL_C_CHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
 column_size       =16777216,0,255,255,255,0,0,0,0,255,1024,64
@@ -133,7 +133,7 @@ stmt_result_null  =FALSE
 stmt_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 stmt_times        =1
 
-select_stmt          =select B_LOB from TB_CLIP_VARCHAR where ID<10;select B_LOB from TB_CLIP_VARCHAR where ID>=10 AND ID<20
+select_stmt          =select B_LOB from TB_BLOB where ID<10;select B_LOB from TB_BLOB where ID>=10 AND ID<20
 select_times         =1 
 select_interval      =1 
 select_ignore_fail  =TRUE 

@@ -2,7 +2,7 @@
 #include "../util/config.h"
 #include "../util/global.h"
 #include "../driver/odbcdriver.h"
-#include "../case/testcase.h"
+#include "../case/testCase.h"
 
 typedef enum{
     LOAD_TYPE_DIRECT = 0,
@@ -318,7 +318,7 @@ int testLoad(TestInfo *pTestInfo, LOAD_TEST_TYPE loadType)
         }
     };
     gettimeofday(&tv2,NULL);
-    LogMsgEx(fpTestLog, TIME_STAMP, _T("Sql load test complete. Summary: test %s   time:%d ms\n"), 
+    LogMsgEx(fpTestLog, TIME_STAMP, _T("Sql load test is complete. Summary: test %s   time:%d ms\n"), 
                     (totalFail == 0) ? "pass" : "fail",
                     (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000));
     delete pConfig;

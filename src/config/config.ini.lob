@@ -1,13 +1,13 @@
 [config]
 CATALOG          =TRAFODION
-#DSN              =traf
-#user             =trafodion
-#password         =traf123
-#schema           =ODBCTEST
-DSN              =MySQL
-user             =root
-password         =123456
-schema           =test
+DSN              =traf
+user             =trafodion
+password         =traf123
+schema           =SEABASE
+#DSN              =MySQL
+#user             =root
+#password         =123456
+#schema           =test
 init_table       =FALSE
 interval         =5
 isMultithreading =FALSE

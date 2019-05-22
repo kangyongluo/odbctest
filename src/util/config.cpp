@@ -874,10 +874,10 @@ int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
                     sizeof(szBuf), 
                     ODBC_TEST_CFG_FILE);
     j = 0;
-    result = strtok(szBuf, ",");
+    result = strtok(szBuf, ";");
     while( result != NULL ) {
         _stprintf(psTestTableInfo->szCqd[j++], result);
-        result = strtok(NULL, ",");
+        result = strtok(NULL, ";");
         if(j >= CONFIG_NUM_CQD_SIZE) break;
     }
     for(i = 0; i < psTestTableInfo->columNum; i++){
@@ -1123,10 +1123,10 @@ int CConfig::readLoadDirectInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
                     sizeof(szBuf), 
                     ODBC_TEST_CFG_FILE);
     i = 0;
-    result = strtok(szBuf, ",");
+    result = strtok(szBuf, ";");
     while( result != NULL ) {
         _stprintf(psLoadDataInfo->szLoadCqd[i++], result);
-        result = strtok(NULL, ",");
+        result = strtok(NULL, ";");
         if(i >= CONFIG_NUM_CQD_SIZE) break;
     }
     psLoadDataInfo->putDataType = SQL_NTS;

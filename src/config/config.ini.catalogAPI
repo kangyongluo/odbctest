@@ -2,9 +2,9 @@
 [config]
 CATALOG          =TRAFODION
 DSN              =traf
-user             =db__root
+user             =trafodion
 password         =traf123
-schema           =ODBCTEST
+schema           =SEABASE
 init_table       =FALSE
 interval         =5
 isMultithreading =FALSE
