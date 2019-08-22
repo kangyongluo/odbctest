@@ -210,6 +210,45 @@ end:
         fclose( fp );
     return ret;
 }
+
+#else
+int GetPrivateProfileStringEx(const char *pSectionName,// section name
+                            const char *pKeyName,        // key name
+                            const char *pDefault,        // default string
+                            char *pReturnedString,  // destination buffer
+                            unsigned int nSize,              // size of destination buffer
+                            const char *pFileName        // initialization file name
+                            )
+{
+#if (!defined(unixcli)) && defined(UNICODE)
+    wchar_t szSection[128] = {0};
+    wchar_t szKey[128] = {0};
+    wchar_t szDefault[128] = {0};
+    wchar_t szReturn[128] = {0};
+    wchar_t szFile[128] = {0};
+    int ret;
+
+    MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pSectionName, -1, szSection, sizeof(szSection) - 1);
+    MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pKeyName, -1, szKey, sizeof(szKey) - 1);
+    MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pDefault, -1, szDefault, sizeof(szDefault) - 1);
+    ret = GetPrivateProfileString(szSection, 
+                                    szKey, 
+                                    szDefault, 
+                                    szReturn, 
+                                    nSize, 
+                                    szFile);
+    WideCharToMultiByte(CP_UTF8, 0, szReturn, -1, pReturnedString, nSize, NULL, NULL);
+    return ret;
+#else
+    return GetPrivateProfileString(pSectionName, 
+                                    pKeyName, 
+                                    pDefault, 
+                                    pReturnedString, 
+                                    nSize, 
+                                    pFileName);
+#endif
+}
+
 #endif
 
 int getConfigString(const char *pSectionName,// section name
@@ -220,12 +259,21 @@ int getConfigString(const char *pSectionName,// section name
                             const char *pFileName        // initialization file name
                             )
 {
+#if (!defined(unixcli)) && defined(UNICODE)
+    return GetPrivateProfileStringEx(pSectionName, 
+                                    pKeyName, 
+                                    pDefault, 
+                                    pReturnedString, 
+                                    nSize, 
+                                    pFileName);
+#else
     return GetPrivateProfileString(pSectionName, 
                                     pKeyName, 
                                     pDefault, 
                                     pReturnedString, 
                                     nSize, 
                                     pFileName);
+#endif
 }
 int getConfigBool(const char *pSectionName,// section name
                             const char *pKeyName,        // key name
@@ -234,14 +282,23 @@ int getConfigBool(const char *pSectionName,// section name
                             const char *pFileName        // initialization file name
                             )
 {
-    char szBuf[5] = {0};
-
+    char szBuf[6] = {0};
+    
+#if (!defined(unixcli)) && defined(UNICODE)
+    GetPrivateProfileStringEx(pSectionName, 
+                                    pKeyName, 
+                                    pDefault, 
+                                    szBuf, 
+                                    sizeof(szBuf), 
+                                    pFileName);
+#else
     GetPrivateProfileString(pSectionName, 
                                     pKeyName, 
                                     pDefault, 
                                     szBuf, 
                                     sizeof(szBuf), 
                                     pFileName);
+#endif
     if(strcasecmp(szBuf, "TRUE") == 0){
         *pReturnedBool = TRUE;
     }
@@ -258,376 +315,32 @@ int getConfigInt(const char *pSectionName,// section name
                             )
 {
     char szBuf[20] = {0};
-
+    
+#if (!defined(unixcli)) && defined(UNICODE)
+    GetPrivateProfileStringEx(pSectionName, 
+                                    pKeyName, 
+                                    pDefault, 
+                                    szBuf, 
+                                    sizeof(szBuf), 
+                                    pFileName);
+#else
     GetPrivateProfileString(pSectionName, 
                                     pKeyName, 
                                     pDefault, 
                                     szBuf, 
                                     sizeof(szBuf), 
                                     pFileName);
-
+#endif
     *pReturnedInt = atoi(szBuf);
 
     return sizeof(int);
 }
 CConfig::CConfig(void)
 {
-    char szBuf[128] = {0};
-
-    pODBCTestData = new sODBCTestData;
-    if(pODBCTestData == NULL){
-        printf("new object for config fail !!!\n");
-        return;
-    }
-    memset(pODBCTestData, 0, sizeof(sODBCTestData));
-    mFpSql = NULL;
-
-    mFd = 0;
-    mFdSqlData = 0;
-    mSqlSet = 0;
-    isTableDefault = FALSE;
-
-    if(GetPrivateProfileString("table", "tableName", "", szBuf, sizeof(szBuf), ODBC_TEST_CFG_FILE) == 0){
-        if(GetPrivateProfileString("table", "sql_file", "", szBuf, sizeof(szBuf), ODBC_TEST_CFG_FILE) == 0){
-            isTableDefault = TRUE;
-        }
-    }
+    
 }
 CConfig::~CConfig()
 {
-    SQLINTEGER i, j;
-    
-    if(mFpSql){
-        fclose(mFpSql);
-        mFpSql = NULL;
-    }
-    for(i = 0; i < CONFIG_ROWS_RESULT_MAX; i++){
-        for(j = 0; j < CONFIG_COLUMNS_RESULT_MAX; j++){
-            if(pODBCTestData->mStmtInfo.mResult.szResult[i][j]){
-                free(pODBCTestData->mStmtInfo.mResult.szResult[i][j]);
-                pODBCTestData->mStmtInfo.mResult.szResult[i][j] = NULL;
-            }
-        }
-    }
-    for(i = 0; i < CONFIG_ROWS_RESULT_MAX; i++){
-        for(j = 0; j < CONFIG_COLUMNS_RESULT_MAX; j++){
-            if(pODBCTestData->mSelectInfo.mResult.szResult[i][j]){
-                free(pODBCTestData->mSelectInfo.mResult.szResult[i][j]);
-                pODBCTestData->mSelectInfo.mResult.szResult[i][j] = NULL;
-            }
-        }
-    }
-    for(i = 0; i < CONFIG_ROWS_RESULT_MAX; i++){
-        for(j = 0; j < CONFIG_COLUMNS_RESULT_MAX; j++){
-            if(pODBCTestData->mSqlFileInfo.mResult.szResult[i][j]){
-                free(pODBCTestData->mSqlFileInfo.mResult.szResult[i][j]);
-                pODBCTestData->mSqlFileInfo.mResult.szResult[i][j] = NULL;
-            }
-        }
-    }
-    
-    if(pODBCTestData != NULL){
-        delete pODBCTestData;
-    }
-}
-int CConfig::init(char *pFile)
-{
-    if(mFpSql != NULL){
-        fclose(mFpSql);
-        mFpSql = NULL;
-    }
-    mFpSql = fopen(pFile, "r" );
-    if(mFpSql == NULL) return -1;
-
-    return 0;
-}
-void CConfig::reset(void)
-{
-    mFd = 0;
-    if(mFpSql != NULL){
-        fclose(mFpSql);
-        mFpSql = NULL;
-    }
-}
-void CConfig::setDefaultTable(void)
-{
-    SQLINTEGER i;
-    char *szTable = "CREATE TABLE IF NOT EXISTS TB_ODBC_TEST(\n"
-                    "C00 BLOB,\n"
-                    "C01 CHAR(100) CHARACTER SET ISO88591 ,\n"
-                    "C02 CHAR(100) CHARACTER SET UCS2 ,\n"
-                    "C03 CHAR(100) CHARACTER SET UTF8 ,\n"
-                    "C04 CHAR VARYING(100) CHARACTER SET ISO88591 ,\n"
-                    "C05 CHAR VARYING(100) CHARACTER SET UCS2 ,\n"
-                    "C06 CHAR VARYING(100) CHARACTER SET UTF8 ,\n"
-                    "C07 VARCHAR(100) CHARACTER SET ISO88591 ,\n"
-                    "C08 VARCHAR(100) CHARACTER SET UCS2 ,\n"
-                    "C09 VARCHAR(100) CHARACTER SET UTF8 ,\n"
-                    "C10 VARCHAR2(100) CHARACTER SET ISO88591 ,\n"
-                    "C11 VARCHAR2(100) CHARACTER SET UCS2 ,\n"
-                    "C12 VARCHAR2(100) CHARACTER SET UTF8 ,\n"
-                    "C13 NCHAR(100) ,\n"
-                    "C14 NCHAR VARYING(100) ,\n"
-                    "C15 NATIONAL CHAR(100) ,\n"
-                    "C16 NATIONAL CHAR VARYING(100) ,\n"
-                    "C17 DECIMAL(12, 6) ,\n"
-                    "C18 DECIMAL(9, 6) UNSIGNED ,\n"
-                    "C19 NUMERIC(18, 6) ,\n"
-                    "C20 NUMERIC(9, 6) UNSIGNED ,\n"
-                    "C21 TINYINT ,\n"
-                    "C22 TINYINT UNSIGNED ,\n"
-                    "C23 SMALLINT ,\n"
-                    "C24 SMALLINT UNSIGNED ,\n"
-                    "C25 INT NOT NULL,\n"
-                    "C26 INT UNSIGNED ,\n"
-                    "C27 LARGEINT NOT NULL,\n"
-                    "C28 LARGEINT UNSIGNED,\n"
-                    "C29 BIGINT ,\n"
-                    "C30 REAL ,\n"
-                    "C31 FLOAT ,\n"
-                    "C32 FLOAT(4) ,\n"
-                    "C33 DOUBLE PRECISION ,\n"
-                    "C34 DATE ,\n"
-                    "C35 TIME,\n"
-                    "C36 TIME(4),\n"
-                    "C37 TIMESTAMP,\n"
-                    "C38 TIMESTAMP(6),\n"
-                    "C39 INTERVAL YEAR(2) ,\n"
-                    "C40 INTERVAL MONTH(2) ,\n"
-                    "C41 INTERVAL DAY(2) ,\n"
-                    "C42 INTERVAL HOUR(2) ,\n"
-                    "C43 INTERVAL MINUTE(2) ,\n"
-                    "C44 INTERVAL SECOND(2,6) ,\n"
-                    "C45 INTERVAL YEAR(2) TO MONTH ,\n"
-                    "C46 INTERVAL DAY(2) TO HOUR ,\n"
-                    "C47 INTERVAL DAY(2) TO MINUTE ,\n"
-                    "C48 INTERVAL DAY(2) TO SECOND(6) ,\n"
-                    "C49 INTERVAL HOUR(2) TO MINUTE ,\n"
-                    "C50 INTERVAL HOUR(2) TO SECOND(6) ,\n"
-                    "C51 INTERVAL MINUTE(2) TO SECOND(6),\n"
-                    "PRIMARY KEY (C25)\n"
-                    ")\n"
-                    "SALT USING 10 PARTITIONS ON (C25)\n";
-    sprintf(pODBCTestData->mTableInfo.szTableName, "%s", "TB_ODBC_TEST");
-    
-    pODBCTestData->mTableInfo.columNum = 52;
-    for(i = 0; i < pODBCTestData->mTableInfo.columNum; i++)
-        sprintf(pODBCTestData->mTableInfo.szColName[i], "C%02d", i);
-    pODBCTestData->mTableInfo.isLobTable = TRUE;
-    pODBCTestData->mTableInfo.numLobCols = 1;
-    pODBCTestData->mTableInfo.idLobCols[0] = 0;
-    
-    pODBCTestData->mTableInfo.sqlCType[0] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[1] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[2] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[3] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[4] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[5] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[6] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[7] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[8] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[9] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[10] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[11] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[12] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[13] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[14] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[15] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[16] = SQL_C_CHAR;
-    pODBCTestData->mTableInfo.sqlCType[17] = SQL_C_NUMERIC;
-    pODBCTestData->mTableInfo.sqlCType[18] = SQL_C_NUMERIC;
-    pODBCTestData->mTableInfo.sqlCType[19] = SQL_C_NUMERIC;
-    pODBCTestData->mTableInfo.sqlCType[20] = SQL_C_NUMERIC;
-    pODBCTestData->mTableInfo.sqlCType[21] = SQL_C_TINYINT;
-    pODBCTestData->mTableInfo.sqlCType[22] = SQL_C_TINYINT;
-    pODBCTestData->mTableInfo.sqlCType[23] = SQL_C_SSHORT;
-    pODBCTestData->mTableInfo.sqlCType[24] = SQL_C_USHORT;
-    pODBCTestData->mTableInfo.sqlCType[25] = SQL_C_ULONG;
-    pODBCTestData->mTableInfo.sqlCType[26] = SQL_C_SLONG;
-    pODBCTestData->mTableInfo.sqlCType[27] = SQL_C_SBIGINT;
-    pODBCTestData->mTableInfo.sqlCType[28] = SQL_C_UBIGINT;
-    pODBCTestData->mTableInfo.sqlCType[29] = SQL_C_SBIGINT;
-    pODBCTestData->mTableInfo.sqlCType[30] = SQL_C_FLOAT;
-    pODBCTestData->mTableInfo.sqlCType[31] = SQL_C_FLOAT;
-    pODBCTestData->mTableInfo.sqlCType[32] = SQL_C_FLOAT;
-    pODBCTestData->mTableInfo.sqlCType[33] = SQL_C_DOUBLE;
-    pODBCTestData->mTableInfo.sqlCType[34] = SQL_C_TYPE_DATE;
-    pODBCTestData->mTableInfo.sqlCType[35] = SQL_C_TYPE_TIME;
-    pODBCTestData->mTableInfo.sqlCType[36] = SQL_C_TYPE_TIME;
-    pODBCTestData->mTableInfo.sqlCType[37] = SQL_C_TYPE_TIMESTAMP;
-    pODBCTestData->mTableInfo.sqlCType[38] = SQL_C_TYPE_TIMESTAMP;
-    pODBCTestData->mTableInfo.sqlCType[39] = SQL_C_INTERVAL_YEAR;
-    pODBCTestData->mTableInfo.sqlCType[40] = SQL_C_INTERVAL_MONTH;
-    pODBCTestData->mTableInfo.sqlCType[41] = SQL_C_INTERVAL_DAY;
-    pODBCTestData->mTableInfo.sqlCType[42] = SQL_C_INTERVAL_HOUR;
-    pODBCTestData->mTableInfo.sqlCType[43] = SQL_C_INTERVAL_MINUTE;
-    pODBCTestData->mTableInfo.sqlCType[44] = SQL_C_INTERVAL_SECOND;
-    pODBCTestData->mTableInfo.sqlCType[45] = SQL_C_INTERVAL_YEAR_TO_MONTH;
-    pODBCTestData->mTableInfo.sqlCType[46] = SQL_C_INTERVAL_DAY_TO_HOUR;
-    pODBCTestData->mTableInfo.sqlCType[47] = SQL_C_INTERVAL_DAY_TO_MINUTE;
-    pODBCTestData->mTableInfo.sqlCType[48] = SQL_C_INTERVAL_DAY_TO_SECOND;
-    pODBCTestData->mTableInfo.sqlCType[49] = SQL_C_INTERVAL_HOUR_TO_MINUTE;
-    pODBCTestData->mTableInfo.sqlCType[50] = SQL_C_INTERVAL_HOUR_TO_SECOND;
-    pODBCTestData->mTableInfo.sqlCType[51] = SQL_C_INTERVAL_MINUTE_TO_SECOND;
-
-    pODBCTestData->mTableInfo.sqlType[0] = SQL_VARCHAR;
-    pODBCTestData->mTableInfo.sqlType[1] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[2] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[3] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[4] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[5] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[6] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[7] = SQL_VARCHAR;
-    pODBCTestData->mTableInfo.sqlType[8] = SQL_VARCHAR;
-    pODBCTestData->mTableInfo.sqlType[9] = SQL_VARCHAR;
-    pODBCTestData->mTableInfo.sqlType[10] = SQL_VARCHAR;
-    pODBCTestData->mTableInfo.sqlType[11] = SQL_VARCHAR;
-    pODBCTestData->mTableInfo.sqlType[12] = SQL_VARCHAR;
-    pODBCTestData->mTableInfo.sqlType[13] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[14] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[15] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[16] = SQL_CHAR;
-    pODBCTestData->mTableInfo.sqlType[17] = SQL_DECIMAL;
-    pODBCTestData->mTableInfo.sqlType[18] = SQL_DECIMAL;
-    pODBCTestData->mTableInfo.sqlType[19] = SQL_DECIMAL;
-    pODBCTestData->mTableInfo.sqlType[20] = SQL_DECIMAL;
-    pODBCTestData->mTableInfo.sqlType[21] = SQL_TINYINT;
-    pODBCTestData->mTableInfo.sqlType[22] = SQL_TINYINT;
-    pODBCTestData->mTableInfo.sqlType[23] = SQL_SMALLINT;
-    pODBCTestData->mTableInfo.sqlType[24] = SQL_SMALLINT;
-    pODBCTestData->mTableInfo.sqlType[25] = SQL_INTEGER;
-    pODBCTestData->mTableInfo.sqlType[26] = SQL_INTEGER;
-    pODBCTestData->mTableInfo.sqlType[27] = SQL_BIGINT;
-    pODBCTestData->mTableInfo.sqlType[28] = SQL_BIGINT;
-    pODBCTestData->mTableInfo.sqlType[29] = SQL_BIGINT;
-    pODBCTestData->mTableInfo.sqlType[30] = SQL_REAL;
-    pODBCTestData->mTableInfo.sqlType[31] = SQL_VARCHAR;
-    pODBCTestData->mTableInfo.sqlType[32] = SQL_FLOAT;
-    pODBCTestData->mTableInfo.sqlType[33] = SQL_DOUBLE;
-    pODBCTestData->mTableInfo.sqlType[34] = SQL_TYPE_DATE;
-    pODBCTestData->mTableInfo.sqlType[35] = SQL_TYPE_TIME;
-    pODBCTestData->mTableInfo.sqlType[36] = SQL_TYPE_TIME;
-    pODBCTestData->mTableInfo.sqlType[37] = SQL_TYPE_TIMESTAMP;
-    pODBCTestData->mTableInfo.sqlType[38] = SQL_TYPE_TIMESTAMP;
-    pODBCTestData->mTableInfo.sqlType[39] = SQL_INTERVAL_YEAR;
-    pODBCTestData->mTableInfo.sqlType[40] = SQL_INTERVAL_MONTH;
-    pODBCTestData->mTableInfo.sqlType[41] = SQL_INTERVAL_DAY;
-    pODBCTestData->mTableInfo.sqlType[42] = SQL_INTERVAL_HOUR;
-    pODBCTestData->mTableInfo.sqlType[43] = SQL_INTERVAL_MINUTE;
-    pODBCTestData->mTableInfo.sqlType[44] = SQL_INTERVAL_SECOND;
-    pODBCTestData->mTableInfo.sqlType[45] = SQL_INTERVAL_YEAR_TO_MONTH;
-    pODBCTestData->mTableInfo.sqlType[46] = SQL_INTERVAL_DAY_TO_HOUR;
-    pODBCTestData->mTableInfo.sqlType[47] = SQL_INTERVAL_DAY_TO_MINUTE;
-    pODBCTestData->mTableInfo.sqlType[48] = SQL_INTERVAL_DAY_TO_SECOND;
-    pODBCTestData->mTableInfo.sqlType[49] = SQL_INTERVAL_HOUR_TO_MINUTE;
-    pODBCTestData->mTableInfo.sqlType[50] = SQL_INTERVAL_HOUR_TO_SECOND;
-    pODBCTestData->mTableInfo.sqlType[51] = SQL_INTERVAL_MINUTE_TO_SECOND;
-
-    pODBCTestData->mTableInfo.columnSize[0] = 16777216;
-    pODBCTestData->mTableInfo.columnSize[1] = 100;
-    pODBCTestData->mTableInfo.columnSize[2] = 100;
-    pODBCTestData->mTableInfo.columnSize[3] = 100;
-    pODBCTestData->mTableInfo.columnSize[4] = 100;
-    pODBCTestData->mTableInfo.columnSize[5] = 100;
-    pODBCTestData->mTableInfo.columnSize[6] = 100;
-    pODBCTestData->mTableInfo.columnSize[7] = 100;
-    pODBCTestData->mTableInfo.columnSize[8] = 100;
-    pODBCTestData->mTableInfo.columnSize[9] = 100;
-    pODBCTestData->mTableInfo.columnSize[10] = 100;
-    pODBCTestData->mTableInfo.columnSize[11] = 100;
-    pODBCTestData->mTableInfo.columnSize[12] = 100;
-    pODBCTestData->mTableInfo.columnSize[13] = 100;
-    pODBCTestData->mTableInfo.columnSize[14] = 100;
-    pODBCTestData->mTableInfo.columnSize[15] = 100;
-    pODBCTestData->mTableInfo.columnSize[16] = 100;
-    pODBCTestData->mTableInfo.columnSize[17] = 12;
-    pODBCTestData->mTableInfo.columnSize[18] = 9;
-    pODBCTestData->mTableInfo.columnSize[19] = 18;
-    pODBCTestData->mTableInfo.columnSize[20] = 9;
-    pODBCTestData->mTableInfo.columnSize[21] = 0;
-    pODBCTestData->mTableInfo.columnSize[22] = 0;
-    pODBCTestData->mTableInfo.columnSize[23] = 0;
-    pODBCTestData->mTableInfo.columnSize[24] = 0;
-    pODBCTestData->mTableInfo.columnSize[25] = 0;
-    pODBCTestData->mTableInfo.columnSize[26] = 0;
-    pODBCTestData->mTableInfo.columnSize[27] = 0;
-    pODBCTestData->mTableInfo.columnSize[28] = 0;
-    pODBCTestData->mTableInfo.columnSize[29] = 0;
-    pODBCTestData->mTableInfo.columnSize[30] = 0;
-    pODBCTestData->mTableInfo.columnSize[31] = 0;
-    pODBCTestData->mTableInfo.columnSize[32] = 0;
-    pODBCTestData->mTableInfo.columnSize[33] = 0;
-    pODBCTestData->mTableInfo.columnSize[34] = 0;
-    pODBCTestData->mTableInfo.columnSize[35] = 0;
-    pODBCTestData->mTableInfo.columnSize[36] = 0;
-    pODBCTestData->mTableInfo.columnSize[37] = 0;
-    pODBCTestData->mTableInfo.columnSize[38] = 0;
-    pODBCTestData->mTableInfo.columnSize[39] = 0;
-    pODBCTestData->mTableInfo.columnSize[40] = 0;
-    pODBCTestData->mTableInfo.columnSize[41] = 0;
-    pODBCTestData->mTableInfo.columnSize[42] = 0;
-    pODBCTestData->mTableInfo.columnSize[43] = 0;
-    pODBCTestData->mTableInfo.columnSize[44] = 0;
-    pODBCTestData->mTableInfo.columnSize[45] = 0;
-    pODBCTestData->mTableInfo.columnSize[46] = 0;
-    pODBCTestData->mTableInfo.columnSize[47] = 0;
-    pODBCTestData->mTableInfo.columnSize[48] = 0;
-    pODBCTestData->mTableInfo.columnSize[49] = 0;
-    pODBCTestData->mTableInfo.columnSize[50] = 0;
-    pODBCTestData->mTableInfo.columnSize[51] = 0;
-
-    pODBCTestData->mTableInfo.decimalDigits[0] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[1] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[2] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[3] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[4] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[5] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[6] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[7] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[8] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[9] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[10] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[11] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[12] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[13] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[14] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[15] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[16] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[17] = 6;
-    pODBCTestData->mTableInfo.decimalDigits[18] = 6;
-    pODBCTestData->mTableInfo.decimalDigits[19] = 6;
-    pODBCTestData->mTableInfo.decimalDigits[20] = 6;
-    pODBCTestData->mTableInfo.decimalDigits[21] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[22] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[23] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[24] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[25] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[26] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[27] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[28] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[29] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[30] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[31] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[32] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[33] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[34] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[35] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[36] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[37] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[38] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[39] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[40] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[41] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[42] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[43] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[44] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[45] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[46] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[47] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[48] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[49] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[50] = 0;
-    pODBCTestData->mTableInfo.decimalDigits[51] = 0;
 
 }
 int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
@@ -677,7 +390,8 @@ int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
         {"SQL_C_INTERVAL_DAY_TO_SECOND", SQL_C_INTERVAL_DAY_TO_SECOND},
         {"SQL_C_INTERVAL_HOUR_TO_MINUTE", SQL_C_INTERVAL_HOUR_TO_MINUTE},
         {"SQL_C_INTERVAL_HOUR_TO_SECOND", SQL_C_INTERVAL_HOUR_TO_SECOND},
-        {"SQL_C_INTERVAL_MINUTE_TO_SECOND", SQL_C_INTERVAL_MINUTE_TO_SECOND}
+        {"SQL_C_INTERVAL_MINUTE_TO_SECOND", SQL_C_INTERVAL_MINUTE_TO_SECOND},
+        {"SQL_C_DEFAULT", SQL_C_DEFAULT}
     };
     struct sSqlTypeInfo_
     {
@@ -717,9 +431,12 @@ int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
         {"SQL_INTERVAL_DAY_TO_SECOND", SQL_INTERVAL_DAY_TO_SECOND},
         {"SQL_INTERVAL_HOUR_TO_MINUTE", SQL_INTERVAL_HOUR_TO_MINUTE},
         {"SQL_INTERVAL_HOUR_TO_SECOND", SQL_INTERVAL_HOUR_TO_SECOND},
-        {"SQL_INTERVAL_MINUTE_TO_SECOND", SQL_INTERVAL_MINUTE_TO_SECOND}
+        {"SQL_INTERVAL_MINUTE_TO_SECOND", SQL_INTERVAL_MINUTE_TO_SECOND},
+        {"SQL_DEFAULT", SQL_DEFAULT}
     };
     int i, j;
+    SQLINTEGER len;
+    char flg = 0;
     
     ret = getConfigString(
                     pSection, 
@@ -746,12 +463,15 @@ int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
     j = 0;
     result = strtok(szBuf, ",");
     while( result != NULL ) {
+        flg = 1;
         for(i = 0; i < sizeof(sSqlTypeInfo) / sizeof(sSqlTypeInfo[0]); i++){
             if(strcasecmp(sSqlTypeInfo[i].szSqlType, result) == 0){
                 psTestTableInfo->sqlType[j++] = sSqlTypeInfo[i].sqlType;
+                flg = 0;
                 break; 
             }
         }
+        if(flg) printf("Unknow SQL Type:%s !!!!!!!!!!\n", result);
         result = strtok(NULL, ",");
         if(j >= CONFIG_SQL_COLUMNS_MAX) break;
     }
@@ -771,12 +491,15 @@ int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
     j = 0;
     result = strtok(szBuf, ",");
     while( result != NULL ) {
+        flg = 0;
         for(i = 0; i < sizeof(sSqlCTypeInfo) / sizeof(sSqlCTypeInfo[0]); i++){
            if(strcasecmp(sSqlCTypeInfo[i].szSqlCType, result) == 0){
                 psTestTableInfo->sqlCType[j++] = sSqlCTypeInfo[i].sqlCType;
+                flg = 0;
                 break; 
             }
         }
+        if(flg) printf("Unknow SQL C Type:%s !!!!!!!!!!\n", result);
         result = strtok(NULL, ",");
         if(j >= CONFIG_SQL_COLUMNS_MAX) break;
     }
@@ -861,7 +584,7 @@ int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
     j = 0;
     result = strtok(szBuf, ",");
     while( result != NULL ) {
-        _stprintf(psTestTableInfo->szColName[j++], result);
+        sprintf(psTestTableInfo->szColName[j++], result);
         result = strtok(NULL, ",");
         if(j >= CONFIG_SQL_COLUMNS_MAX) break;
     }
@@ -876,7 +599,7 @@ int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
     j = 0;
     result = strtok(szBuf, ";");
     while( result != NULL ) {
-        _stprintf(psTestTableInfo->szCqd[j++], result);
+        sprintf(psTestTableInfo->szCqd[j++], result);
         result = strtok(NULL, ";");
         if(j >= CONFIG_NUM_CQD_SIZE) break;
     }
@@ -909,182 +632,41 @@ int CConfig::readTable(char *pSection, sTestTableInfo *psTestTableInfo)
             if(psTestTableInfo->numLobCols >= (sizeof(psTestTableInfo->idLobCols) / sizeof(psTestTableInfo->idLobCols[0]))) break;
         }
     }
-    
-    return 0;
-}
-int CConfig::scanTestStmt(void)
-{
-    char szSection[64] = {0};
-    int ret;
-
-    if(pODBCTestData == NULL) return -1;
-    
-    pODBCTestData->isAvailableSqlFile = FALSE;
-    pODBCTestData->isAvailableStmt = FALSE;
-    pODBCTestData->isAvailableSelect = FALSE;
-    pODBCTestData->isAvailableTable = FALSE;
-
-    memset(&pODBCTestData->mTableInfo, 0, sizeof(pODBCTestData->mTableInfo));
-    if(mFd == 0) _stprintf(szSection, _T("%s"), _T("table"));
-    else _stprintf(szSection, _T("%s%s%d"), _T("table"), "_", mFd);
-    ret = readTable(szSection, &pODBCTestData->mTableInfo);
-    if(ret == 0){
-        pODBCTestData->isAvailableTable = TRUE;
-    }
-    if(readStmt(szSection, &pODBCTestData->mStmtInfo) == 0)
-        pODBCTestData->isAvailableStmt = TRUE;
-    if(readSelect(szSection, &pODBCTestData->mSelectInfo) == 0)
-        pODBCTestData->isAvailableSelect = TRUE;
-    if((pODBCTestData->isAvailableStmt == TRUE) || (pODBCTestData->isAvailableSelect == TRUE)){
-        mFd++;
-        return 0;
-    }
-        
-    return -1;
-}
-int CConfig::scanTestTable(void)
-{
-    char szSection[64] = {0};
-    int ret;
-
-    if(pODBCTestData == NULL) return -1;
-    
-    pODBCTestData->isAvailableSqlFile = FALSE;
-    pODBCTestData->isAvailableStmt = FALSE;
-    pODBCTestData->isAvailableSelect = FALSE;
-    pODBCTestData->isAvailableTable = FALSE;
-    if(isTableDefault){
-        if(mFd != 0){
-            return -1;
+    for(i = 0; i < CONFIG_SQL_COLUMNS_MAX; i++)
+        psTestTableInfo->paraValueLen[i] =  SQL_DEFAULT;
+    memset(szBuf, 0, sizeof(szBuf));
+    ret = getConfigString(
+                    pSection, 
+                    "parameter_len", 
+                    "", 
+                    szBuf, 
+                    sizeof(szBuf), 
+                    ODBC_TEST_CFG_FILE);
+    j = 0;
+    result = strtok(szBuf, ",");
+    while( result != NULL ) {
+        if(strcasecmp("SQL_NTS", result) == 0){
+            psTestTableInfo->paraValueLen[j++] = SQL_NTS;
         }
-        mFd = -1;
-        pODBCTestData->isAvailableTable = TRUE;
-        return 0;
-    }
-    memset(&pODBCTestData->mTableInfo, 0, sizeof(pODBCTestData->mTableInfo));
-    if(mFd == 0) _stprintf(szSection, _T("%s"), _T("table"));
-    else _stprintf(szSection, _T("%s%s%d"), _T("table"), "_", mFd);
-    ret = readTable(szSection, &pODBCTestData->mTableInfo);
-    if(ret == 0){
-        if(readStmt(szSection, &pODBCTestData->mStmtInfo) == 0)
-            pODBCTestData->isAvailableStmt = TRUE;
-        if(readSelect(szSection, &pODBCTestData->mSelectInfo) == 0)
-            pODBCTestData->isAvailableSelect = TRUE;
-        readLoadDirectInfo(szSection, &pODBCTestData->mLoadDirect);
-        readRowsetInfo(szSection, &pODBCTestData->mRowsetInfo);
-        readAtExecInfo(szSection, &pODBCTestData->mLoadAtExec);
-        readLobUpdateInfo(szSection, &pODBCTestData->mLobUpdate);
-        mFd++;
-        pODBCTestData->isAvailableTable = TRUE;
-        return 0;
-    }
-    else if(ret == -2){
-        mFd++;
-        return 0;
-    }
-    return -1;
-}
-int CConfig::getTableName(char *ddl, char *name, int size)
-{
-    char *p;
-    int pos = 0;
-
-    p = strstr(ddl, "TABLE");
-    if(p == NULL){
-        p = strstr(ddl, "table");
-    }
-    if(p != NULL){
-        p += strlen("table");
-        while(*p){
-            if(isalnum(*p) || (*p == '_')){
-                break;
-            }
-            p++;
+        else if(strcasecmp("SQL_NULL_DATA", result) == 0){
+            psTestTableInfo->paraValueLen[j++] = SQL_NULL_DATA;
         }
-        while(*p){
-            if(isalnum(*p) || (*p == '_')){
-                name[pos++] = *p;
+        else{
+            len = (SQLLEN)atoi(result);
+            if(len > 0){
+                len = (psTestTableInfo->actualDataSize[j][0] > 0) ? psTestTableInfo->actualDataSize[j][0] : len;
+                psTestTableInfo->paraValueLen[j] = (SQLLEN)(len);
             }
             else{
-                *p = 0x00;
-                break;
+                psTestTableInfo->paraValueLen[j] = SQL_DEFAULT;
             }
-            if(pos >= size) break;
-            p++;
+            j++;
         }
+        result = strtok(NULL, ",");
+        if(j >= CONFIG_SQL_COLUMNS_MAX) break;
     }
-
-    return 0;
-}
-int CConfig::findSQL(FILE *fp, char *sql, unsigned int nsize)
-{
-    int ret = -1;
-    char szBuf[1024] = {0};
-    char szDDL[2048] = {0};
-    int len, i, offset;
-
-    if(fp == NULL) return -1;
     
-    offset = 0;
-    while (fgets(szBuf , sizeof(szBuf) , fp) != NULL) {
-        if((offset == 0) && (szBuf[0] == '#')){ 
-            offset = 0;
-            memset(szBuf, 0, sizeof(szBuf));
-            continue;
-        }
-        if((offset == 0) && (szBuf[0] == '-') && (szBuf[1] == '-')){ 
-            offset = 0;
-            memset(szBuf, 0, sizeof(szBuf));
-            continue;
-        }
-        if((offset == 0) && (szBuf[0] == '/') && (szBuf[1] == '/')){ 
-            offset = 0;
-            memset(szBuf, 0, sizeof(szBuf));
-            continue;
-        }
-        len = strlen(szBuf);
-        i = len - 1;
-        while(szBuf[i] == ' '){
-            szBuf[i] = 0x00;
-            i--;
-            if(i == 0) break;
-        }
-        
-        len = strlen(szBuf);
-        i = len - 1;
-        while(szBuf[i] == 0x0a || szBuf[i] == 0x0d){
-            szBuf[i] = 0x00;
-            i--;
-            if(i == 0) break;
-        }
-        len = strlen(szBuf);
-        if(len == 0) continue;
-        if(offset == 0){
-           offset = len;
-           strncpy(szDDL, szBuf, offset);
-        }
-        else if((len > 0) && ((offset + len) < sizeof(szDDL))){
-            strncpy(&szDDL[offset], szBuf, len);
-            offset += len;            
-        }
-        else{
-            offset = 0;
-        }
-        
-        if((offset > 0) && (szDDL[offset - 1] == ';')){
-            if(offset <= nsize){
-                strncpy(sql, szDDL, offset);
-                return 0;
-            }
-            offset = 0;
-        }
-        else{
-            szDDL[offset] = '\n';
-            offset++;
-        }
-        memset(szBuf, 0, sizeof(szBuf));
-    }
-    return ret;
+    return 0;
 }
 int CConfig::readLoadDirectInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
 {
@@ -1109,6 +691,12 @@ int CConfig::readLoadDirectInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
                     psLoadDataInfo->szInsertType, 
                     sizeof(psLoadDataInfo->szInsertType), 
                     ODBC_TEST_CFG_FILE);
+    getConfigString(pSection, 
+                    "load_direct_where", 
+                    "", 
+                    psLoadDataInfo->szInsertWhere, 
+                    sizeof(psLoadDataInfo->szInsertType), 
+                    ODBC_TEST_CFG_FILE);
     getConfigInt(pSection, 
             "load_direct_threads", 
             "1", 
@@ -1125,7 +713,7 @@ int CConfig::readLoadDirectInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
     i = 0;
     result = strtok(szBuf, ";");
     while( result != NULL ) {
-        _stprintf(psLoadDataInfo->szLoadCqd[i++], result);
+        sprintf(psLoadDataInfo->szLoadCqd[i++], result);
         result = strtok(NULL, ";");
         if(i >= CONFIG_NUM_CQD_SIZE) break;
     }
@@ -1136,7 +724,13 @@ int CConfig::readLoadDirectInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
                     psLoadDataInfo->szLobFile, 
                     sizeof(psLoadDataInfo->szLobFile), 
                     ODBC_TEST_CFG_FILE);
-    if(_tcslen(psLoadDataInfo->szLobFile) > 0){
+    getConfigString(pSection, 
+                    "load_direct_file_charset", 
+                    "utf-8", 
+                    psLoadDataInfo->szCharsetOfFile, 
+                    sizeof(psLoadDataInfo->szCharsetOfFile), 
+                    ODBC_TEST_CFG_FILE);
+    if(strlen(psLoadDataInfo->szLobFile) > 0){
         psLoadDataInfo->putDataType = SQL_DATA_AT_EXEC;
     }
     getConfigBool(pSection, 
@@ -1169,9 +763,15 @@ int CConfig::readRowsetInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
                 &psLoadDataInfo->beginVal,
                 ODBC_TEST_CFG_FILE);
     getConfigString(pSection, 
-                    "rowset_type", 
+                    "rowset_insert", 
                     "INSERT", 
                     psLoadDataInfo->szInsertType, 
+                    sizeof(psLoadDataInfo->szInsertType), 
+                    ODBC_TEST_CFG_FILE);
+    getConfigString(pSection, 
+                    "rowset_where", 
+                    "", 
+                    psLoadDataInfo->szInsertWhere, 
                     sizeof(psLoadDataInfo->szInsertType), 
                     ODBC_TEST_CFG_FILE);
     getConfigInt(pSection, 
@@ -1190,7 +790,7 @@ int CConfig::readRowsetInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
     i = 0;
     result = strtok(szBuf, ";");
     while( result != NULL ) {
-        _stprintf(psLoadDataInfo->szLoadCqd[i++], result);
+        sprintf(psLoadDataInfo->szLoadCqd[i++], result);
         result = strtok(NULL, ";");
         if(i >= CONFIG_NUM_CQD_SIZE) break;
     }
@@ -1199,6 +799,12 @@ int CConfig::readRowsetInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
                     "", 
                     psLoadDataInfo->szLobFile, 
                     sizeof(psLoadDataInfo->szLobFile), 
+                    ODBC_TEST_CFG_FILE);
+    getConfigString(pSection, 
+                    "rowset_file_charset", 
+                    "utf-8", 
+                    psLoadDataInfo->szCharsetOfFile, 
+                    sizeof(psLoadDataInfo->szCharsetOfFile), 
                     ODBC_TEST_CFG_FILE);
     
     return 0;
@@ -1219,6 +825,12 @@ int CConfig::readAtExecInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
     if(ret == 0){
         //return -1;
     }
+    getConfigString(pSection, 
+                    "load_at_exec_file_charset", 
+                    "utf-8", 
+                    psLoadDataInfo->szCharsetOfFile, 
+                    sizeof(psLoadDataInfo->szCharsetOfFile), 
+                    ODBC_TEST_CFG_FILE);
     psLoadDataInfo->batchSize = 1;
     getConfigInt(pSection, 
                 "load_at_exec_rows", 
@@ -1255,7 +867,7 @@ int CConfig::readAtExecInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
     i = 0;
     result = strtok(szBuf, ";");
     while( result != NULL ) {
-        _stprintf(psLoadDataInfo->szLoadCqd[i++], result);
+        sprintf(psLoadDataInfo->szLoadCqd[i++], result);
         result = strtok(NULL, ";");
         if(i >= CONFIG_NUM_CQD_SIZE) break;
     }
@@ -1297,6 +909,12 @@ int CConfig::readLobUpdateInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
                     psLoadDataInfo->szLobFile, 
                     sizeof(psLoadDataInfo->szLobFile), 
                     ODBC_TEST_CFG_FILE);
+    getConfigString(pSection, 
+                    "lobupdate_file_charset", 
+                    "utf-8", 
+                    psLoadDataInfo->szCharsetOfFile, 
+                    sizeof(psLoadDataInfo->szCharsetOfFile), 
+                    ODBC_TEST_CFG_FILE);
     psLoadDataInfo->batchSize = 1;
     getConfigInt(pSection, 
                 "lobupdate_rows", 
@@ -1333,7 +951,7 @@ int CConfig::readLobUpdateInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
     i = 0;
     result = strtok(szBuf, ";");
     while( result != NULL ) {
-        _stprintf(psLoadDataInfo->szLoadCqd[i++], result);
+        sprintf(psLoadDataInfo->szLoadCqd[i++], result);
         result = strtok(NULL, ";");
         if(i >= CONFIG_NUM_CQD_SIZE) break;
     }
@@ -1348,7 +966,7 @@ int CConfig::readLobUpdateInfo(char *pSection, sLoadDataInfo *psLoadDataInfo)
     return 0;
 }
 
-int CConfig::readStmt(char *pSection, sSqlStmt *psStmtInfo)
+int CConfig::readSQL(char *pSection, sSqlStmt *psStmtInfo)
 {
     int ret;
     int i, j;
@@ -1401,7 +1019,7 @@ int CConfig::readStmt(char *pSection, sSqlStmt *psStmtInfo)
     };
    
     ret = getConfigString(pSection, 
-                        "stmt", 
+                        "sql", 
                         "", 
                         psStmtInfo->szSql, 
                         sizeof(psStmtInfo->szSql), 
@@ -1410,27 +1028,27 @@ int CConfig::readStmt(char *pSection, sSqlStmt *psStmtInfo)
         return -1;
     }
     getConfigBool(pSection, 
-                    "stmt_ignore_fail", 
+                    "sql_ignore_fail", 
                     "FALSE", 
                     &psStmtInfo->isIgnoreFail, 
                     ODBC_TEST_CFG_FILE);
     getConfigBool(pSection, 
-                    "stmt_checkout", 
+                    "sql_checkout", 
                     "FALSE", 
                     &psStmtInfo->isCheckResult, 
                     ODBC_TEST_CFG_FILE);
     getConfigBool(pSection, 
-                    "stmt_result_null", 
+                    "sql_result_null", 
                     "FALSE", 
                     &psStmtInfo->isResultNull, 
                     ODBC_TEST_CFG_FILE);
     getConfigInt(pSection, 
-                    "stmt_times", 
+                    "sql_times", 
                     "1", 
                     &psStmtInfo->testTimes,
                     ODBC_TEST_CFG_FILE);
     getConfigInt(pSection, 
-                    "stmt_interval", 
+                    "sql_interval", 
                     "1", 
                     &psStmtInfo->interval,
                     ODBC_TEST_CFG_FILE);
@@ -1445,15 +1063,25 @@ int CConfig::readStmt(char *pSection, sSqlStmt *psStmtInfo)
                     "FALSE", 
                     &psStmtInfo->isSaveFile, 
                     ODBC_TEST_CFG_FILE);
-    getConfigInt(pSection, 
+    memset(szBuf, 0, sizeof(szBuf));
+    ret = getConfigString(
+                    pSection, 
                     "save_column_id", 
-                    "0", 
-                    &psStmtInfo->saveColId,
+                    "1", 
+                    szBuf, 
+                    sizeof(szBuf), 
                     ODBC_TEST_CFG_FILE);
+    j = 0;
+    result = strtok(szBuf, ",");
+    while( result != NULL ) {
+        psStmtInfo->saveColId[j++] = atoi(result);
+        result = strtok(NULL, ",");
+        if(j >= CONFIG_SQL_COLUMNS_MAX) break;
+    }
     memset(szBuf, 0, sizeof(szBuf));
     getConfigString(
                     pSection, 
-                    "stmt_cqd", 
+                    "sql_cqd", 
                     "", 
                     szBuf, 
                     sizeof(szBuf), 
@@ -1461,12 +1089,12 @@ int CConfig::readStmt(char *pSection, sSqlStmt *psStmtInfo)
     i = 0;
     result = strtok(szBuf, ";");
     while( result != NULL ) {
-        _stprintf(psStmtInfo->szStmtCqd[i++], result);
+        sprintf(psStmtInfo->szStmtCqd[i++], result);
         result = strtok(NULL, ";");
         if(i >= CONFIG_NUM_CQD_SIZE) break;
     }
     getConfigBool(pSection, 
-                    "stmt_calc_crc", 
+                    "sql_calc_crc", 
                     "TRUE", 
                     &psStmtInfo->isCalcCrc, 
                     ODBC_TEST_CFG_FILE);
@@ -1498,10 +1126,10 @@ int CConfig::readStmt(char *pSection, sSqlStmt *psStmtInfo)
     psStmtInfo->mResult.totalRows = 0;
     for(psStmtInfo->mResult.totalRows = 0; psStmtInfo->mResult.totalRows < CONFIG_ROWS_RESULT_MAX; psStmtInfo->mResult.totalRows++){
         if(psStmtInfo->mResult.totalRows == 0){
-            _stprintf(szKey, _T("%s"), "stmt_result");
+            sprintf(szKey, "%s", "sql_result");
         }
         else{
-            _stprintf(szKey, _T("%s%d"), "stmt_result_", psStmtInfo->mResult.totalRows);
+            sprintf(szKey, "%s%d", "sql_result_", psStmtInfo->mResult.totalRows);
         }
         memset(szBuf, 0, sizeof(szBuf));
         ret = getConfigString(
@@ -1515,7 +1143,7 @@ int CConfig::readStmt(char *pSection, sSqlStmt *psStmtInfo)
         i = 0;
         result = strtok(szBuf, ";");
         while( result != NULL ) {
-            psStmtInfo->mResult.szResult[psStmtInfo->mResult.totalRows][i++] = _tcsdup(result);
+            psStmtInfo->mResult.szResult[psStmtInfo->mResult.totalRows][i++] = strdup(result);
             result = strtok(NULL, ";");
             if(i >= CONFIG_COLUMNS_RESULT_MAX) break;
         }
@@ -1523,10 +1151,55 @@ int CConfig::readStmt(char *pSection, sSqlStmt *psStmtInfo)
         if(psStmtInfo->mResult.totalCols == 0)
             psStmtInfo->mResult.totalCols = i;
     }   
-    
+    getConfigString(
+                    pSection, 
+                    "sql_digit", 
+                    "0", 
+                    szBuf, 
+                    sizeof(szBuf), 
+                    ODBC_TEST_CFG_FILE);
+    psStmtInfo->range[0] = 0;
+    psStmtInfo->range[1] = 2147483647;
+#ifdef unixcli
+    if(strncasecmp(szBuf, "range(", 6) == 0){
+        sscanf(&szBuf[6], "%d,%d", &psStmtInfo->range[0], &psStmtInfo->range[1]);
+    }
+#else
+    if (strnicmp(szBuf, "range(", 6) == 0){
+        sscanf(&szBuf[6], "%d,%d", &psStmtInfo->range[0], &psStmtInfo->range[1]);
+    }
+#endif
+    else if((szBuf[0] >= '0') && (szBuf[0] <= '9')){
+        psStmtInfo->range[0] = atoi(&szBuf[0]);
+        psStmtInfo->range[1] = 2147483647;
+    }
     return 0;
 }
-int CConfig::readSelect(char *pSection, sSqlStmt *psStmtInfo)
+int CConfig::readSQLFileInfo(char *pSection, sSqlStmt *psStmtInfo)
+{
+    int i;
+    char szBuf[512] = {0};
+    char *result;
+    
+    memset(szBuf, 0, sizeof(szBuf));
+    getConfigString(
+                    pSection, 
+                    "sqlfile_cqd", 
+                    "", 
+                    szBuf, 
+                    sizeof(szBuf), 
+                    ODBC_TEST_CFG_FILE);
+    i = 0;
+    result = strtok(szBuf, ";");
+    while( result != NULL ) {
+        sprintf(psStmtInfo->szStmtCqd[i++], result);
+        result = strtok(NULL, ";");
+        if(i >= CONFIG_NUM_CQD_SIZE) break;
+    }
+
+    return 0;
+}
+int CConfig::readSQLBigObject(char *pSection, sSqlStmt *psStmtInfo)
 {
     int ret;
     int i, j;
@@ -1578,7 +1251,7 @@ int CConfig::readSelect(char *pSection, sSqlStmt *psStmtInfo)
     };
     
     ret = getConfigString(pSection, 
-                        "select_stmt", 
+                        "query", 
                         "", 
                         psStmtInfo->szSql, 
                         sizeof(psStmtInfo->szSql), 
@@ -1587,50 +1260,67 @@ int CConfig::readSelect(char *pSection, sSqlStmt *psStmtInfo)
         return -1;
     }
     getConfigBool(pSection, 
-                    "select_ignore_fail", 
+                    "query_ignore_fail", 
                     "FALSE", 
                     &psStmtInfo->isIgnoreFail, 
                     ODBC_TEST_CFG_FILE);
     getConfigBool(pSection, 
-                    "select_checkout", 
+                    "query_checkout", 
                     "FALSE", 
                     &psStmtInfo->isCheckResult, 
                     ODBC_TEST_CFG_FILE);
     getConfigBool(pSection, 
-                    "select_result_null", 
+                    "query_result_null", 
                     "FALSE", 
                     &psStmtInfo->isResultNull, 
                     ODBC_TEST_CFG_FILE);
     getConfigInt(pSection, 
-                    "select_times", 
+                    "query_times", 
                     "1", 
                     &psStmtInfo->testTimes,
                     ODBC_TEST_CFG_FILE);
+    if(psStmtInfo->testTimes <= 0) psStmtInfo->testTimes = 1;
     getConfigInt(pSection, 
-                    "select_interval", 
+                    "query_interval", 
                     "1", 
                     &psStmtInfo->interval,
                     ODBC_TEST_CFG_FILE);
     getConfigString(pSection, 
-                    "select_save_file", 
+                    "query_save_file", 
                     "test.jpg", 
                     psStmtInfo->szSaveFile, 
                     sizeof(psStmtInfo->szSaveFile), 
                     ODBC_TEST_CFG_FILE);
+    getConfigString(pSection, 
+                    "query_save_charset", 
+                    ENCODING_UNKNOW, 
+                    psStmtInfo->szCharset, 
+                    sizeof(psStmtInfo->szCharset), 
+                    ODBC_TEST_CFG_FILE);
     getConfigBool(pSection, 
-                    "select_save_result", 
+                    "query_save_result", 
                     "FALSE", 
                     &psStmtInfo->isSaveFile, 
                     ODBC_TEST_CFG_FILE);
-    getConfigInt(pSection, 
-                    "select_save_column_id", 
-                    "0", 
-                    &psStmtInfo->saveColId,
+    memset(szBuf, 0, sizeof(szBuf));
+    ret = getConfigString(
+                    pSection, 
+                    "query_save_column", 
+                    "1", 
+                    szBuf, 
+                    sizeof(szBuf), 
                     ODBC_TEST_CFG_FILE);
+    j = 0;
+    result = strtok(szBuf, ",");
+    while( result != NULL ) {
+        psStmtInfo->saveColId[j++] = atoi(result);
+        result = strtok(NULL, ",");
+        if(j >= CONFIG_SQL_COLUMNS_MAX) break;
+    }
     memset(szBuf, 0, sizeof(szBuf));
     getConfigString(
                     pSection, 
-                    "select_cqd", 
+                    "query_cqd", 
                     "", 
                     szBuf, 
                     sizeof(szBuf), 
@@ -1638,24 +1328,34 @@ int CConfig::readSelect(char *pSection, sSqlStmt *psStmtInfo)
     i = 0;
     result = strtok(szBuf, ";");
     while( result != NULL ) {
-        _stprintf(psStmtInfo->szStmtCqd[i++], result);
+        sprintf(psStmtInfo->szStmtCqd[i++], result);
         result = strtok(NULL, ";");
         if(i >= CONFIG_NUM_CQD_SIZE) break;
     }
     getConfigBool(pSection, 
-                    "select_calc_crc", 
+                    "query_calc_crc", 
                     "TRUE", 
                     &psStmtInfo->isCalcCrc, 
                     ODBC_TEST_CFG_FILE);
     getConfigBool(pSection, 
-                    "select_col_attr", 
+                    "query_col_attr", 
                     "FALSE", 
                     &psStmtInfo->isCheckColAttr,
+                    ODBC_TEST_CFG_FILE);
+    getConfigBool(pSection, 
+                    "query_prepare", 
+                    "FALSE", 
+                    &psStmtInfo->isPrepare,
+                    ODBC_TEST_CFG_FILE);
+    getConfigBool(pSection, 
+                    "query_mult_prepare", 
+                    "TRUE", 
+                    &psStmtInfo->isMultPrepare,
                     ODBC_TEST_CFG_FILE);
     memset(szBuf, 0, sizeof(szBuf));
     getConfigString(
                     pSection, 
-                    "select_c_type", 
+                    "query_c_type", 
                     "", 
                     szBuf, 
                     sizeof(szBuf), 
@@ -1675,143 +1375,34 @@ int CConfig::readSelect(char *pSection, sSqlStmt *psStmtInfo)
         result = strtok(NULL, ",");
         if(j >= CONFIG_SQL_COLUMNS_MAX) break;
     }
-    return 0;
-}
-
-int CConfig::readSqlFile(char *pSection, sSqlStmt *psSqlFileInfo)
-{
-    char szSection[64] = {0};
-    char szKey[64] = {0};
-    char szBuf[512] = {0};
-    int ret;
-    char *result = NULL;
-    char szDataFile[64] = {0};
-    int i;
-    struct sSqlReturn_
-    {
-        char szRetcode[40];
-        RETCODE retcode;
-    } sSqlReturn[]= {
-        {"SQL_SUCCESS",SQL_SUCCESS},
-        {"SQL_SUCCESS_WITH_INFO", SQL_SUCCESS_WITH_INFO},
-        {"SQL_ERROR",SQL_ERROR},
-        {"SQL_NO_DATA", SQL_NO_DATA},
-    };
-
-    ret = getConfigString(pSection, 
-                        "sql_file", 
-                        "", 
-                        psSqlFileInfo->szSqlFile, 
-                        sizeof(psSqlFileInfo->szSqlFile), 
-                        ODBC_TEST_CFG_FILE);
-    if(ret == 0){
-        return -1;
-    }
-    if(mFpSql == NULL){
-        iSqlStat = 0;
-        mFpSql = fopen(psSqlFileInfo->szSqlFile, "r");
-        if(mFpSql == NULL) return -1;
-    }
-    ret = findSQL(mFpSql, psSqlFileInfo->szSql, sizeof(psSqlFileInfo->szSql) - 1);
-    if(ret != 0){
-        fclose(mFpSql);
-        mFpSql = NULL;
-        if(iSqlStat == 1){
-            mSqlSet++;
-        }
-        return -1;
-    }
-    if(iSqlStat == 0) iSqlStat = 1;
-
-    memset(szBuf, 0, sizeof(szBuf));
-    getConfigString(pSection, 
-                    "retcode", 
-                    "SQL_SUCCESS", 
-                    szBuf, 
-                    sizeof(szBuf), 
-                    szDataFile);
-    for(i = 0; i < sizeof(sSqlReturn) / sizeof(sSqlReturn[0]); i++){
-       if(strcasecmp(szBuf, sSqlReturn[i].szRetcode) == 0){
-            psSqlFileInfo->retcode = sSqlReturn[i].retcode;
-            break; 
-        }
-    }
-    getConfigBool(pSection, 
-                "ignore_fail", 
-                "FALSE", 
-                &psSqlFileInfo->isIgnoreFail, 
-                szDataFile);
-    getConfigBool(pSection, 
-                "checkout", 
-                "FALSE", 
-                &psSqlFileInfo->isCheckResult, 
-                szDataFile);
-    getConfigBool(pSection, 
-                "result_null", 
-                "FALSE", 
-                &psSqlFileInfo->isResultNull, 
-                szDataFile);
+    getConfigInt(pSection, 
+                    "query_buf_length", 
+                    "16777216", 
+                    (int *)&psStmtInfo->lengRecv,
+                    ODBC_TEST_CFG_FILE);
     memset(szBuf, 0, sizeof(szBuf));
     getConfigString(
                     pSection, 
-                    "sqlfile_cqd", 
-                    "", 
+                    "query_digit", 
+                    "0", 
                     szBuf, 
                     sizeof(szBuf), 
                     ODBC_TEST_CFG_FILE);
-    i = 0;
-    result = strtok(szBuf, ";");
-    while( result != NULL ) {
-        _stprintf(psSqlFileInfo->szStmtCqd[i++], result);
-        result = strtok(NULL, ";");
-        if(i >= CONFIG_NUM_CQD_SIZE) break;
-    } 
+    psStmtInfo->range[0] = 0;
+    psStmtInfo->range[1] = 2147483647;
+#ifdef unixcli
+    if(strncasecmp(szBuf, "range(", 6) == 0){
+        sscanf(&szBuf[6], "%d,%d", &psStmtInfo->range[0], &psStmtInfo->range[1]);
+    }
+#else
+    if (strnicmp(szBuf, "range(", 6) == 0){
+        sscanf(&szBuf[6], "%d,%d", &psStmtInfo->range[0], &psStmtInfo->range[1]);
+    }
+#endif
+    else if((szBuf[0] >= '0') && (szBuf[0] <= '9')){
+        psStmtInfo->range[0] = atoi(&szBuf[0]);
+        psStmtInfo->range[1] = 2147483647;
+    }
     
     return 0;
-    
-}
-int CConfig::scanTestSqlFile(void)
-{
-    char szSection[64] = {0};
-    int i;
-    int ret = -1;
-
-    if(pODBCTestData == NULL) return -1;
-    
-    pODBCTestData->isAvailableSqlFile = FALSE;
-    pODBCTestData->isAvailableStmt = FALSE;
-    pODBCTestData->isAvailableSelect = FALSE;
-    pODBCTestData->isAvailableTable = FALSE;
-    if(isTableDefault){
-        return -1;
-    }
-    memset(pODBCTestData, 0, sizeof(sODBCTestData));
-    
-    for(i = 0; i < 2; i++){
-        if(mSqlSet == 0) _stprintf(szSection, _T("%s"), _T("table"));
-        else _stprintf(szSection, _T("%s%d"), _T("table_"), mSqlSet);
-        ret = readSqlFile(szSection, &pODBCTestData->mSqlFileInfo);
-        if(ret == 0){
-            pODBCTestData->isAvailableSqlFile = TRUE;
-            if(readTable(szSection, &pODBCTestData->mTableInfo) == 0)
-                pODBCTestData->isAvailableTable = TRUE;
-            if(readStmt(szSection, &pODBCTestData->mStmtInfo) == 0)
-                pODBCTestData->isAvailableStmt = TRUE;
-            if(readSelect(szSection, &pODBCTestData->mSelectInfo) == 0)
-                pODBCTestData->isAvailableSelect = TRUE;
-            readLoadDirectInfo(szSection, &pODBCTestData->mLoadDirect);
-            readRowsetInfo(szSection, &pODBCTestData->mRowsetInfo);
-            readAtExecInfo(szSection, &pODBCTestData->mLoadAtExec);
-            readLobUpdateInfo(szSection, &pODBCTestData->mLobUpdate);
-            break;
-        }
-    }
-    if(ret != 0) return -1;
-    
-    return 0;
-}
-sODBCTestData *CConfig::getTestData(void)
-{
-    if(pODBCTestData) return pODBCTestData;
-    return NULL;
 }

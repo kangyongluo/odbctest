@@ -1,7 +1,95 @@
----- FETCHSIZE Matches (6 in 2 files) ----
-loadData.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):    /*retcode = SQLExecDirect(hstmt, (SQLTCHAR*)"set FETCHSIZE 1", SQL_NTS);
-loadData.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):    //SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
-loadData.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):            //SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
-testSQL.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):    /*retcode = SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
-testSQL.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        LogMsgEx(fpLog, NONE,_T("call \"set FETCHSIZE 1\" fail.\n"));
-testSQL.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):    //SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
+---- while Matches (94 in 13 files) ----
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( pStr )
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( *sz )
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):        while( !feof( fp ) )
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):            while( pSectionNameHead[i] && ( pSectionNameHead[i] != ']' )
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( !feof( fp ) )    /*Want find key*/
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):        while( pLineHead[i] && pKeyName[i] )
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):            while( pValueHead[j] && ( nRetIndex < nSize) 
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):            while(pReturnedString[ret - 1]){
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):        while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):        while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Config.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while( result != NULL ) {
+Global.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while(pTok){
+Global.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):        while(fgets(szBuf, sizeof(szBuf) - 1, fp)){
+Global.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while(*start){
+loadData.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):                while (retcode == SQL_SUCCESS){
+loadData.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):                    }while(retcode == SQL_SUCCESS);
+loadData.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):                    while (retcode == SQL_SUCCESS){
+loadData.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):                        }while(retcode != SQL_NO_DATA_FOUND);
+Odbcdriver.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):   while((returncode == SQL_SUCCESS) ||
+Odbcdriver.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):   while((returncode == SQL_SUCCESS) ||
+Odbcdriver.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):   while((returncode == SQL_SUCCESS) ||
+Odbcdriver.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):   while((returncode == SQL_SUCCESS) ||
+Odbcdriver.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):   while((returncode == SQL_SUCCESS) ||
+Odbcdriver.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):   while((returncode == SQL_SUCCESS) ||
+Odbcdriver.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):        while (returnCode != SQL_NO_DATA)
+SQLColumns.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):                while (retcode == SQL_SUCCESS)
+SQLColumns.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):        while (SQLFetch(hstmt) == SQL_SUCCESS) {
+SQLGetTypeInfo.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):    while (SQLFetch(hstmt) == SQL_SUCCESS) {
+SQLTables.c (d:\work\esgyn\tests\odbc\odbctest\src\driver):	while (retcode == SQL_SUCCESS)
+testODBC.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(pTok){
+testODBC.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(pTok){
+testODBC.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(idCase < totalCaseType){
+testODBC.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):            while(thraedOver != TRUE){
+testODBC.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(mAliveThNum > 0){
+testODBC.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):                        while(end){ 
+testODBC.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):                        while(end){ 
+testODBC.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):            while(getSQLFromFile(fpSql, psSqlStmt->szSql, sizeof(psSqlStmt->szSql) - 1) == 0){
+testSQL.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):    while( result != NULL ) {
+testSQL.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while (retcode == SQL_SUCCESS)
+testSQL.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):            while (retcode == SQL_SUCCESS)
+testSQL.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):    }while(result != NULL);
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):    while(start){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(start){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(end){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(start){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(end){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(start){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(end){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(start){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(end){
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):            while (retcode == SQL_SUCCESS)
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):            while(end){ 
+testSQLColumns.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(pTok){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):    while(start){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(start){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(end){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(start){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(end){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(start){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(end){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(start){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(end){
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):	while (retcode == SQL_SUCCESS)
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):            while(end){ 
+testSQLTables.cpp (d:\work\esgyn\tests\odbc\odbctest\src\case):        while(pTok){
+Util.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):  while (usDataLen--) 	
+Util.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):  while (usDataLen--) 	
+Util.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):    while (fgets(szBuf , sizeof(szBuf) , fp) != NULL) {
+Util.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):        while(szBuf[i] == ' '){
+Util.cpp (d:\work\esgyn\tests\odbc\odbctest\src\util):        while(szBuf[i] == 0x0a || szBuf[i] == 0x0d){
+Util.h (d:\work\esgyn\tests\odbc\odbctest\src\util):#define TEST_DECLARE  //do{;}while(0)
+Util.h (d:\work\esgyn\tests\odbc\odbctest\src\util):#define TEST_INIT  //do{;}while(0)
+Util.h (d:\work\esgyn\tests\odbc\odbctest\src\util):#define TESTCASE_END  do{;}while(0)
+Util.h (d:\work\esgyn\tests\odbc\odbctest\src\util):                }while(0)\
+Util.h (d:\work\esgyn\tests\odbc\odbctest\src\util):#define LOG_HEAD(fp)    do{LogMsgEx(fp, NONE, "[%s:%d func:%s] ", __FILE__, __LINE__, __FUNCTION__);}while(0)

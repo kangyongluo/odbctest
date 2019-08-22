@@ -29,19 +29,27 @@
 extern "C" {
 #endif
 
+#define ENCODING_UTF8               "utf8"
+#define ENCODING_UTF_8              "UTF-8"
+#define ENCODING_ISO88591           "iso-8859-1"
+#define ENCODING_UCS2_BIG_ENDIAN    "UCS-2 Big Endian"
+#define ENCODING_UCS2_LITTLE_ENDIAN "UCS-2 Little Endian"
+#define ENCODING_GBK                "GBK"
+#define ENCODING_UNKNOW             "Unknow"
+
 typedef  struct tabTestInfo
 {
     SQLHANDLE henv;
     SQLHDBC hdbc;
     SQLHANDLE hstmt;
-    TCHAR DataSource[128];
-    TCHAR Server[128];
-    TCHAR Port[10 * 2];
-    TCHAR UserID[128];
-    TCHAR Password[50];
-    TCHAR Database[50];
-    TCHAR Catalog[128];
-    TCHAR Schema[128];
+    char DataSource[128];
+    char Server[128];
+    char Port[10 * 2];
+    char UserID[128];
+    char Password[50];
+    char Database[50];
+    char Catalog[128];
+    char Schema[128];
 }TestInfo;
 
 
@@ -65,6 +73,7 @@ typedef  struct tabTestInfo
 #define INTERNALERRMSG  0x10     /* Prefix ***INTERNAL ERROR: to the fromt of the message */
 #define SHORTTIMESTAMP  0x20     /* Prefix a shorter timestamp to the front of the message */
 #define INFO			0x30	 /* Will print only if debugMode = on */
+#define PRINT_OFF       0x80
 
 typedef enum PassFail {PASSED, FAILED} PassFail;
 
@@ -134,8 +143,10 @@ typedef struct{
     BOOL isLobTable;
     BOOL isLobFile;
     char szLobFile[64];
+    char szCharsetOfLobFile[16];
     SQLINTEGER idLobCols[CONFIG_COLUMNS_LOB_MAX];
     SQLINTEGER numLobCols;
+    SQLLEN paraValueLen[CONFIG_SQL_COLUMNS_MAX];
 } sTestTableInfo;
 typedef struct
 {
@@ -147,14 +158,19 @@ typedef struct
     BOOL isResultNull;
     BOOL isCalcCrc;
     BOOL isCheckColAttr;
+    BOOL isPrepare;
+    BOOL isMultPrepare;
     SQLSMALLINT sqlCType[CONFIG_SQL_COLUMNS_MAX];
     sTestResultData mResult;
     int testTimes;
     int interval;
     BOOL isSaveFile;
     char szSaveFile[32];
-    int saveColId;
+    char szCharset[32];
+    int saveColId[CONFIG_SQL_COLUMNS_MAX];
     char szStmtCqd[CONFIG_NUM_CQD_SIZE][50];
+    unsigned int lengRecv;
+    int range[2];
 }sSqlStmt;
 typedef struct
 {
@@ -162,30 +178,15 @@ typedef struct
     int batchSize;
     int totalBatch;
     char szInsertType[256];
+    char szInsertWhere[256];
     int threads;
     char szLobFile[64];
+    char szCharsetOfFile[16];
     char szLoadCqd[CONFIG_NUM_CQD_SIZE][50];
     int putDataBatch;
     SQLLEN putDataType;
     BOOL isloadCrc;
 }sLoadDataInfo;
-
-
-typedef struct
-{
-    sTestTableInfo mTableInfo;
-    sLoadDataInfo mLoadDirect;
-    sLoadDataInfo mRowsetInfo;
-    sLoadDataInfo mLoadAtExec;
-    sLoadDataInfo mLobUpdate;
-    sSqlStmt mStmtInfo;
-    sSqlStmt mSelectInfo;
-    sSqlStmt mSqlFileInfo;
-    BOOL isAvailableTable;
-    BOOL isAvailableStmt;
-    BOOL isAvailableSelect;
-    BOOL isAvailableSqlFile;
-} sODBCTestData;
 
 typedef enum{
     BINDPARAM_EXECUTE_DIRECT = 0,
@@ -231,10 +232,13 @@ typedef struct
     int beginVal;
     int batchSize;
     int totalBatch;
+    char szTable[256];
     char szInsertType[256];
+    char szInsertWhere[256];
     //other
-    TCHAR szConnStr[128];
+    char szConnStr[128];
     FILE *fpLog;
+    SQLULEN paraValueLen[CONFIG_SQL_COLUMNS_MAX];
 }sLoadParamInfo;
 typedef struct
 {
@@ -258,16 +262,35 @@ typedef struct
     SQLULEN decimalDigits[CONFIG_SQL_COLUMNS_MAX];
     SQLLEN lenType[CONFIG_SQL_COLUMNS_MAX];
     SQLLEN actualDataSize[CONFIG_SQL_COLUMNS_MAX][2];
+    char szColName[CONFIG_SQL_COLUMNS_MAX][64];
     SQLINTEGER totalCols;
     BOOL isLobTable;
     BOOL isLobFile;
     char szLobFile[64];
+    char szCharsetOfFile[16];
     SQLINTEGER idLobCols[CONFIG_COLUMNS_LOB_MAX];
     SQLINTEGER numLobCols;
+    SQLULEN paraValueLen[CONFIG_SQL_COLUMNS_MAX];
 }sBindParamAttr;
 
-extern TCHAR *SQLTypeToChar(SWORD SQLType, TCHAR *buf);
-extern TCHAR *SQLCTypeToChar(SWORD CType, TCHAR *buf);
+typedef struct cfgSectionInfo_
+{
+    char szSection[64];
+    char szCaseType[32];
+    int loadBegintMultNum;
+}cfgSectionInfo;
+typedef struct testCaseInfo_
+{
+    TestInfo mTestInfo;
+    cfgSectionInfo mSection;
+}testCaseInfo;
+void ucToAscii(SQLWCHAR *uc, char *ascii);
+void asciiToUnicode( char *ascii, SQLWCHAR *szUc);
+void charToTChar(char *szChar, TCHAR *szTChar);
+void tcharToChar(TCHAR *szTChar, char *szChar);
+
+extern char *SQLTypeToChar(SWORD SQLType, char *buf);
+extern char *SQLCTypeToChar(SWORD CType, char *buf);
 
 #ifndef unixcli
 extern int gettimeofday(struct timeval *tp, void *tzp);
@@ -275,7 +298,7 @@ extern int gettimeofday(struct timeval *tp, void *tzp);
 
 
 
-extern FILE *openLog(TCHAR *headKey);
+extern FILE *openLog(char *headKey);
 extern int closeLog(FILE *fp);
 
 extern void invertUint32(unsigned int *dBuf,unsigned int *srcBuf);
@@ -297,12 +320,14 @@ extern void setSqlData(TCHAR *pSqlData,
                   
 
 
-extern void LogMsgEx(FILE *fp, unsigned int option, TCHAR *format, ...);
-extern void LogMsgGlobal(unsigned int option, TCHAR *format, ...);
-extern int calcFileSize(TCHAR *pFileName);
+extern void LogMsgEx(FILE *fp, unsigned int option, char *format, ...);
+extern void LogMsgGlobal(unsigned int option, char *format, ...);
+extern int calcFileSize(char *pFileName);
+extern int getFileEncoding(char *pFileName, char *encoding);
 
-extern BOOL isTypeName(SQLSMALLINT sqlType, TCHAR *pTypeName);
-extern TCHAR *sqlTypeToSqltypeName(SQLSMALLINT sqlType, TCHAR *pTypeName);
+extern BOOL isTypeName(SQLSMALLINT sqlType, char *pTypeName);
+extern char *sqlTypeToSqltypeName(SQLSMALLINT sqlType, char *pTypeName);
+extern int getSQLFromFile(FILE *fp, char *sql, unsigned int nsize);
 
 #ifdef unixcli
 #define CONFIG_DEBUG_PRINT
@@ -318,7 +343,7 @@ extern TCHAR *sqlTypeToSqltypeName(SQLSMALLINT sqlType, TCHAR *pTypeName);
 
 
 
-#define LOG_HEAD(fp)    do{LogMsgEx(fp, NONE, _T("[%s:%d func:%s] "), __FILE__, __LINE__, __FUNCTION__);}while(0)
+#define LOG_HEAD(fp)    do{LogMsgEx(fp, NONE, "[%s:%d func:%s] ", __FILE__, __LINE__, __FUNCTION__);}while(0)
 
 
 #ifdef __cplusplus

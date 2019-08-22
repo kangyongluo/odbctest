@@ -8,107 +8,19 @@ schema           =SEABASE
 #user             =root
 #password         =123456
 #schema           =test
-init_table       =FALSE
-interval         =5
-isMultithreading =FALSE
-isConnectInfo    =TRUE
-isMultiTask      =FALSE
-test_times       =1
+#case_threads     =2
 connect_string   =DataLang=4
-#test case:SQLColumns,SQLTables,testLoadDirect,testLoadAtExec,testLobUpdate,testRowset,testStmt,testSqlFile,testSelect,cleanupTable
-test_case        =testInsert,testSelect,testRowset
-#test_case        =testSelect
+#test case:SQLColumns;SQLTables;testLoadDirect;testLoadAtExec;testLobUpdate;testRowset;testSQL;testSQLFile;testSQLBigObject;cleanupTable
 
-######################################################
-#Regression test table information and sql test
-#[table]
-######################################################
-#Configuration test "testSqlFile"
-#sql_file         =test.sql
-#data_file        =test.data
-#retcode          =SQL_SUCCESS
-#cqd_sqlfile      =cqd traf_blob_as_varchar 'off'
-#cqd_sqlfil       =cqd traf_clob_as_varchar 'off'
-#Configuration test table info
-#table_name        =TB_TEST_1 
-#sql_type          = SQL_CHAR
-#sql_c_type         =SQL_C_CHAR
-#column_name      =C1
-#column_size       =50
-#decimal_digits    =0
-#Length of actual data inserted
-#data_size         =50
-#data_digits       =0
-#lob_table         =FALSE
-#lob_columns       =0
-######################################################
-#Configuration test "testStmt"
-#stmt              =get tables;
-#stmt_ignore_fail  =FALSE
-#stmt_checkout     =FALSE
-#stmt_result_null  =FALSE
-#stmt_times        =1
-#stmt_interval     =1
-#stmt_cqd          =
-######################################################
-#Configuration test "testRowset" 
-#rowset_batch_size  =2
-#rowset_batch_num   =1
-#rowset_begin_value =0
-#rowset_type        =INSERT,UPSERT,UPSERT WITH NO CONFLICT CHECK,UPSERT USING LOAD
-#rowset_threads     =1
-#rowset_cqd         =
-#rowset_file        =cc.jpg
-######################################################
-#Configuration test "testSelect" 
-#select_stmt          =select * from TB_TEST_1
-#select_times         =1
-#select_interval      =1
-#select_ignore_fail   =TRUE
-#select_checkout      =TRUE
-#select_result_null   =FALSE
-#Configuration select result
-#select_save_result   =TRUE
-#select_save_file     =test.jpg
-#select_save_column_id    =0
-#select_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
-#select_calc_crc     =FALSE
-######################################################
-#Configuration test "testLoadDirect"
-#load_direct_rows              = 1
-#load_direct_begin_value  =0
-#load_direct_insert         =INSERT,UPSERT,UPSERT WITH NO CONFLICT CHECK,UPSERT USING LOAD
-#load_direct_threads      =1
-#load_direct_cqd          =
-#load_direct_file         =cc.jpg
-#load_direct_file_crc     =FALSE
-######################################################
-#load_at_exec_rows        = 1
-#load_at_exec_begin_value = 0
-#load_at_exec_type        = SQL_DATA_AT_EXEC
-#load_at_exec_type        = SQL_LEN_DATA_AT_EXEC 
-#load_at_exec_put_batch   = 4096
-#load_at_exec_insert      =INSERT
-#load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
-#load_at_exec_file        =cc1.jpg
-#load_at_exec_threads     =1
-######################################################
-#lobupdate_rows        = 1
-#lobupdate_begin_value = 1
-#lobupdate_insert      =INSERT
-#lobupdate_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
-#lobupdate_threads     = 1
-#lobupdate_file        =cc.jpg
-#lobupdate_put_batch   =4096
-######################################################
-#Regression test table information and sql test
-[table]
+[run_sql_file]
+case_type        =testSQLFile
+case_status      =FALSE
 sql_file         =test.sql
 sql_file         =cqd traf_blob_as_varchar 'off'
 #sql_file        =cqd traf_clob_as_varchar 'off'
-table_name        =TB_TEST_1 
 
-[table_1]
+[regression_test]
+case_type        =testSQL;testLoadDirect;testLoadAtExec;testRowset
 table_name        =TB_TEST_1
 sql_type          = SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_NUMERIC,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_TYPE_TIMESTAMP,SQL_TYPE_TIMESTAMP,SQL_VARCHAR,SQL_NUMERIC,SQL_VARCHAR,SQL_NUMERIC,SQL_VARCHAR,SQL_VARCHAR,SQL_NUMERIC,SQL_VARCHAR,SQL_VARCHAR,SQL_NUMERIC,SQL_NUMERIC,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP
 sql_c_type         =SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_TIMESTAMP,SQL_C_TIMESTAMP,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_CHAR,SQL_C_NUMERIC,SQL_C_NUMERIC,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP
@@ -118,21 +30,14 @@ data_size         =40,40,40,40,40,4,64,50,64,64,0,0,0,40,4,20,4,100,100,4,64,64,
 data_digits       =0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 column_name      =TRANS_TRACK_ID,NODE_INS_ID,ACTIVE_INS_ID,NODE_TRACK_ID,WORK_ID,TRANS_FLAG,ACTOR_ID,ACTOR_NAME,AUTHORIZER_ID,AUTHORIZER_NAME,CREATE_TIME,HANDLE_TIME,OVER_TIME,MSG,MSG_TYPE,RESULT_FLAG,BACK_FLAG,CONDITION,CONDITION_VALUE,CONDITION_RESULT,RESSIGNM_PERSON_ID,RESSIGNM_PERSON_NAME,COMPLETE_TYPE,REVOKE_FLAG,PRE_TRANS_TRACK_ID,PROCESS_ID,MAIN_PROCESS_INS_ID,MODIFY_DATE
 
-stmt              =show tables
-stmt_times         =10
-stmt_interval     =5
-stmt_ignore_fail  =TRUE
-stmt_checkout     =FALSE
-stmt_result_null  =FALSE
-
-select_stmt          =select * from TB_TEST_1
-select_times         =1 
-select_interval      =1 
-select_ignore_fail  =TRUE 
-select_checkout     =TRUE
-select_result_null  =FALSE
+query          =select * from TB_TEST_1
+query_times         =1 
+query_interval      =1 
+query_ignore_fail  =TRUE 
+query_checkout     =TRUE
+query_result_null  =FALSE
 #Configuration select result
-select_calc_crc     =FALSE
+query_calc_crc     =FALSE
 
 load_direct_rows        = 1
 load_direct_begin_value = 0
@@ -151,11 +56,11 @@ load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
-lobupdate_rows        = 1
-lobupdate_begin_value = 1
-lobupdate_insert      =INSERT
-lobupdate_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
-lobupdate_threads     = 1
+#lobupdate_rows        = 1
+#lobupdate_begin_value = 1
+#lobupdate_insert      =INSERT
+#lobupdate_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+#lobupdate_threads     = 1
 
 rowset_file        =cc.jpg
 rowset_batch_size  =1

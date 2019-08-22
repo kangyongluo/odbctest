@@ -60,8 +60,6 @@ int main (int argc, char *argv[])
     CTestODBC *testODBC = new CTestODBC;
     
     printf("Testing odbc, please don't shut down.\n");
-    testODBC->runTest();
-    printf("Next case......\n");
     testODBC->runCases();
     printf("Finished test.\n");
     delete testODBC;

@@ -8,28 +8,22 @@ schema           =SEABASE
 #user             =root
 #password         =123456
 #schema           =test
-init_table       =FALSE
-interval         =5
-isMultithreading =FALSE
-isConnectInfo    =TRUE
-#isMultiTask      =TRUE
-test_times       =1
-connect_string   =DataLang=4
-#test case:SQLColumns,SQLTables,testLoadDirect,testLoadAtExec,testLobUpdate,testRowset,testStmt,testSqlFile,testSelect,cleanupTable
-test_case        =testSqlFile,testLoadDirect,testSelect,cleanupTable,testLoadAtExec,testSelect,cleanupTable,testRowset,testSelect
+#connect_string   =DataLang=4
+#case type:SQLColumns;SQLTables;testLoadDirect;testLoadAtExec;testLobUpdate;testRowset;testSQL;testSQLFile;testSQLBigObject;cleanupTable
 
 ######################################################
 #Regression test table information and sql test
 [table]
-sql_file         =lob.sql
+case_type         =testSQLFile
+sql_file         =blob.sql
 sqlfile_cqd      =cqd traf_blob_as_varchar 'on'
 #sqlfile_cqd      =cqd traf_blob_as_varchar 'off'
 #sqlfile_cqd     =cqd traf_clob_as_varchar 'on'
 #sqlfile_cqd     =cqd traf_clob_as_varchar 'off'
-table_name        =TB_LOB
 
 
 [table_1]
+case_type          =testLoadDirect;testLoadAtExec;testRowset;testSQLBigObject
 table_name        =TB_LOB
 sql_type          =SQL_VARCHAR,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR,SQL_TYPE_TIMESTAMP,SQL_INTEGER,SQL_INTEGER,SQL_INTEGER,SQL_VARCHAR,SQL_VARCHAR,SQL_VARCHAR
 sql_c_type         =SQL_C_CHAR,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR,SQL_C_TIMESTAMP,SQL_C_ULONG,SQL_C_ULONG,SQL_C_ULONG,SQL_C_CHAR,SQL_C_CHAR,SQL_C_CHAR
@@ -42,18 +36,18 @@ cqd              =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 lob_table        =TRUE
 lob_columns      =0
 
-select_stmt          =select B_LOB from TB_LOB where ID=0
-select_times         =1 
-select_interval      =1 
-select_ignore_fail  =TRUE 
-select_checkout     =TRUE
-select_result_null  =FALSE
+query          =select B_LOB from TB_LOB where ID=0
+query_times         =1 
+query_interval      =1 
+query_ignore_fail  =TRUE 
+query_checkout     =TRUE
+query_result_null  =FALSE
 #Configuration select result
-select_save_result       =TRUE
-select_save_file         =test.jpg
-select_save_column_id    =0
-select_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
-select_calc_crc     =TRUE
+query_save_result       =TRUE
+query_save_file         =test.jpg
+query_save_column_id    =0
+query_cqd          =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
+query_calc_crc     =TRUE
 
 
 load_direct_rows        = 1

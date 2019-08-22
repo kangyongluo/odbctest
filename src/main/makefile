@@ -8,13 +8,15 @@ ifeq ($(ODBC_VERSION),unixODBC)
 LINKLIB = -lodbc
 else
 LIBPATH +=$(TRAFODION_LIB_PATH)
-LINKLIB =-ltrafodbc64 -lpthread -licuuc -licudata
+LINKLIB =-ltrafodbc64 -lpthread
 endif
 LINKLIB +=-lstdc++ -lm -lrt -lpthread -lodbc
 
 LINKLIBS=../case/libcase.a
 LINKLIBS +=../driver/libdriver.a
 LINKLIBS +=../util/libutil.a
+LINKLIBS +=-I $(ICU)
+LINKLIBS +=-L $(ICU)  -licuuc -licudata
 
 OBJS=main.o
 

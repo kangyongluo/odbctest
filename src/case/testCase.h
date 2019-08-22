@@ -23,20 +23,12 @@ enum{
 #define CONFIG_LOAD_TYPE_MAX    5
 #define CONFIG_LOAD_THREAD_MAX  100
 
-typedef struct
-{
-    int retcode;
-    void *args;
-    sLoadParamInfo mLoadParam;
-}loadThreadPara;
-
-
-extern PassFail testSQLColumns(TestInfo *pTestInfo);
-extern PassFail testSQLTables(TestInfo *pTestInfo);
-extern PassFail testLoadAtExec(TestInfo *pTestInfo);
-extern PassFail testLoadDirect(TestInfo *pTestInfo);
-extern PassFail testRowset(TestInfo *pTestInfo);
-extern PassFail testLobUpdate(TestInfo *pTestInfo);
+extern int testSQLColumns(testCaseInfo info);
+extern int testSQLTables(testCaseInfo info);
+extern int testLoadAtExec(testCaseInfo info);
+extern int testLoadDirect(testCaseInfo info);
+extern int testRowset(testCaseInfo info);
+extern int testLobUpdate(testCaseInfo info);
 
 #ifdef __cplusplus
 }

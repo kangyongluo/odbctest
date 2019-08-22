@@ -15,21 +15,24 @@
 
 typedef struct
 {
-    TCHAR szDataSource[128];
-    TCHAR szUser[50];
-    TCHAR szPassword[50];
-    TCHAR szDatabase[50];
-    TCHAR szCatalog[128];
-    TCHAR szSchema[128];
-    TCHAR szConnStr[128];
+    char szDataSource[128];
+    char szUser[50];
+    char szPassword[50];
+    char szDatabase[50];
+    char szCatalog[128];
+    char szSchema[128];
+    char szConnStr[128];
     BOOL isInitTable;
     int interval;
     BOOL isMultithreading;
+    int totalThreads;
     char szTable[50];
     BOOL isConnectInfo;
     BOOL isMultiTask;
     int testTimes;
 }sTestConfig;
+#define  CONFIG_CFG_SECTION_NUM     256
+#define CONFIG_SECTION_SET_MAX     50
 
 class CTestGlobal
 {
@@ -38,6 +41,12 @@ class CTestGlobal
         ~CTestGlobal();
     public:
         int init(void);
+    private:
+        void initSection(void);
+        int sectionMatch(char *src, char *dest);
+    public:
+        char *szSection[CONFIG_CFG_SECTION_NUM];
+        int mTotalSection;
     public:
         sTestConfig mcfg;
         FILE *fpLog;

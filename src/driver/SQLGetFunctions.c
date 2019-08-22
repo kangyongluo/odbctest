@@ -22,7 +22,7 @@ int SQLGetFunctionsEx(TestInfo *pTestInfo,
     
     if (!FullConnectWithOptions(&sTestInfo, CONNECT_ODBC_VERSION_3))
     {
-        LogMsgEx(fpLog, NONE, _T("Unable to connect\n"));
+        LogMsgEx(fpLog, NONE, "Unable to connect\n");
         return -1;
     }
     henv = sTestInfo.henv;
@@ -30,23 +30,23 @@ int SQLGetFunctionsEx(TestInfo *pTestInfo,
     
     retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
     if (!SQL_SUCCEEDED(retcode)){
-        LogMsgEx(fpLog, NONE, _T("SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail,line = %d\n"), __LINE__);
-        LogMsgEx(fpLog, NONE,_T("Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n"));
+        LogMsgEx(fpLog, NONE, "SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail,line = %d\n",  __LINE__);
+        LogMsgEx(fpLog, NONE,"Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n");
         retcode = SQLAllocStmt((SQLHANDLE)hdbc, &hstmt);
         if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
-            LogMsgEx(fpLog, NONE,_T("SQLAllocStmt hstmt fail, line %d\n"), __LINE__);
+            LogMsgEx(fpLog, NONE,"SQLAllocStmt hstmt fail, line %d\n",  __LINE__);
             FullDisconnectEx(fpLog, &sTestInfo);
             return -1;
         }
     }
     sTestInfo.hstmt = hstmt;
     
-    LogMsgEx(fpLog, NONE, _T("connect info......\n"));
+    LogMsgEx(fpLog, NONE, "connect info......\n");
     addInfoSessionEx(hstmt, fpLog);
 
-    LogMsgEx(fpLog, TIME_STAMP, _T("SQLGetFunctions(hdbc, %d, %s)\n"), 
+    LogMsgEx(fpLog, TIME_STAMP, "SQLGetFunctions(hdbc, %d, %s)\n",  
                                                             FunctionId, 
-                                                            (Supported == NULL) ? _T("NULL") : _T("Supported"));
+                                                            (Supported == NULL) ? "NULL" : "Supported");
     gettimeofday(&tv1,NULL);
     retcode = SQLGetFunctions((SQLHANDLE)hdbc, FunctionId, Supported);
     if(retcode != SQL_SUCCESS){
@@ -54,10 +54,10 @@ int SQLGetFunctionsEx(TestInfo *pTestInfo,
         ret = -1;
     }
     gettimeofday(&tv2,NULL);
-    LogMsgEx(fpLog, TIME_STAMP, _T("call SQLGetFunctions: %d (ms) FunctionId:%d, %s\n"), 
+    LogMsgEx(fpLog, TIME_STAMP, "call SQLGetFunctions: %d (ms) FunctionId:%d, %s\n",  
                                 (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000), 
                                 FunctionId,
-                                (Supported == NULL) ? _T("NULL") : _T("Supported"));
+                                (Supported == NULL) ? "NULL" : "Supported");
     FullDisconnectEx(fpLog, &sTestInfo);
     
     return ret;
@@ -73,7 +73,7 @@ int SQLGetFunctionsEx_(SQLHANDLE henv,
     RETCODE retcode;
     struct timeval tv1, tv2;
 
-    LogMsgEx(fpLog, NONE, _T("SQLGetFunctions(hdbc, %d, %s)\n"), FunctionId, (Supported == NULL) ? _T("NULL") : _T("Supported"));
+    LogMsgEx(fpLog, NONE, "SQLGetFunctions(hdbc, %d, %s)\n",  FunctionId, (Supported == NULL) ? "NULL" : "Supported");
     gettimeofday(&tv1,NULL);
     retcode = SQLGetFunctions((SQLHANDLE)hdbc, FunctionId, Supported);
     if(retcode != SQL_SUCCESS){
@@ -81,10 +81,10 @@ int SQLGetFunctionsEx_(SQLHANDLE henv,
         ret = -1;
     }
     gettimeofday(&tv2,NULL);
-    LogMsgEx(fpLog, TIME_STAMP, _T("call SQLGetFunctions: %d (ms) FunctionId:%d, %s\n"), 
+    LogMsgEx(fpLog, TIME_STAMP, "call SQLGetFunctions: %d (ms) FunctionId:%d, %s\n",  
                                 (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000), 
                                 FunctionId,
-                                (Supported == NULL) ? _T("NULL") : _T("Supported"));
+                                (Supported == NULL) ? "NULL" : "Supported");
     
     return ret;
 }

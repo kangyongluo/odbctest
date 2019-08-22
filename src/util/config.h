@@ -10,33 +10,17 @@ class CConfig
         CConfig(void);
         ~CConfig();
     public:
-        sODBCTestData *getTestData(void);
-        int getTableName(char *ddl, char *name, int size);
-        int init(char *pFile);
-        int scanTestStmt(void);
-        int scanTestSqlFile(void);
-        int scanTestTable(void);
-        void reset(void);
         int readTable(char *pSection, sTestTableInfo *psTestTableInfo);
         int readLoadDirectInfo(char *pSection, sLoadDataInfo *psLoadDataInfo);
         int readRowsetInfo(char *pSection, sLoadDataInfo *psLoadDataInfo);
         int readAtExecInfo(char *pSection, sLoadDataInfo *psLoadDataInfo);
         int readLobUpdateInfo(char *pSection, sLoadDataInfo *psLoadDataInfo);
-        int readStmt(char *pSection, sSqlStmt *psStmtInfo);
-        int readSelect(char *pSection, sSqlStmt *psStmtInfo);
-        int readSqlFile(char *pSection, sSqlStmt *psSqlFileInfo);
+        int readSQL(char *pSection, sSqlStmt *psStmtInfo);
+        int readSQLFileInfo(char *pSection, sSqlStmt *psStmtInfo);
+        int readSQLBigObject(char *pSection, sSqlStmt *psStmtInfo);
+        int readSQLFile(char *pSection, sSqlStmt *psStmtInfo);
     private:
-        int findSQL(FILE *fp, char *sql, unsigned int nsize);
-        void setDefaultTable(void);
-    private:
-        FILE *mFpSql;
-        int mFd;
-        int mFdSqlData;
-        int numTableSet;
-        int iSqlStat;
-        int mSqlSet;
-        sODBCTestData *pODBCTestData;
-        BOOL isTableDefault;
+        
 };
 
 #define MAX_LEN_BYTES_OF_LINE 1024
@@ -63,6 +47,18 @@ int getConfigInt(const char *pSectionName,// section name
             				int *pReturnedInt,  // destination buffer
             				const char *pFileName        // initialization file name
             				);
+#ifdef unixcli
+#define GetPrivateProfileStringEx GetPrivateProfileString
+#else
+int GetPrivateProfileStringEx(const char *pSectionName,// section name
+                            const char *pKeyName,        // key name
+                            const char *pDefault,        // default string
+                            char *pReturnedString,  // destination buffer
+                            unsigned int nSize,              // size of destination buffer
+                            const char *pFileName        // initialization file name
+                            );
+#endif
+
 #ifdef __cplusplus
 }
 #endif

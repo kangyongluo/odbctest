@@ -10,6 +10,11 @@ CFLAGS=-o -Wall -g -w -Dunixcli
 CPPFLAGS=-o -Wall -g -w -Dunixcli
 TRAFODION_LIB_PATH=-L /home/kangyong/lib64
 endif
+ICU=/home/kangyong/lib64 
+
+#UNICODE version
+#CFLAGS += -DUNICODE 
+#CPPFLAGS += -DUNICODE 
 
 
 CXX		= g++
@@ -30,10 +35,10 @@ ALLFLAGS	= $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS)
 # Explicit rules
 #
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDEPATH) -o $@ $< -c
+	$(CC) $(CFLAGS) $(INCLUDEPATH) -I $(ICU) -o $@ $< -c
 
 %.o: %.cpp
-	$(CXX) $(CPPFLAGS) $(INCLUDEPATH) -o $@ $< -c
+	$(CXX) $(CPPFLAGS) $(INCLUDEPATH) -I $(ICU) -o $@ $< -c
 
 %.o: %.cc
-	$(CXX) $(CPPFLAGS) $(INCLUDEPATH) -o $@ $< -c
+	$(CXX) $(CPPFLAGS) $(INCLUDEPATH) -I $(ICU) -o $@ $< -c

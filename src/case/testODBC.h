@@ -6,44 +6,51 @@
 
 #define CONFIG_MAX_TEST_CASE 256
 
-typedef struct testThreadPara_
+typedef struct caseThreadPara_
 {
-    TestInfo mTestInfo;
-    char szTestCase[32];
-    TCHAR szDdl[512];
     int testTimes;
     int interval;
-}testThreadPara;
-typedef struct testTaskInfo_
-{
-    char szTestName[32];
-    BOOL isTest;
-    char szSql[512];
-    int testTimes;
-}testTaskInfo;
+    void *args;
+    cfgSectionInfo sectionInfo;
+    char szThreadId[16];
+}caseThreadPara;
 
-typedef struct testCase_
-{
-    TCHAR szCase[32];
-    PassFail (*run)(TestInfo *);
-}testCase;
+
 #define CONFIG_TOTAL_THREAD_NUM     64
+#define CONFIG_TEST_CASES_MAX     20
+
+
+
+#define CONFIG_ODBCTEST_CASE_SQL                    "testSQL"
+#define CONFIG_ODBCTEST_CASE_SQL_BIG_OBJECT        "testSQLBigObject"
+#define CONFIG_ODBCTEST_CASE_CLEANUP                "cleanupTable"
+#define CONFIG_ODBCTEST_CASE_LOAD_DIRECT            "testLoadDirect"
+#define CONFIG_ODBCTEST_CASE_LOAD_AT_EXEC           "testLoadAtExec"
+#define CONFIG_ODBCTEST_CASE_LOB_UPDATE             "testLobUpdate"
+#define CONFIG_ODBCTEST_CASE_ROWSET                 "testRowset"
+#define CONFIG_ODBCTEST_CASE_SQLCOLUMNS             "SQLColumns"
+#define CONFIG_ODBCTEST_CASE_SQLTABLES              "SQLTables"
+#define CONFIG_ODBCTEST_CASE_SQL_FILE              "testSQLFile"
+
+
 class CTestODBC
 {
     public:
         CTestODBC(void);
         ~CTestODBC();
     public:
-        void runTest(void);
         void runCases(void);
+        void runCasesSerial(void);
+        void doLoadData(testCaseInfo caseInfo);
+        void doSQLBigObject(testCaseInfo caseInfo);
+        void doSQL(testCaseInfo caseInfo);
+        void doCleanUpTable(testCaseInfo caseInfo);
+        void doSQLColumns(testCaseInfo caseInfo);
+        void doSQLTables(testCaseInfo caseInfo);
+        void doSqlFile(testCaseInfo caseInfo);
+        void doCase(cfgSectionInfo section);
     private:
-        testThreadPara mtestThreadPara;
-#ifdef unixcli
-        pthread_t mPth[CONFIG_TOTAL_THREAD_NUM];
-#else
-        HANDLE mPth[CONFIG_TOTAL_THREAD_NUM];
-#endif
-        BOOL mThStat[CONFIG_TOTAL_THREAD_NUM];
+
 };
 
 

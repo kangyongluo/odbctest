@@ -7,24 +7,32 @@
 #define CONFIG_LONG_COLUMN_MAX  4
 #define CONFIG_SELECT_STMT_MAX      10
 
-enum{
-    DDL_NULL = 0,
-    DDL_SELECT,
-    DDL_LOAD,
-    DDL_FILE
-};
 
-
-
-#define CONFIG_LOAD_COLUMN_MAX  64
-#define CONFIG_LOAD_DATA_SIZE   128
-
+typedef struct sqlResultSet_
+{
+    unsigned int id;
+    int sqlTime;
+    int sqlPrepareTime;
+    int queryTime;
+    int fetchTime;
+    unsigned int rowsSecond;
+    unsigned int microSecondsRows;
+    unsigned int crcTime;
+    unsigned int extraTime;
+    unsigned int totalRows;
+    unsigned int totalCols;
+    SQLLEN minLen;
+    SQLLEN maxLen;
+    SQLSMALLINT sqlCType;
+    char *szSQL;
+    int ret;
+}sqlResultSet;
 
 class CTesSQL
 {
     public:
         CTesSQL(void);
-        CTesSQL(TCHAR *szKey);
+        CTesSQL(char *szKey);
         ~CTesSQL();
     public:
         int checkColAttribute(TestInfo *pTestInfo, 
@@ -38,27 +46,17 @@ class CTesSQL
                                   SQLSMALLINT colNum
                                   );
         //When the result set of the test is relatively large, for example, query the blob table.
-        int testSelect(TestInfo *pTestInfo, 
+        int testSqlBigObject(TestInfo *pTestInfo, 
                       sSqlStmt *psStmt,
                       sTestTableInfo *psTestTableInfo
                       );
         //When the result set of the test is relatively small, you can use this interface.
         int testSQL(TestInfo *pTestInfo, 
-                      sSqlStmt *psSqlStmt, 
-                      sTestTableInfo *psTestTableInfo);
-        int doStmt(TestInfo *pTestInfo);
-        int doSqlFile(TestInfo *pTestInfo);
-        int doSqlTable(TestInfo *pTestInfo);
-        int doSelect(TestInfo *pTestInfo);
-        int doCleanupTable(TestInfo *pTestInfo);
-        int doSqlTest(TestInfo *pTestInfo, char *pCase);
+                      sSqlStmt *psSqlStmt);
         FILE *fileLogs(void);
     private:
-        BOOL isStmtResultNotNull(TCHAR *sql);
+        void putResultset(FILE *fpLog, sqlResultSet *resultset, BOOL head);
     private:
-        int mBeginVal;
-        TCHAR szLoadBuf[CONFIG_LOAD_COLUMN_MAX][CONFIG_LOAD_DATA_SIZE];
-        BOOL isBindOk;
         FILE *fpLog;
     public:
         sTestConfig *pGlobalCfg;

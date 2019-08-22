@@ -8,18 +8,9 @@ schema           =ODBCTEST
 #user             =root
 #password         =123456
 #schema           =test
-init_table       =FALSE
-interval         =5
-isMultithreading =FALSE
-isConnectInfo    =TRUE
-#isMultiTask      =TRUE
-test_times       =1
-#connect_string   =DataLang=4
-#test case:SQLColumns,SQLTables,testLoadDirect,testLoadAtExec,testLobUpdate,testRowset,testStmt,testSqlFile,testSelect,cleanupTable
-#test_case        =cleanupTable,testLoadDirect,testSelect
-#test_case        =testSqlFile,testLoadDirect,testSelect
-#test_case        =testLoadDirect,testSelect
-#test_case        =testSelect
+connect_string   =DataLang=4
+#case type:SQLColumns;SQLTables;testLoadDirect;testLoadAtExec;testLobUpdate;testRowset;testSQL;testSQLFile;testSQLBigObject;cleanupTable
+
 
 [case]
 #init table
@@ -51,28 +42,28 @@ load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_direct_threads     =1
 
 [case_2]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=0
-select_c_type        =SQL_C_TCHAR
-select_times         =1 
-select_interval      =1 
-select_ignore_fail   =TRUE 
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=0
+query_c_type        =SQL_C_TCHAR
+query_times         =1 
+query_interval      =1 
+query_ignore_fail   =TRUE 
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =FALSE
 
 [case_3]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=0
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=0
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =FALSE
 
 #insert NULL data by SQL_C_BINARY
 #SQLPrepare --- SQLBindParameter --- SQLExecute
@@ -97,27 +88,27 @@ load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_direct_threads     =1
 
 [case_5]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=1
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=1
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =FALSE
 [case_6]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=1
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=1
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =FALSE
 
 #insert string data by SQL_C_TCHAR
 #SQLPrepare --- SQLBindParameter --- SQLExecute
@@ -141,28 +132,28 @@ load_direct_insert      =INSERT
 load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 
 [case_8]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=2
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=2
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =TRUE
 
 [case_9]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=2
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=2
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =TRUE
 
 
 #insert string data by SQL_C_BINARY
@@ -187,28 +178,28 @@ load_direct_insert      =INSERT
 load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 
 [case_11]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=3
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=3
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =TRUE
 
 [case_12]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=3
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=3
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =TRUE
 
 #insert file data by SQL_C_TCHAR
 #SQLPrepare --- SQLBindParameter --- SQLExecute
@@ -233,30 +224,30 @@ load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_direct_file        =cc1.jpg
 
 [case_14]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=4
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_4.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=4
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_4.jpg
+query_calc_crc      =FALSE
 
 [case_15]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=4
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_4.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=4
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_4.jpg
+query_calc_crc      =FALSE
 
 
 #insert file data by SQL_C_BINARY
@@ -282,30 +273,30 @@ load_direct_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_direct_file        =cc1.jpg
 
 [case_17]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=5
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_5.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=5
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_5.jpg
+query_calc_crc      =FALSE
 
 [case_18]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=5
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_5.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=5
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_5.jpg
+query_calc_crc      =FALSE
 
 #insert NULL data by SQL_C_TCHAR 
 #SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
@@ -334,30 +325,30 @@ load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
 [case_20]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=6
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_6.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=6
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_6.jpg
+query_calc_crc      =TRUE
 
 [case_21]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=6
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_6.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=6
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_6.jpg
+query_calc_crc      =TRUE
 
 
 
@@ -388,30 +379,30 @@ load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
 [case_23]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=7
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_7.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=7
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_7.jpg
+query_calc_crc      =TRUE
 
 [case_24]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=7
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_7.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=7
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_7.jpg
+query_calc_crc      =TRUE
 
 
 #insert NULL data by SQL_C_TCHAR 
@@ -441,30 +432,30 @@ load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
 [case_26]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=8
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_8.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=8
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_8.jpg
+query_calc_crc      =TRUE
 
 [case_27]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=8
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_8.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=8
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_8.jpg
+query_calc_crc      =TRUE
 
 
 
@@ -495,30 +486,30 @@ load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
 [case_29]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=9
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_9.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=9
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_9.jpg
+query_calc_crc      =TRUE
 
 [case_30]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=9
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_9.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=9
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_9.jpg
+query_calc_crc      =TRUE
 
 
 
@@ -548,30 +539,30 @@ load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_at_exec_threads     =1
 
 [case_32]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=10
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_10.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=10
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_10.jpg
+query_calc_crc      =TRUE
 
 [case_33]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=10
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_10.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=10
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_10.jpg
+query_calc_crc      =TRUE
 
 #insert string data by SQL_C_BINARY 
 #SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
@@ -599,30 +590,30 @@ load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_at_exec_threads     =1
 
 [case_35]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=11
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_11.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=11
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_11.jpg
+query_calc_crc      =TRUE
 
 [case_36]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=11
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_11.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=11
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_11.jpg
+query_calc_crc      =TRUE
 
 
 #insert string data by SQL_C_TCHAR 
@@ -651,30 +642,30 @@ load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_at_exec_threads     =1
 
 [case_38]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=12
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_12.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=12
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_12.jpg
+query_calc_crc      =TRUE
 
 [case_39]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=12
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_12.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=12
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_12.jpg
+query_calc_crc      =TRUE
 
 
 #insert string data by SQL_C_BINARY 
@@ -703,30 +694,30 @@ load_at_exec_cqd         =cqd LOB_INPUT_LIMIT_FOR_BATCH  '1000000'
 load_at_exec_threads     =1
 
 [case_41]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=13
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_13.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=13
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_13.jpg
+query_calc_crc      =TRUE
 
 [case_42]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=13
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_13.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=13
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_13.jpg
+query_calc_crc      =TRUE
 
 #insert file data by SQL_C_TCHAR 
 #SQLPrepare --- SQLBindParameter(...,SQL_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
@@ -755,30 +746,30 @@ load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
 [case_44]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=14
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_14.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=14
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_14.jpg
+query_calc_crc      =FALSE
 
 [case_45]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=14
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_14.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=14
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_14.jpg
+query_calc_crc      =FALSE
 
 
 
@@ -809,30 +800,30 @@ load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
 [case_47]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=15
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_15.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=15
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_15.jpg
+query_calc_crc      =FALSE
 
 [case_48]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=15
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_15.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=15
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_15.jpg
+query_calc_crc      =FALSE
 
 #insert file data by SQL_C_TCHAR 
 #SQLPrepare --- SQLBindParameter(...,SQL_LEN_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
@@ -861,30 +852,30 @@ load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
 [case_50]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=16
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_16.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=16
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_16.jpg
+query_calc_crc      =FALSE
 
 [case_51]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=16
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_16.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=16
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_16.jpg
+query_calc_crc      =FALSE
 
 #insert file data by SQL_C_BINARY 
 #SQLPrepare --- SQLBindParameter(...,SQL_LEN_DATA_AT_EXEC) --- SQLExecute --- SQLPutData
@@ -913,30 +904,30 @@ load_at_exec_file        =cc1.jpg
 load_at_exec_threads     =1
 
 [case_53]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=17
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_char_id_16.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=17
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_16.jpg
+query_calc_crc      =FALSE
 
 [case_54]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID=17
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_16.jpg
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID=17
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_16.jpg
+query_calc_crc      =FALSE
 
 #rowset:insert NULL data by SQL_C_TCHAR 
 [case_55]
@@ -960,28 +951,28 @@ rowset_insert      =INSERT
 rowset_threads     =1
 
 [case_56]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=1000 AND ID<=1500
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=1000 AND ID<=1500
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =FALSE
 
 [case_57]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=1000 AND ID<=1500
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=1000 AND ID<=1500
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =FALSE
 
 #rowset:insert NULL data by SQL_C_BINARY
 [case_58]
@@ -1005,28 +996,28 @@ rowset_insert      =INSERT
 rowset_threads     =1
 
 [case_59]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=2000 AND ID<=2500
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=2000 AND ID<=2500
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =FALSE
 
 [case_60]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=2000 AND ID<=2500
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=2000 AND ID<=2500
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =FALSE
 
 #rowset:insert string data by SQL_C_TCHAR 
 [case_61]
@@ -1050,30 +1041,30 @@ rowset_insert      =INSERT
 rowset_threads     =1
 
 [case_62]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=3000 AND ID<=3500
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =FALSE
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=3000 AND ID<=3500
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =FALSE
+query_calc_crc      =TRUE
 
 [case_63]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=3000 AND ID<=3500
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =FALSE
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=3000 AND ID<=3500
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =FALSE
+query_calc_crc      =TRUE
 
 #rowset:insert string data by SQL_C_BINARY
 [case_64]
@@ -1097,28 +1088,28 @@ rowset_insert      =INSERT
 rowset_threads     =1
 
 [case_65]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=4000 AND ID<=4500
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=4000 AND ID<=4500
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =TRUE
 
 [case_66]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=4000 AND ID<=4500
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =FALSE
-select_calc_crc      =TRUE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=4000 AND ID<=4500
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =FALSE
+query_calc_crc      =TRUE
 
 #rowset:insert file data by SQL_C_TCHAR 
 [case_67]
@@ -1143,30 +1134,30 @@ rowset_insert      =INSERT
 rowset_threads     =1
 
 [case_68]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=5000 AND ID<=5500
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_5000.jpg
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=5000 AND ID<=5500
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_5000.jpg
+query_calc_crc      =FALSE
 
 [case_69]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=5000 AND ID<=5500
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_5000.jpg
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=5000 AND ID<=5500
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_5000.jpg
+query_calc_crc      =FALSE
 
 #rowset:insert file data by SQL_C_BINARY
 [case_70]
@@ -1191,27 +1182,27 @@ rowset_insert      =INSERT
 rowset_threads     =1
 
 [case_71]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=6000 AND ID<=6500
-select_c_type        =SQL_C_TCHAR
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_6000.jpg
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=6000 AND ID<=6500
+query_c_type        =SQL_C_TCHAR
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_char_id_6000.jpg
+query_calc_crc      =FALSE
 
 [case_72]
-case_type            =testSelect
-select_stmt          =select C_LOB from TB_CLOB where ID>=6000 AND ID<=6500
-select_c_type        =SQL_C_BINARY
-select_times         =1
-select_interval      =1
-select_ignore_fail   =TRUE
-select_checkout      =TRUE
-select_result_null   =FALSE
-select_save_result   =TRUE
-select_save_file     =clob_binary_id_6000.jpg
-select_calc_crc      =FALSE
+case_type            =testSQLBigObject
+query          =select C_LOB from TB_CLOB where ID>=6000 AND ID<=6500
+query_c_type        =SQL_C_BINARY
+query_times         =1
+query_interval      =1
+query_ignore_fail   =TRUE
+query_checkout      =TRUE
+query_result_null   =FALSE
+query_save_result   =TRUE
+query_save_file     =clob_binary_id_6000.jpg
+query_calc_crc      =FALSE

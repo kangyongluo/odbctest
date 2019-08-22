@@ -34,4 +34,4 @@ TenantName                  = ESGYNDB
 #Pooling                     = Yes
 #DATALANG		    = 0 
 #DataLang                    = 11 
-
+StatementPool               =true

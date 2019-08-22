@@ -3,7 +3,84 @@
 #include <string.h>
 #include "odbcdriver.h"
 #include "../util/util.h"
+#ifdef UNICODE
+#ifdef unixcli
+#include <iconv.h>
+#include "unicode/ucnv.h"
+#endif/*unixcli*/
+#endif/*UNICODE*/
 
+
+typedef struct loadResult_
+{
+    int row;
+    int total;
+    int beginVal;
+    int batchSize;
+    int numOfBatch;
+    char szInsertType[32];
+    char szTableName[64];
+    int timeInit;
+    int timePrepare;
+    int timeExecute;
+    int timeQuery;
+    int timeFetch;
+    char szDataType[32];
+    unsigned int sizeLob;
+    char szParaSQLBind[32];
+    SQLSMALLINT sqlCType;
+    char szQuery[512];
+    int ret;
+}loadResult;
+
+static void putLoadResultset(FILE *fpLog, loadResult *resultset, BOOL head)
+{
+    char szBuf[512] = {0};
+    char szTmp[64] = {0};
+    unsigned int option = PRINT_OFF;
+    
+    if(head == TRUE){
+        memset(szBuf, 0, sizeof(szBuf));
+        strcat(szBuf, "|   row   |");
+        strcat(szBuf, "  begin value |");
+        strcat(szBuf, "      insert      |");
+        strcat(szBuf, "       table        |");
+        strcat(szBuf, "   execute(ms)  |");
+        strcat(szBuf, "  batch(row) |");
+        strcat(szBuf, "  num of batch |");
+        strcat(szBuf, "   SQLBindParameter   |");
+        strcat(szBuf, "   lob:c type   |");
+        strcat(szBuf, " lob:data type |");
+        strcat(szBuf, " lob:data length |");
+        strcat(szBuf, "  result  |");
+        strcat(szBuf, "  query  |");
+        LogMsgEx(fpLog, NONE, "%s\n", szBuf);
+        option = 0;
+    }
+    else{
+#ifdef unixcli
+        printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\brow:%d/%d  %s", 
+                resultset->row, 
+                resultset->total,
+                (resultset->ret == 0) ? "pass" : "fail");
+        fflush(stdout);
+#endif
+    }
+    LogMsgEx(fpLog, NONE | option, "  %-14d %-14d %-16s %-20s %-16d %-12d %-12d %-24s %-14s %-16s %-16d %-10s %s\n",
+                                                resultset->row,
+                                                resultset->beginVal,
+                                                resultset->szInsertType,
+                                                resultset->szTableName,
+                                                resultset->timeExecute, 
+                                                resultset->batchSize,
+                                                resultset->numOfBatch,
+                                                resultset->szParaSQLBind,
+                                                SQLCTypeToChar(resultset->sqlCType, szTmp),
+                                                resultset->szDataType,
+                                                resultset->sizeLob,
+                                                (resultset->ret == 0) ? "passed" : "failed",
+                                                resultset->szQuery);
+}
 
 void printBindData(sBindParamAttr bindParamAttr, 
                         sBindParamStruct *pBindParamS, 
@@ -32,7 +109,7 @@ void printBindData(sBindParamAttr bindParamAttr,
         }
         for(cols = 0; cols < bindParamAttr.totalCols; cols++){
             switch(bindParamAttr.sqlCType[cols]){
-            case SQL_C_TCHAR:
+            case SQL_C_CHAR:
             case SQL_C_BINARY:
             case SQL_C_WCHAR:
                 printf("rows:%d cols:%d len = %d values:%s\n", 
@@ -260,15 +337,17 @@ int setBindParamData(sBindParamAttr bindParamAttr,
     TIMESTAMP_STRUCT *pTimestampS;
     SQL_NUMERIC_STRUCT *pNumeric;
     SQL_INTERVAL_STRUCT *pInterval;
-    TCHAR szCrc[10] = {0};
-    TCHAR *pData = NULL;
+    unsigned char szCrc[10] = {0};
+    unsigned char *pData = NULL;
     unsigned int crc = 0;
     FILE *fpLob = NULL;
     BOOL isLobCol = FALSE;
     int num;
     unsigned char *pStartAddr = NULL;
-    unsigned char *pColData[CONFIG_SQL_COLUMNS_MAX];
+    SQLTCHAR *pColData[CONFIG_SQL_COLUMNS_MAX];
     SQLLEN *pDataLen[CONFIG_SQL_COLUMNS_MAX];
+    char szCharset[32] = {0};
+    int charsetFlgLen = 0;
 
     if(pBindParamS->addr == NULL || batchNum <= 0){
         printf("Pleass init bindparameter info.file:%s function:%s line %d\n", __FILE__, __FUNCTION__, __LINE__);
@@ -281,10 +360,10 @@ int setBindParamData(sBindParamAttr bindParamAttr,
             pDataLen[cols] = (SQLLEN *)(&pStartAddr[num * pBindParamS->structSize + pBindParamS->offsetLen + cols * sizeof(SQLLEN)]);
         }
         for(cols = 0; cols < bindParamAttr.totalCols; cols++){
-            pData = (TCHAR *)pColData[cols];
+            pData = (unsigned char *)pColData[cols];
             *pDataLen[cols] = SQL_NTS;
             switch(bindParamAttr.sqlCType[cols]){
-            case SQL_C_TCHAR:
+            case SQL_C_CHAR:
             case SQL_C_BINARY:
             case SQL_C_WCHAR:
                 isLobCol = FALSE;
@@ -296,18 +375,69 @@ int setBindParamData(sBindParamAttr bindParamAttr,
                         }
                     }
                     if(isLobCol && (bindParamAttr.actualDataSize[cols][0] >= 0)){
+                        getFileEncoding(bindParamAttr.szLobFile, szCharset);
+                        if(strcmp(szCharset, ENCODING_UCS2_BIG_ENDIAN) == 0){
+                            charsetFlgLen = 2;
+                        }
+                        else if(strcmp(szCharset, ENCODING_UCS2_LITTLE_ENDIAN) == 0){
+                            charsetFlgLen = 2;
+                        }
+                        else if(strcmp(szCharset, ENCODING_UTF8) == 0){
+                            charsetFlgLen = 3;
+                        }
                         fpLob = fopen(bindParamAttr.szLobFile, "rb+");
                         if(fpLob){
+                            if(charsetFlgLen > 0) fread(szCrc, 1, charsetFlgLen, fpLob);
                             *pDataLen[cols] = fread(pData, 1, bindParamAttr.columnSize[cols], fpLob);
                             fclose(fpLob);
-                            LogMsgEx(fpLog, NONE, _T("col:%d load lob file:%s size=%d bytes\n"), cols + 1, bindParamAttr.szLobFile, *pDataLen[cols]);
+#if 0
+#ifdef UNICODE
+#if unixcli
+                            UConverter* convSrc;
+                            UErrorCode status = U_ZERO_ERROR;
+                            int lenConv = 0;
+                            TCHAR *szTChar = NULL;
+
+                            szTChar = malloc(*pDataLen[cols] * sizeof(TCHAR) + 2);
+                            if(szTChar != NULL){
+                                LogMsgEx(fpLog, NONE, "ucnv_open(\"%s\", &status)\n", bindParamAttr.szCharsetOfFile);
+                                convSrc = ucnv_open(bindParamAttr.szCharsetOfFile, &status);
+                                if (!U_SUCCESS(status)){
+                                        LogMsgEx(fpLog, NONE, "[%s:%d]Call ucnv_open fail.Charset of file is %s\n", __FILE__, __LINE__, bindParamAttr.szCharsetOfFile);
+                                }
+                                else{
+                                    printf("src of data:%s\n", pData);
+                                    lenConv= ucnv_toUChars(convSrc, szTChar, *pDataLen[cols], pData, *pDataLen[cols], &status);
+                                    if(lenConv > 0){
+                                        LogMsgEx(fpLog, NONE, "len = %d lenconv=%d\n", *pDataLen[cols], lenConv);
+                                        memcpy(pData, szTChar, lenConv * sizeof(TCHAR));
+                                        *pDataLen[cols] = lenConv * 2;
+                                        int kk;
+                                        for(kk = 0; kk < lenConv * sizeof(TCHAR); kk++)
+                                            printf("0x%x ", pData[kk]);
+                                            printf("\n");
+                                    }
+                                    else{
+                                        LogMsgEx(fpLog, NONE, "Call ucnv_toUChars fail!!!\n");
+                                    }
+                                }
+                                ucnv_close(convSrc);
+                                free(szTChar);
+                            }
+#else
+
+#endif /*unixcli*/
+#endif /*UNICODE*/
+#endif
+                            LogMsgEx(fpLog, NONE, "col:%d load lob file:%s size=%d bytes\n", cols + 1, bindParamAttr.szLobFile, *pDataLen[cols]);
                             if(*pDataLen[cols] <= 0){
                                 *pDataLen[cols] = SQL_NULL_DATA;
                             }
                         }
                         else{
-                            LogMsgEx(fpLog, NONE, _T("col:%d load lob strings data. size=%d bytes\n"), cols + 1, bindParamAttr.actualDataSize[cols][0]);
+                            LogMsgEx(fpLog, NONE, "col:%d load lob strings data. size=%d bytes\n", cols + 1, bindParamAttr.actualDataSize[cols][0]);
                             isLobCol = FALSE;
+                            *pDataLen[cols] = (bindParamAttr.paraValueLen[cols] == SQL_DEFAULT) ? bindParamAttr.actualDataSize[cols][0] : SQL_NTS;
                         }
                     }
                     else if(isLobCol){
@@ -315,7 +445,7 @@ int setBindParamData(sBindParamAttr bindParamAttr,
                     }
                 }
                 if(isLobCol != TRUE){
-                    setSqlData(pData, 
+                    setSqlData((TCHAR *)pData, 
                             bindParamAttr.actualDataSize[cols][0], 
                             beginVal, 
                             bindParamAttr.sqlType[cols],
@@ -441,7 +571,7 @@ int setBindParamData(sBindParamAttr bindParamAttr,
             case SQL_C_GUID:
                 break;
             default:
-                setSqlData(pData, 
+                setSqlData((TCHAR *)pData, 
                             bindParamAttr.actualDataSize[cols][0], 
                             beginVal, 
                             bindParamAttr.sqlType[cols],
@@ -469,7 +599,7 @@ static int newBindParamStruct(sBindParamAttr bindParamAttr, sBindParamStruct *pB
             tmpLen[cols] = SQL_NULL_DATA;
         }
         switch(bindParamAttr.sqlCType[cols]){
-        case SQL_C_TCHAR:
+        case SQL_C_CHAR:
         case SQL_C_BINARY:
         case SQL_C_WCHAR:
             if(bindParamAttr.sqlType[cols] == SQL_CHAR ||
@@ -647,9 +777,9 @@ static int bindLoadParam(SQLHANDLE hstmt,
     RETCODE retcode;
     SQLPOINTER rgbValue;
     SQLLEN *pLen;
-    TCHAR szBuf[64];
-    TCHAR szTmp[64];
-    TCHAR szData[64];
+    char szBuf[64];
+    char szTmp[64];
+    char szData[64];
     unsigned char *pStartAddr = pBindParam->addr;
 
     for(numCol = 0; numCol < pBindParamAttr->totalCols; numCol++){
@@ -661,26 +791,26 @@ static int bindLoadParam(SQLHANDLE hstmt,
         rgbValue = &pStartAddr[pBindParam->offsetAddr[numCol]];
         pLen = (SQLLEN *)(&pStartAddr[pBindParam->offsetLen + numCol * sizeof(SQLLEN)]); 
         if(*pLen == SQL_NTS){
-            _stprintf(szData, _T("%s"), _T("SQL_NTS"));
+            sprintf(szData, "%s", "SQL_NTS");
         }
         else if(*pLen == SQL_NULL_DATA){
-            _stprintf(szData, _T("%s"), _T("SQL_NULL_DATA"));
+            sprintf(szData, "%s", "SQL_NULL_DATA");
         }
         else if(*pLen > 0){
-            _stprintf(szData, _T("%d"), *pLen);
+            sprintf(szData, "%d", *pLen);
         }
         else{
-            _stprintf(szData, _T("%s"), _T("SQL_NTS"));
+            sprintf(szData, "%s", "SQL_NTS");
         }
-        LogMsgEx(fpLog, NONE, _T("SQLBindParameter(hstmt, %d, %s, %s, %s, ..., %s)\n"), 
+        LogMsgEx(fpLog, NONE, "SQLBindParameter(hstmt, %d, %s, %s, %s, ..., %s)\n", 
                             numCol + 1,
-                            (pBindParamAttr->inputOutputType == SQL_PARAM_INPUT_OUTPUT) ? _T("SQL_PARAM_INPUT_OUTPUT") : _T("SQL_PARAM_INPUT"),
+                            (pBindParamAttr->inputOutputType == SQL_PARAM_INPUT_OUTPUT) ? "SQL_PARAM_INPUT_OUTPUT" : "SQL_PARAM_INPUT",
                             SQLCTypeToChar(pBindParamAttr->sqlCType[numCol], szBuf),
                             SQLTypeToChar(pBindParamAttr->sqlType[numCol], szTmp),
                             szData
                             );
         switch(pBindParamAttr->sqlCType[numCol]){
-        case SQL_C_TCHAR:
+        case SQL_C_CHAR:
         case SQL_C_BINARY:
         case SQL_C_WCHAR:
             retcode = SQLBindParameter(hstmt, 
@@ -897,7 +1027,9 @@ int loadExecDirect(sLoadParamInfo *pLoadParam)
     SQLHANDLE hstmt = SQL_NULL_HANDLE;
     SQLINTEGER i, numCol, cols;
     int beginVal = 0;
-    TCHAR szBuf[256] = {0};
+    char szBuf[256] = {0};
+    char szTmp[256] = {0};
+    TCHAR szQuery[256] = {0};
     int totalRows = 0;
     int totalInsert;
     SQLLEN len;
@@ -908,16 +1040,21 @@ int loadExecDirect(sLoadParamInfo *pLoadParam)
     int lobSize = 0;
     FILE *fpBlob = NULL;
     unsigned int crc = 0;
-    TCHAR szCrc[10] = {0};
+    unsigned char szCrc[10] = {0};
+    char szCharset[32] = {0};
     
     FILE *fpLog = pLoadParam->fpLog;
     TestInfo mTestInfo;
     sBindParamStruct mBindParam;
     sBindParamAttr mBindParamAttr;
+    SQLSMALLINT lobCType = SQL_C_TCHAR;
+    SQLLEN lenLob = 0, dataTypeLob = SQL_NTS;
+    loadResult mloadResult;
     
     memset(&mBindParam, 0, sizeof(mBindParam));
     memset(&mBindParamAttr, 0, sizeof(mBindParamAttr));
     memcpy(&mTestInfo, &pLoadParam->mTestInfo, sizeof(TestInfo));
+    memset(&mloadResult, 0, sizeof(mloadResult));
     //init
     mBindParamAttr.inputOutputType = pLoadParam->inputOutputType;
     mBindParamAttr.totalCols = pLoadParam->mTable.columNum;
@@ -929,49 +1066,62 @@ int loadExecDirect(sLoadParamInfo *pLoadParam)
         mBindParamAttr.actualDataSize[cols][0] = pLoadParam->mTable.actualDataSize[cols][0];
         mBindParamAttr.actualDataSize[cols][1] = pLoadParam->mTable.actualDataSize[cols][1];
         mBindParamAttr.lenType[cols] = pLoadParam->lenType[cols];
+        mBindParamAttr.paraValueLen[cols] = pLoadParam->mTable.paraValueLen[cols];
+        sprintf(mBindParamAttr.szColName[cols], pLoadParam->mTable.szColName[cols]);
     }
     mBindParamAttr.isLobTable = pLoadParam->mTable.isLobTable;
     mBindParamAttr.isLobFile = pLoadParam->mTable.isLobFile;
-    _stprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szCharsetOfFile, "%s", pLoadParam->mTable.szCharsetOfLobFile);
     mBindParamAttr.numLobCols = pLoadParam->mTable.numLobCols;
     memcpy(mBindParamAttr.idLobCols, pLoadParam->mTable.idLobCols, sizeof(mBindParamAttr.idLobCols));
     if(mBindParamAttr.isLobTable){
         lobSize = calcFileSize(mBindParamAttr.szLobFile);
+        getFileEncoding(mBindParamAttr.szLobFile, szCharset);
+        if(strcmp(szCharset, ENCODING_UCS2_BIG_ENDIAN) == 0){
+            lobSize -= 2;
+        }
+        else if(strcmp(szCharset, ENCODING_UCS2_LITTLE_ENDIAN) == 0){
+            lobSize -= 2;
+        }
+        else if(strcmp(szCharset, ENCODING_UTF8) == 0){
+            lobSize -= 3;
+        }
     }
     if(mBindParamAttr.totalCols >= CONFIG_SQL_COLUMNS_MAX){
         LOG_HEAD(pLoadParam->fpLog);
-        LogMsgEx(fpLog, NONE, _T("The column width defined by the table is out of range. The largest column value is %d\n"), CONFIG_SQL_COLUMNS_MAX);
+        LogMsgEx(fpLog, NONE, "The column width defined by the table is out of range. The largest column value is %d\n", CONFIG_SQL_COLUMNS_MAX);
         return -1;
     }
     for(numCol = 0; numCol < mBindParamAttr.totalCols; numCol++){
         if(mBindParamAttr.actualDataSize[numCol][0] > 16777216){
             LOG_HEAD(pLoadParam->fpLog);
-            LogMsgEx(fpLog, NONE, _T("The data loaded is too large and the maximum value is %d.Please use \"LOBUPDATE\" mode.\n"), 16777216);
+            LogMsgEx(fpLog, NONE, "The data loaded is too large and the maximum value is %d.Please use \"LOBUPDATE\" mode.\n", 16777216);
             return -1;
         }
     }
     if(newBindParamStruct(mBindParamAttr, &mBindParam, 1) != 0){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("prepare bind parameter data fail.\n"));
+        LogMsgEx(fpLog, NONE, "prepare bind parameter data fail.\n");
         return -1;
     }
     
-    LogMsgEx(fpLog, TIME_STAMP, _T("Prepare load......\n"));
-    LogMsgEx(fpLog, TIME_STAMP, _T("type:%s begin value:%d batch:%d num of batch:%d\n"),
+    LogMsgEx(fpLog, TIME_STAMP, "Prepare load......\n");
+    LogMsgEx(fpLog, TIME_STAMP, "type:%s begin value:%d batch:%d num of batch:%d\n",
                                     pLoadParam->szInsertType,
                                     pLoadParam->beginVal,
                                     pLoadParam->batchSize,
                                     pLoadParam->totalBatch
                                     );
-    _stprintf(szBuf, _T("DSN=%s;UID=%s;PWD=%s;%s"), 
+    sprintf(szBuf, "DSN=%s;UID=%s;PWD=%s;%s", 
                         mTestInfo.DataSource, 
                         mTestInfo.UserID, 
                         mTestInfo.Password, 
                         pLoadParam->szConnStr);
-    LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
+    LogMsgEx(fpLog, NONE, "%s\n", szBuf);
     if(!FullConnectWithOptionsEx(&mTestInfo, CONNECT_ODBC_VERSION_3, pLoadParam->szConnStr, fpLog)){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("connect fail.\n"));
+        LogMsgEx(fpLog, NONE, "connect fail.\n");
 		LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         deleteBindParamStruct(&mBindParam);
         return -1;
@@ -981,12 +1131,12 @@ int loadExecDirect(sLoadParamInfo *pLoadParam)
 
     retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
     if (!SQL_SUCCEEDED(retcode)){
-        LogMsgEx(fpLog, NONE, _T("SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n"));
-        LogMsgEx(fpLog, NONE,_T("Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n"));
+        LogMsgEx(fpLog, NONE, "SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n");
+        LogMsgEx(fpLog, NONE,"Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n");
         retcode = SQLAllocStmt((SQLHANDLE)hdbc, &hstmt);
         if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE,_T("SQLAllocStmt hstmt fail.\n"));
+            LogMsgEx(fpLog, NONE,"SQLAllocStmt hstmt fail.\n");
             FullDisconnectEx(fpLog, &mTestInfo);
             deleteBindParamStruct(&mBindParam);
             return -1;
@@ -997,12 +1147,13 @@ int loadExecDirect(sLoadParamInfo *pLoadParam)
     addInfoSessionEx(hstmt, fpLog);
 
     for(i = 0; i < CONFIG_NUM_CQD_SIZE; i++){
-        if(_tcslen(pLoadParam->mTable.szCqd[i]) > 0){
-            LogMsgEx(fpLog, NONE, _T("%s\n"), pLoadParam->mTable.szCqd[i]);
-            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)pLoadParam->mTable.szCqd[i], SQL_NTS);
+        if(strlen(pLoadParam->mTable.szCqd[i]) > 0){
+            LogMsgEx(fpLog, NONE, "%s\n", pLoadParam->mTable.szCqd[i]);
+            charToTChar(pLoadParam->mTable.szCqd[i], szQuery);
+            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szQuery, SQL_NTS);
             if(retcode != SQL_SUCCESS){
                 LOG_HEAD(fpLog);
-                LogMsgEx(fpLog, NONE, _T("set cqd fail !\n"));
+                LogMsgEx(fpLog, NONE, "set cqd fail !\n");
                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt); 
             }
         }
@@ -1010,25 +1161,81 @@ int loadExecDirect(sLoadParamInfo *pLoadParam)
             break;
         }
     }
-    LogMsgEx(fpLog, NONE, _T("SQLPrepare -- > SQLBindParameter --> SQLExecute.\n"));
-    _stprintf(szBuf, _T("%s INTO %s VALUES("), 
-                        pLoadParam->szInsertType, 
-                        pLoadParam->mTable.szTableName);
-    for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
-    {
-        _tcscat(szBuf, _T("?"));
-        if(cols < (mBindParamAttr.totalCols - 1))
+    
+    LogMsgEx(fpLog, NONE, "SQLPrepare -- > SQLBindParameter --> SQLExecute.\n");
+    if(strcmp(pLoadParam->szInsertType, "INSERT") == 0 ||
+        strcmp(pLoadParam->szInsertType, "insert") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPSERT") == 0 ||
+        strcmp(pLoadParam->szInsertType, "upsert") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPSERT USING LOAD") == 0 ||
+        strcmp(pLoadParam->szInsertType, "upsert using load") == 0){
+        sprintf(szBuf, "%s INTO %s VALUES(", 
+                            pLoadParam->szInsertType, 
+                            pLoadParam->mTable.szTableName);
+        for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
         {
-            _tcscat(szBuf, _T(","));
+            strcat(szBuf, "?");
+            if(cols < (mBindParamAttr.totalCols - 1))
+            {
+                strcat(szBuf, ",");
+            }
         }
+        strcat(szBuf, ")");
     }
-    _tcscat(szBuf, _T(")"));
-    LogMsgEx(fpLog, NONE, _T("SQLPrepare(hstmt, \"%s\", SQL_NTS)\n"), szBuf);
-    retcode = SQLPrepare(hstmt, (SQLTCHAR *)szBuf , SQL_NTS);
+    else if(strcmp(pLoadParam->szInsertType, "UPDATE") == 0 ||
+        strcmp(pLoadParam->szInsertType, "update") == 0
+        ){
+        sprintf(szBuf, "UPDATE %s set ", pLoadParam->szTable);
+        for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
+        {
+            memset(szTmp, 0, sizeof(szTmp));
+            sprintf(szTmp, "%s=?", mBindParamAttr.szColName[cols]);
+            if(cols < (mBindParamAttr.totalCols - 1))
+            {
+                strcat(szTmp, ",");
+            }
+            else{
+                if(strlen(pLoadParam->szInsertWhere) > 0)
+                    strcat(szTmp, "  ");
+            }
+            strcat(szBuf, szTmp);
+        }
+        strcat(szBuf, pLoadParam->szInsertWhere);
+    }
+    else if(strcmp(pLoadParam->szInsertType, "DELETE") == 0 ||
+        strcmp(pLoadParam->szInsertType, "delete") == 0
+        ){
+        sprintf(szBuf, "DELETE FROM %s WHERE ", pLoadParam->szTable);
+        for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
+        {
+            sprintf(szTmp, "%s=?", mBindParamAttr.szColName[cols]);
+            if(cols < (mBindParamAttr.totalCols - 1))
+            {
+                strcat(szTmp, ",");
+            }
+            else{
+                if(strlen(pLoadParam->szInsertWhere) > 0)
+                    strcat(szTmp, "  ");
+            }
+            strcat(szBuf, szTmp);
+        }
+        strcat(szBuf, pLoadParam->szInsertWhere);
+    }
+    else{
+        LOG_HEAD(fpLog);
+        LogMsgEx(fpLog, NONE,"Unknown insertion type:%s\n", pLoadParam->szInsertType);
+        FullDisconnectEx(fpLog, &mTestInfo);
+        deleteBindParamStruct(&mBindParam);
+        return -1;
+    }
+    sprintf(mloadResult.szQuery, "%s", szBuf);
+    LogMsgEx(fpLog, NONE, "SQLPrepare(hstmt, \"%s\", SQL_NTS)\n", szBuf);
+    charToTChar(szBuf, szQuery);
+    retcode = SQLPrepare(hstmt, (SQLTCHAR *)szQuery , SQL_NTS);
     if (!SQL_SUCCEEDED(retcode))
     {
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLPrepare  fail.\n"));
+        LogMsgEx(fpLog, NONE, "SQLPrepare  fail.\n");
         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto TEST_INSERT_FAIL;
@@ -1039,104 +1246,143 @@ int loadExecDirect(sLoadParamInfo *pLoadParam)
             for(i = 0; i < mBindParamAttr.numLobCols; i++){
                 if(numCol == pLoadParam->mTable.idLobCols[i]){
                     isBlobCol = TRUE;
+                    lobCType = pLoadParam->mTable.sqlCType[numCol];
+                    if(lobSize > 0) lenLob = lobSize;
+                    else lenLob = pLoadParam->mTable.actualDataSize[numCol][0];
                     break;
                 }
             }
         }
-        if(mBindParamAttr.actualDataSize[numCol][0] <= -1){
+        if(mBindParamAttr.actualDataSize[numCol][0] == SQL_NULL_DATA){
             *mBindParam.pDataLen[numCol] = SQL_NULL_DATA;
+            if(isBlobCol == TRUE) dataTypeLob = SQL_NULL_DATA;
         }
         else if((isBlobCol == TRUE) && (lobSize > 0)){
+            //load lob file...
             /*if(lobSize > mBindParamAttr.columnSize[numCol]){
                 lobSize = mBindParamAttr.columnSize[numCol];
             }*/
             *mBindParam.pDataLen[numCol] = lobSize;
+            dataTypeLob = lobSize;
+        }
+        else if((isBlobCol == TRUE) && (mBindParamAttr.actualDataSize[numCol][0] >= 0)){
+            //Load lob string with the actual length
+            *mBindParam.pDataLen[numCol] = (mBindParamAttr.paraValueLen[numCol] == SQL_DEFAULT) ? mBindParamAttr.actualDataSize[numCol][0] : SQL_NTS;
+            dataTypeLob = (mBindParamAttr.paraValueLen[numCol] == SQL_DEFAULT) ? 0 : SQL_NTS;
         }
         else{
             *mBindParam.pDataLen[numCol] = SQL_NTS;
         }
     }
     if(bindLoadParam(hstmt, &mBindParamAttr, &mBindParam, fpLog) != 0){
-        LogMsgEx(fpLog, NONE, _T("Call SQLBindParameter fail.\n"));
+        LogMsgEx(fpLog, NONE, "Call SQLBindParameter fail.\n");
         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto TEST_INSERT_FAIL;
     }
     
-    LogMsgEx(fpLog, NONE, _T("Start insert...\n"));
+    LogMsgEx(fpLog, NONE, "Start %s...\n", pLoadParam->szInsertType);
+    
     beginVal = pLoadParam->beginVal;
     totalInsert = 0;
+    mloadResult.total = pLoadParam->totalBatch * pLoadParam->batchSize;
     for(i = 0; i < (pLoadParam->totalBatch * pLoadParam->batchSize); i++, beginVal++)
     {
-        if((i < 3000) || ((i > 3000) && (i % 1000 == 0))){
-            LogMsgEx(fpLog, NONE, _T("insert row %d\n"), i + 1);
-        }
-        setBindParamData(mBindParamAttr, &mBindParam, beginVal, 1, fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLExecute(hstmt)\n"));
+        setBindParamData(mBindParamAttr, 
+                        &mBindParam, 
+                        beginVal, 
+                        1, 
+                        (i == 0) ? fpLog : NULL);
         gettimeofday(&tv1,NULL);
+        if(i == 0) LogMsgEx(fpLog, NONE, "SQLExecute(hstmt)\n");
         retcode = SQLExecute(hstmt);
         if (retcode != SQL_SUCCESS)
         {
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE, _T("SQLExecute fail.\n"));
+            LogMsgEx(fpLog, NONE, "SQLExecute fail.\n");
             LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
             ret = -1;
-            break;
         }
         gettimeofday(&tv2,NULL);
         exeTimes = (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000);
-        LogMsgEx(fpLog, NONE, _T("Load test: row:%d val:%d insert:%s table:%s %d (ms) batch:%d (row)\n"),
-                                                                            i,
-                                                                            beginVal,
-                                                                            pLoadParam->szInsertType,
-                                                                            pLoadParam->mTable.szTableName,
-                                                                            exeTimes, 
-                                                                            1);
+        
+        mloadResult.row = i;
+        mloadResult.beginVal = beginVal;
+        if(dataTypeLob == SQL_NULL_DATA) sprintf(mloadResult.szDataType, "%s", "SQL_NULL_DATA");
+        else if(dataTypeLob == SQL_NTS) sprintf(mloadResult.szDataType, "%s", "SQL_NTS");
+        else if((dataTypeLob == 0) && (lobSize == 0)) sprintf(mloadResult.szDataType, "%s", "string");
+        else if(dataTypeLob > 0) sprintf(mloadResult.szDataType, "%s(%s)", "hex", szCharset);
+        else sprintf(mloadResult.szDataType, "%s", "SQL_NTS");
+        mloadResult.batchSize = 1;
+        mloadResult.numOfBatch = i + 1;
+        sprintf(mloadResult.szInsertType, "%s", pLoadParam->szInsertType);
+        sprintf(mloadResult.szTableName, "%s", pLoadParam->mTable.szTableName);
+        mloadResult.timeExecute = exeTimes;
+        mloadResult.sizeLob = lenLob;
+        if(dataTypeLob == SQL_NULL_DATA) sprintf(mloadResult.szParaSQLBind, "%s", "SQL_NULL_DATA");
+        else if(dataTypeLob == SQL_NTS) sprintf(mloadResult.szParaSQLBind, "%s", "SQL_NTS");
+        else if((dataTypeLob == 0) && (lobSize == 0)) sprintf(mloadResult.szParaSQLBind, "%s", "string");
+        else sprintf(mloadResult.szParaSQLBind, "%s", "SQL_NTS");
+        mloadResult.sqlCType = lobCType;
+        mloadResult.ret = ret;
+        putLoadResultset(fpLog, &mloadResult, (i == 0) ? TRUE : FALSE);
+        if(ret != 0)break;
         totalInsert += 1;
     }
-    LogMsgEx(fpLog, NONE, _T("Total insert rows %d\n"), totalInsert);
+    LogMsgEx(fpLog, NONE, "Total insert rows %d\n", totalInsert);
     if(totalInsert == 0){
         ret = -1;
         goto TEST_INSERT_FAIL;
     }
     SQLFreeStmt(hstmt, SQL_UNBIND);
     SQLFreeStmt(hstmt, SQL_CLOSE);
-   
-    LogMsgEx(fpLog, NONE, _T("check total insert\n"));
-    totalRows = 0;
-    retcode = SQLBindCol(hstmt, 1, SQL_C_ULONG, &totalRows, sizeof(totalRows), &len);
-    if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
-    {
-        LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLBindCol fail.\n"));
-        LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
-        ret = -1;
-        goto TEST_INSERT_FAIL;
+
+    if(strcmp(pLoadParam->szInsertType, "INSERT") == 0 ||
+        strcmp(pLoadParam->szInsertType, "insert") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPSERT") == 0 ||
+        strcmp(pLoadParam->szInsertType, "upsert") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPSERT USING LOAD") == 0 ||
+        strcmp(pLoadParam->szInsertType, "upsert using load") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPDATE") == 0 ||
+        strcmp(pLoadParam->szInsertType, "update") == 0
+        ){
+        LogMsgEx(fpLog, NONE, "check total insert\n");
+        totalRows = 0;
+        retcode = SQLBindCol(hstmt, 1, SQL_C_ULONG, &totalRows, sizeof(totalRows), &len);
+        if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
+        {
+            LOG_HEAD(fpLog);
+            LogMsgEx(fpLog, NONE, "SQLBindCol fail.\n");
+            LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
+            ret = -1;
+            goto TEST_INSERT_FAIL;
+        }
+        /*retcode = SQLExecDirect(hstmt, (SQLTCHAR*)"set FETCHSIZE 1", SQL_NTS);
+        if(retcode != SQL_SUCCESS){
+            LOG_HEAD(fpLog);
+            LogMsgEx(fpLog, NONE, "set cqd fail !\n");
+            LogAllErrorsEx(fpLog, henv, hdbc, hstmt); 
+        }*/
+        sprintf(szBuf, "SELECT COUNT(*) FROM %s\n", pLoadParam->mTable.szTableName);
+        LogMsgEx(fpLog, NONE,"%s\n", szBuf);
+        charToTChar(szBuf, szQuery);
+        retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szQuery, SQL_NTS);
+        if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
+        {
+            LogMsgEx(fpLog, NONE, "SQLExecDirect fail.\n");
+            LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
+            ret = -1;
+            goto TEST_INSERT_FAIL;
+        }
+        SQLFetch(hstmt);
+        if(totalRows < (pLoadParam->totalBatch * pLoadParam->batchSize))
+        {
+            ret = -1;
+        }
     }
-    /*retcode = SQLExecDirect(hstmt, (SQLTCHAR*)"set FETCHSIZE 1", SQL_NTS);
-    if(retcode != SQL_SUCCESS){
-        LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("set cqd fail !\n"));
-        LogAllErrorsEx(fpLog, henv, hdbc, hstmt); 
-    }*/
-    _stprintf(szBuf, _T("SELECT COUNT(*) FROM %s\n"), pLoadParam->mTable.szTableName);
-    LogMsgEx(fpLog, NONE,_T("%s\n"), szBuf);
-    retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szBuf, SQL_NTS);
-    if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
-    {
-        LogMsgEx(fpLog, NONE, _T("SQLExecDirect fail.\n"));
-        LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
-        ret = -1;
-        goto TEST_INSERT_FAIL;
-    }
-    SQLFetch(hstmt);
-    if(totalRows < (pLoadParam->totalBatch * pLoadParam->batchSize))
-    {
-        ret = -1;
-        goto TEST_INSERT_FAIL;
-    }
-    LogMsgEx(fpLog, NONE, _T("%s: expect rows:%d actual rows:%d\n"), 
-                (ret == 0) ? _T("Test pass") : _T("Test fail"),
+    
+    LogMsgEx(fpLog, NONE, "%s: expect rows:%d actual rows:%d\n", 
+                (ret == 0) ? "Test pass" : "Test fail",
                 (pLoadParam->totalBatch * pLoadParam->batchSize), 
                 totalRows);
 TEST_INSERT_FAIL:
@@ -1152,8 +1398,9 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
  	SQLHANDLE henv = SQL_NULL_HANDLE;
  	SQLHANDLE hdbc = SQL_NULL_HANDLE;
  	SQLHANDLE hstmt = SQL_NULL_HANDLE;
-    TCHAR szBuf[512] = {0};
-    TCHAR szTmp[64];
+    char szBuf[512] = {0};
+    char szTmp[64];
+    TCHAR szQuery[256] = {0};
     int rows = 0;
     int beginVal = 0;
     int cols;
@@ -1163,7 +1410,7 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
     FILE *fpBlob = NULL;
     PTR pToken;
     unsigned int crc = 0;
-    TCHAR szCrc[10] = {0};
+    unsigned char szCrc[10] = {0};
     int ret = 0;
     SQLINTEGER i;
     struct timeval tv1, tv2, tv3;
@@ -1176,10 +1423,15 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
     TestInfo mTestInfo;
     sBindParamStruct mBindParam;
     sBindParamAttr mBindParamAttr;
+    SQLSMALLINT lobCType = SQL_C_TCHAR;
+    SQLLEN lenLob = 0, dataTypeLob = SQL_NTS;
+    char szCharset[32] = {0};
+    loadResult mloadResult;
     
     memset(&mBindParam, 0, sizeof(mBindParam));
     memset(&mBindParamAttr, 0, sizeof(mBindParamAttr));
     memcpy(&mTestInfo, &pLoadParam->mTestInfo, sizeof(TestInfo));
+    memset(&mloadResult, 0, sizeof(mloadResult));
     //init
     mBindParamAttr.inputOutputType = pLoadParam->inputOutputType;
     mBindParamAttr.totalCols = pLoadParam->mTable.columNum;
@@ -1191,45 +1443,57 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
         mBindParamAttr.actualDataSize[cols][0] = pLoadParam->mTable.actualDataSize[cols][0];
         mBindParamAttr.actualDataSize[cols][1] = pLoadParam->mTable.actualDataSize[cols][1];
         mBindParamAttr.lenType[cols] = pLoadParam->lenType[cols];
+        mBindParamAttr.paraValueLen[cols] = pLoadParam->mTable.paraValueLen[cols];
     }
     mBindParamAttr.isLobTable = pLoadParam->mTable.isLobTable;
     mBindParamAttr.isLobFile = pLoadParam->mTable.isLobFile;
-    _stprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szCharsetOfFile, "%s", pLoadParam->mTable.szCharsetOfLobFile);
     mBindParamAttr.numLobCols = pLoadParam->mTable.numLobCols;
     memcpy(mBindParamAttr.idLobCols, pLoadParam->mTable.idLobCols, sizeof(mBindParamAttr.idLobCols));
     if(mBindParamAttr.isLobTable){
         lobSize = calcFileSize(mBindParamAttr.szLobFile);
+        getFileEncoding(mBindParamAttr.szLobFile, szCharset);
+        if(strcmp(szCharset, ENCODING_UCS2_BIG_ENDIAN) == 0){
+            lobSize -= 2;
+        }
+        else if(strcmp(szCharset, ENCODING_UCS2_LITTLE_ENDIAN) == 0){
+            lobSize -= 2;
+        }
+        else if(strcmp(szCharset, ENCODING_UTF8) == 0){
+            lobSize -= 3;
+        }
     }
     if(mBindParamAttr.totalCols >= CONFIG_SQL_COLUMNS_MAX){
-        LogMsgEx(fpLog, NONE, _T("The column width defined by the table is out of range. The largest column value is %d\n"), CONFIG_SQL_COLUMNS_MAX);
+        LogMsgEx(fpLog, NONE, "The column width defined by the table is out of range. The largest column value is %d\n", CONFIG_SQL_COLUMNS_MAX);
         return -1;
     }
     for(cols = 0; cols < mBindParamAttr.totalCols; cols++){
         if(mBindParamAttr.actualDataSize[cols][0] > 16777216){
-            LogMsgEx(fpLog, NONE, _T("The data loaded is too large and the maximum value is %d.Please use \"LOBUPDATE\" mode.\n"), 16777216);
+            LogMsgEx(fpLog, NONE, "The data loaded is too large and the maximum value is %d.Please use \"LOBUPDATE\" mode.\n", 16777216);
             return -1;
         }
     }
     if(newBindParamStruct(mBindParamAttr, &mBindParam, 1) != 0){
-        LogMsgEx(fpLog, NONE, _T("prepare bind parameter data fail.\n"));
+        LogMsgEx(fpLog, NONE, "prepare bind parameter data fail.\n");
         return -1;
     }
     
-    LogMsgEx(fpLog, TIME_STAMP, _T("Prepare load......\n"));
-    LogMsgEx(fpLog, TIME_STAMP, _T("type:%s begin value:%d batch:%d num of batch:%d\n"),
+    LogMsgEx(fpLog, TIME_STAMP, "Prepare load......\n");
+    LogMsgEx(fpLog, TIME_STAMP, "type:%s begin value:%d batch:%d num of batch:%d\n",
                                     pLoadParam->szInsertType,
                                     pLoadParam->beginVal,
                                     pLoadParam->batchSize,
                                     pLoadParam->totalBatch
                                     );
-    _stprintf(szBuf, _T("DSN=%s;UID=%s;PWD=%s;%s"), 
+    sprintf(szBuf, "DSN=%s;UID=%s;PWD=%s;%s", 
                         mTestInfo.DataSource, 
                         mTestInfo.UserID, 
                         mTestInfo.Password, 
                         pLoadParam->szConnStr);
-    LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
+    LogMsgEx(fpLog, NONE, "%s\n", szBuf);
     if(!FullConnectWithOptionsEx(&mTestInfo, CONNECT_ODBC_VERSION_3, pLoadParam->szConnStr, fpLog)){
-        LogMsgEx(fpLog, NONE, _T("connect fail.\n"));
+        LogMsgEx(fpLog, NONE, "connect fail.\n");
 		LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         deleteBindParamStruct(&mBindParam);
         return -1;
@@ -1240,12 +1504,12 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
     retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
     if (!SQL_SUCCEEDED(retcode)){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n"));
-        LogMsgEx(fpLog, NONE,_T("Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n"));
+        LogMsgEx(fpLog, NONE, "SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n");
+        LogMsgEx(fpLog, NONE,"Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n");
         retcode = SQLAllocStmt((SQLHANDLE)hdbc, &hstmt);
         if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE,_T("SQLAllocStmt hstmt fail.\n"));
+            LogMsgEx(fpLog, NONE,"SQLAllocStmt hstmt fail.\n");
             FullDisconnectEx(fpLog, &mTestInfo);
             deleteBindParamStruct(&mBindParam);
             return -1;
@@ -1256,12 +1520,13 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
     addInfoSessionEx(hstmt, fpLog);
 
     for(i = 0; i < CONFIG_NUM_CQD_SIZE; i++){
-        if(_tcslen(pLoadParam->mTable.szCqd[i]) > 0){
-            LogMsgEx(fpLog, NONE, _T("%s\n"), pLoadParam->mTable.szCqd[i]);
-            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)pLoadParam->mTable.szCqd[i], SQL_NTS);
+        if(strlen(pLoadParam->mTable.szCqd[i]) > 0){
+            LogMsgEx(fpLog, NONE, "%s\n", pLoadParam->mTable.szCqd[i]);
+            charToTChar(pLoadParam->mTable.szCqd[i], szQuery);
+            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szQuery, SQL_NTS);
             if(retcode != SQL_SUCCESS){
                 LOG_HEAD(fpLog);
-                LogMsgEx(fpLog, NONE, _T("set cqd fail !\n"));
+                LogMsgEx(fpLog, NONE, "set cqd fail !\n");
                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt); 
             }
         }
@@ -1269,32 +1534,33 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
             break;
         }
     }
-    LogMsgEx(fpLog, NONE, _T("SQLPrepare -- > SQLBindParameter --> SQLPutData.  type:%s\n"),
-              _T("SQL_DATA_AT_EXEC"));
-    _stprintf(szBuf, _T("%s INTO %s VALUES("), 
+    LogMsgEx(fpLog, NONE, "SQLPrepare -- > SQLBindParameter --> SQLPutData.  type:%s\n",
+              "SQL_DATA_AT_EXEC");
+    sprintf(szBuf, "%s INTO %s VALUES(", 
                         pLoadParam->szInsertType, 
                         pLoadParam->mTable.szTableName);
     for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
     {
-        _tcscat(szBuf, _T("?"));
+        strcat(szBuf, "?");
         if(cols < (mBindParamAttr.totalCols - 1))
         {
-            _tcscat(szBuf, _T(","));
+            strcat(szBuf, ",");
         }
     }
-    _tcscat(szBuf, _T(")"));
-    LogMsgEx(fpLog, NONE, _T("SQLPrepare(hstmt, \"%s\", SQL_NTS)\n"), szBuf);
+    strcat(szBuf, ")");
+    sprintf(mloadResult.szQuery, "%s", szBuf);
+    LogMsgEx(fpLog, NONE, "SQLPrepare(hstmt, \"%s\", SQL_NTS)\n", szBuf);
     retcode = SQLPrepare(hstmt, (SQLTCHAR *)szBuf , SQL_NTS);
     if (!SQL_SUCCEEDED(retcode))
     {
-        LogMsgEx(fpLog, NONE, _T("SQLPrepare  fail.\n"));
+        LogMsgEx(fpLog, NONE, "SQLPrepare  fail.\n");
         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto LOAD_EXEC_PUT_DATA_FAIL;
     }
     ret = 0;
     for(cols = 0; cols < mBindParamAttr.totalCols; cols++){
-        LogMsgEx(fpLog, NONE, _T("SQLBindParameter(hstmt, %d, SQL_PARAM_INPUT, %s, %s, ...)\n"), 
+        LogMsgEx(fpLog, NONE, "SQLBindParameter(hstmt, %d, SQL_PARAM_INPUT, %s, %s, ...)\n", 
                             cols + 1,
                             SQLCTypeToChar(mBindParamAttr.sqlCType[cols], szBuf),
                             SQLTypeToChar(mBindParamAttr.sqlType[cols], szTmp)
@@ -1313,7 +1579,7 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
                                     );
         if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE, _T("SQLBindParameter %d fail.\n"), cols + 1);
+            LogMsgEx(fpLog, NONE, "SQLBindParameter %d fail.\n", cols + 1);
             break;
         }
     }    
@@ -1325,21 +1591,22 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
         beginVal = pLoadParam->beginVal;
         for(rows = 0; rows < (pLoadParam->totalBatch * pLoadParam->batchSize); rows++,beginVal++){
             initDataTime = 0;
-            LogMsgEx(fpLog, NONE, _T("SQLExecute(hstmt)\n"));
+            if(rows == 0) LogMsgEx(fpLog, NONE, "SQLExecute(hstmt)\n");
             gettimeofday(&tv1,NULL);
             retcode = SQLExecute(hstmt);
             if (retcode != SQL_NEED_DATA){
                 LOG_HEAD(fpLog);
-                LogMsgEx(fpLog, NONE, _T("SQLExecute fail:rows:%d id:%d\n"), rows, beginVal);
+                LogMsgEx(fpLog, NONE, "SQLExecute fail:rows:%d id:%d\n", rows + 1, beginVal);
                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                 ret = -1;
                 break;
             }
             gettimeofday(&tv2,NULL);
-            if((rows < 3000) || ((rows > 3000) && (rows % 1000 == 0))){
-                LogMsgEx(fpLog, NONE, _T("insert row %d\n"), rows + 1);
-            }
-            setBindParamData(mBindParamAttr, &mBindParam, beginVal, 1, fpLog);
+            setBindParamData(mBindParamAttr, 
+                            &mBindParam, 
+                            beginVal, 
+                            1, 
+                            (rows == 0) ? fpLog : NULL);
             for(cols = 0; cols < mBindParamAttr.totalCols; cols++){
                 *mBindParam.pDataLen[cols] = SQL_DATA_AT_EXEC;
             }
@@ -1353,23 +1620,27 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
                         for(i = 0; i < mBindParamAttr.numLobCols; i++){
                             if(cols == mBindParamAttr.idLobCols[i]){
                                 isBlobCol = TRUE;
+                                lobCType = pLoadParam->mTable.sqlCType[cols];
+                                if(lobSize > 0) lenLob = lobSize;
+                                else lenLob = pLoadParam->mTable.actualDataSize[cols][0];
                                 break;
                             }
                         }
                     }
                     if(isBlobCol && (lobSize > 0) && (mBindParamAttr.actualDataSize[cols][0] >= 0)){
-                        LogMsgEx(fpLog, NONE, _T("columns:%d SQLPutData(hstmt, pLobData, %d)  lob size:%d bytes\n"), cols + 1, lobSize, lobSize);
+                        dataTypeLob = lobSize;
+                        if(rows == 0) LogMsgEx(fpLog, NONE, "columns:%d SQLPutData(hstmt, pLobData, %d)  lob size:%d bytes\n", cols + 1, lobSize, lobSize);
                         pLobData = mBindParam.pColData[cols];
                         for(offset = 0; offset < lobSize; ){
                             dataBatch = lobSize - offset;
                             if(dataBatch >= CONFIG_BLOB_SIZE) dataBatch = CONFIG_BLOB_SIZE;
                             if(dataBatch > pLoadParam->lenPutBatchSize) dataBatch = pLoadParam->lenPutBatchSize;
                             if(dataBatch == 0) dataBatch = 4096;
-                            LogMsgEx(fpLog, NONE, _T("lob size:%d bytes offset:%d, put size:%d bytes\n"), lobSize, offset, dataBatch);
+                            if(rows == 0) LogMsgEx(fpLog, NONE, "lob size:%d bytes offset:%d, put size:%d bytes\n", lobSize, offset, dataBatch);
                             retcode = SQLPutData(hstmt, &pLobData[offset], dataBatch);
                             if (retcode != SQL_SUCCESS){
                                 LOG_HEAD(fpLog);
-                                LogMsgEx(fpLog, NONE, _T("SQLPutData for lob fail !\n"));
+                                LogMsgEx(fpLog, NONE, "SQLPutData for lob fail !\n");
                                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                                 break;
                             }
@@ -1378,24 +1649,36 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
                     }
                     else{
                         if(mBindParamAttr.actualDataSize[cols][0] <= -1){
-                            LogMsgEx(fpLog, NONE, _T("columns:%d SQLPutData(hstmt, NULL, SQL_NULL_DATA)\n"), cols + 1);
+                            if(rows == 0) LogMsgEx(fpLog, NONE, "columns:%d SQLPutData(hstmt, NULL, SQL_NULL_DATA)\n", cols + 1);
                             retcode = SQLPutData(hstmt, mBindParam.pColData[cols], SQL_NULL_DATA);
+                            if(isBlobCol){ 
+                                dataTypeLob = SQL_NULL_DATA;
+                                lenLob = -1;
+                            }
                         }
                         else{
-                            LogMsgEx(fpLog, NONE, _T("columns:%d SQLPutData(hstmt, pStr, SQL_NTS)\n"), cols + 1);
-                            retcode = SQLPutData(hstmt, mBindParam.pColData[cols], SQL_NTS);
+                            if(isBlobCol && (mBindParamAttr.paraValueLen[cols] == SQL_DEFAULT) && (mBindParamAttr.actualDataSize[cols][0] >= 0)){
+                                dataTypeLob = 0;
+                                if(rows == 0) LogMsgEx(fpLog, NONE, "columns:%d SQLPutData(hstmt, pStr, %d)\n", cols + 1, mBindParamAttr.actualDataSize[cols][0]);
+                                retcode = SQLPutData(hstmt, mBindParam.pColData[cols], mBindParamAttr.actualDataSize[cols][0]);
+                            }
+                            else{
+                                if(isBlobCol) dataTypeLob = SQL_NTS;
+                                if(rows == 0) LogMsgEx(fpLog, NONE, "columns:%d SQLPutData(hstmt, pStr, SQL_NTS)\n", cols + 1);
+                                retcode = SQLPutData(hstmt, mBindParam.pColData[cols], SQL_NTS);
+                            }
                         }    
                     }
                     if (retcode != SQL_SUCCESS){
                         LOG_HEAD(fpLog);
-                        LogMsgEx(fpLog, NONE, _T("SQLPutData  fail: row:%d, columns:%d\n"), rows, cols + 1);
+                        LogMsgEx(fpLog, NONE, "SQLPutData  fail: row:%d, columns:%d\n", rows + 1, cols + 1);
                         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                         ret = -1;
                         break;
                     }
                 }
                 else{
-                    LogMsgEx(fpLog, NONE, _T("SQLParamData  fail: row:%d, columns:%d\n"), rows, cols);
+                    LogMsgEx(fpLog, NONE, "SQLParamData  fail: row:%d, columns:%d\n", rows + 1, cols + 1);
                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                     ret = -1;
                     break;
@@ -1405,24 +1688,34 @@ int loadExecPutData(sLoadParamInfo *pLoadParam)
                 retcode = SQLParamData(hstmt, &pToken);
                 if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("SQLPutData  fail: row:%d, columns:%d\n"), rows, cols);
+                    LogMsgEx(fpLog, NONE, "SQLPutData  fail: row:%d, columns:%d\n", rows + 1, cols = 1);
                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                     ret = -1;
                 }
             }
             gettimeofday(&tv2,NULL);
             exeTimes = (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000);
-            LogMsgEx(fpLog, NONE, _T("Lob test: row:%d val:%d insert:%s table:%s times:%d (ms) batch:%d (row) read data:%d ms\n"),
-                                                                                i,
-                                                                                beginVal,
-                                                                                pLoadParam->szInsertType,
-                                                                                pLoadParam->mTable.szTableName,
-                                                                                exeTimes - initDataTime,
-                                                                                1,
-                                                                                initDataTime);
+            mloadResult.row = rows + 1;
+            mloadResult.beginVal = beginVal;
+            if(dataTypeLob == SQL_NULL_DATA) sprintf(mloadResult.szDataType, "%s", "SQL_NULL_DATA");
+            else if(dataTypeLob == SQL_NTS) sprintf(mloadResult.szDataType, "%s", "SQL_NTS");
+            else if((dataTypeLob == 0) && (lobSize == 0)) sprintf(mloadResult.szDataType, "%s", "string");
+            else if(dataTypeLob > 0) sprintf(mloadResult.szDataType, "%s(%s)", "hex", szCharset);
+            else sprintf(mloadResult.szDataType, "%s", "SQL_NTS");
+            mloadResult.batchSize = 1;
+            mloadResult.numOfBatch = rows + 1;
+            sprintf(mloadResult.szInsertType, "%s", pLoadParam->szInsertType);
+            sprintf(mloadResult.szTableName, "%s", pLoadParam->mTable.szTableName);
+            mloadResult.timeInit = initDataTime;
+            mloadResult.timeExecute = exeTimes - initDataTime;
+            mloadResult.sizeLob = lenLob;
+            sprintf(mloadResult.szParaSQLBind, "%s", "SQL_DATA_AT_EXEC");
+            mloadResult.sqlCType = lobCType;
+            mloadResult.ret = ret;
+            putLoadResultset(fpLog, &mloadResult, (rows == 0) ? TRUE : FALSE);
         }
     }
-    LogMsgEx(fpLog, NONE, _T("complete insert...,total rows:%d\n"), rows);
+    LogMsgEx(fpLog, NONE, "complete insert...,total rows:%d\n", rows);
 LOAD_EXEC_PUT_DATA_FAIL:    
     FullDisconnectEx(fpLog, &mTestInfo);
     deleteBindParamStruct(&mBindParam);
@@ -1436,7 +1729,8 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
  	SQLHANDLE henv = SQL_NULL_HANDLE;
  	SQLHANDLE hdbc = SQL_NULL_HANDLE;
  	SQLHANDLE hstmt = SQL_NULL_HANDLE;
-    TCHAR szBuf[512] = {0};
+    char szBuf[512] = {0};
+    TCHAR szQuery[256] = {0};
     int rows = 0;
     int beginVal = 0;
     int cols;
@@ -1446,7 +1740,7 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
     FILE *fpBlob = NULL;
     PTR pToken;
     unsigned int crc = 0;
-    TCHAR szCrc[10] = {0};
+    unsigned char szCrc[10] = {0};
     int ret = 0;
     SQLINTEGER i;
     struct timeval tv1, tv2, tv3;
@@ -1459,11 +1753,16 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
     TestInfo mTestInfo;
     sBindParamStruct mBindParam;
     sBindParamAttr mBindParamAttr;
-    TCHAR szTmp[64];
+    char szTmp[64];
+    SQLSMALLINT lobCType = SQL_C_TCHAR;
+    SQLLEN lenLob = 0, dataTypeLob = SQL_NTS;
+    char szCharset[32] = {0};
+    loadResult mloadResult;
     
     memset(&mBindParam, 0, sizeof(mBindParam));
     memset(&mBindParamAttr, 0, sizeof(mBindParamAttr));
     memcpy(&mTestInfo, &pLoadParam->mTestInfo, sizeof(TestInfo));
+    memset(&mloadResult, 0, sizeof(mloadResult));
     //init
     mBindParamAttr.inputOutputType = pLoadParam->inputOutputType;
     mBindParamAttr.totalCols = pLoadParam->mTable.columNum;
@@ -1475,48 +1774,60 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
         mBindParamAttr.actualDataSize[cols][0] = pLoadParam->mTable.actualDataSize[cols][0];
         mBindParamAttr.actualDataSize[cols][1] = pLoadParam->mTable.actualDataSize[cols][1];
         mBindParamAttr.lenType[cols] = pLoadParam->lenType[cols];
+        mBindParamAttr.paraValueLen[cols] = pLoadParam->mTable.paraValueLen[cols];
     }
     mBindParamAttr.isLobTable = pLoadParam->mTable.isLobTable;
     mBindParamAttr.isLobFile = pLoadParam->mTable.isLobFile;
-    _stprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szCharsetOfFile, "%s", pLoadParam->mTable.szCharsetOfLobFile);
     mBindParamAttr.numLobCols = pLoadParam->mTable.numLobCols;
     memcpy(mBindParamAttr.idLobCols, pLoadParam->mTable.idLobCols, sizeof(mBindParamAttr.idLobCols));
     if(mBindParamAttr.isLobTable){
         lobSize = calcFileSize(mBindParamAttr.szLobFile);
+        getFileEncoding(mBindParamAttr.szLobFile, szCharset);
+        if(strcmp(szCharset, ENCODING_UCS2_BIG_ENDIAN) == 0){
+            lobSize -= 2;
+        }
+        else if(strcmp(szCharset, ENCODING_UCS2_LITTLE_ENDIAN) == 0){
+            lobSize -= 2;
+        }
+        else if(strcmp(szCharset, ENCODING_UTF8) == 0){
+            lobSize -= 3;
+        }
     }
     if(mBindParamAttr.totalCols >= CONFIG_SQL_COLUMNS_MAX){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("The column width defined by the table is out of range. The largest column value is %d\n"), CONFIG_SQL_COLUMNS_MAX);
+        LogMsgEx(fpLog, NONE, "The column width defined by the table is out of range. The largest column value is %d\n", CONFIG_SQL_COLUMNS_MAX);
         return -1;
     }
     for(cols = 0; cols < mBindParamAttr.totalCols; cols++){
         if(mBindParamAttr.actualDataSize[cols][0] > 16777216){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE, _T("The data loaded is too large and the maximum value is %d.Please use \"LOBUPDATE\" mode.\n"), 16777216);
+            LogMsgEx(fpLog, NONE, "The data loaded is too large and the maximum value is %d.Please use \"LOBUPDATE\" mode.\n", 16777216);
             return -1;
         }
     }
     if(newBindParamStruct(mBindParamAttr, &mBindParam, 1) != 0){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("prepare bind parameter data fail.\n"));
+        LogMsgEx(fpLog, NONE, "prepare bind parameter data fail.\n");
         return -1;
     }
     
-    LogMsgEx(fpLog, TIME_STAMP, _T("Prepare load......\n"));
-    LogMsgEx(fpLog, TIME_STAMP, _T("type:%s begin value:%d batch:%d num of batch:%d\n"),
+    LogMsgEx(fpLog, TIME_STAMP, "Prepare load......\n");
+    LogMsgEx(fpLog, TIME_STAMP, "type:%s begin value:%d batch:%d num of batch:%d\n",
                                     pLoadParam->szInsertType,
                                     pLoadParam->beginVal,
                                     pLoadParam->batchSize,
                                     pLoadParam->totalBatch
                                     );
-    _stprintf(szBuf, _T("DSN=%s;UID=%s;PWD=%s;%s"), 
+    sprintf(szBuf, "DSN=%s;UID=%s;PWD=%s;%s", 
                         mTestInfo.DataSource, 
                         mTestInfo.UserID, 
                         mTestInfo.Password, 
                         pLoadParam->szConnStr);
-    LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
+    LogMsgEx(fpLog, NONE, "%s\n", szBuf);
     if(!FullConnectWithOptionsEx(&mTestInfo, CONNECT_ODBC_VERSION_3, pLoadParam->szConnStr, fpLog)){
-        LogMsgEx(fpLog, NONE, _T("connect fail.\n"));
+        LogMsgEx(fpLog, NONE, "connect fail.\n");
 		LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         deleteBindParamStruct(&mBindParam);
         return -1;
@@ -1526,12 +1837,12 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
     
     retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
     if (!SQL_SUCCEEDED(retcode)){
-        LogMsgEx(fpLog, NONE, _T("SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n"));
-        LogMsgEx(fpLog, NONE,_T("Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n"));
+        LogMsgEx(fpLog, NONE, "SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n");
+        LogMsgEx(fpLog, NONE,"Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n");
         retcode = SQLAllocStmt((SQLHANDLE)hdbc, &hstmt);
         if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE,_T("SQLAllocStmt hstmt fail.\n"));
+            LogMsgEx(fpLog, NONE,"SQLAllocStmt hstmt fail.\n");
             FullDisconnectEx(fpLog, &mTestInfo);
             deleteBindParamStruct(&mBindParam);
             return -1;
@@ -1542,12 +1853,13 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
     addInfoSessionEx(hstmt, fpLog);
 
     for(i = 0; i < CONFIG_NUM_CQD_SIZE; i++){
-        if(_tcslen(pLoadParam->mTable.szCqd[i]) > 0){
-            LogMsgEx(fpLog, NONE, _T("%s\n"), pLoadParam->mTable.szCqd[i]);
-            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)pLoadParam->mTable.szCqd[i], SQL_NTS);
+        if(strlen(pLoadParam->mTable.szCqd[i]) > 0){
+            LogMsgEx(fpLog, NONE, "%s\n", pLoadParam->mTable.szCqd[i]);
+            charToTChar(pLoadParam->mTable.szCqd[i], szQuery);
+            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szQuery, SQL_NTS);
             if(retcode != SQL_SUCCESS){
                 LOG_HEAD(fpLog);
-                LogMsgEx(fpLog, NONE, _T("set cqd fail !\n"));
+                LogMsgEx(fpLog, NONE, "set cqd fail !\n");
                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt); 
             }
         }
@@ -1555,25 +1867,26 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
             break;
         }
     }
-    LogMsgEx(fpLog, NONE, _T("SQLPrepare -- > SQLBindParameter --> SQLPutData.  type:%s\n"),
-              _T("SQL_LEN_DATA_AT_EXEC"));
-    _stprintf(szBuf, _T("%s INTO %s VALUES("), 
+    LogMsgEx(fpLog, NONE, "SQLPrepare -- > SQLBindParameter --> SQLPutData.  type:%s\n",
+              "SQL_LEN_DATA_AT_EXEC");
+    sprintf(szBuf, "%s INTO %s VALUES(", 
                         pLoadParam->szInsertType, 
                         pLoadParam->mTable.szTableName);
     for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
     {
-        _tcscat(szBuf, _T("?"));
+        strcat(szBuf, "?");
         if(cols < (mBindParamAttr.totalCols - 1))
         {
-            _tcscat(szBuf, _T(","));
+            strcat(szBuf, ",");
         }
     }
-    _tcscat(szBuf, _T(")"));
-    LogMsgEx(fpLog, NONE, _T("SQLPrepare(hstmt, \"%s\", SQL_NTS)\n"), szBuf);
+    strcat(szBuf, ")");
+    sprintf(mloadResult.szQuery, "%s", szBuf);
+    LogMsgEx(fpLog, NONE, "SQLPrepare(hstmt, \"%s\", SQL_NTS)\n", szBuf);
     retcode = SQLPrepare(hstmt, (SQLTCHAR *)szBuf , SQL_NTS);
     if (!SQL_SUCCEEDED(retcode))
     {
-        LogMsgEx(fpLog, NONE, _T("SQLPrepare  fail.\n"));
+        LogMsgEx(fpLog, NONE, "SQLPrepare  fail.\n");
         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto LOAD_EXEC_PUT_DATA_FAIL;
@@ -1592,16 +1905,24 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
         if((mBindParamAttr.isLobTable) && (lobSize > 0)){
             *mBindParam.pDataLen[cols] = lobSize;
         }
+        else if((isBlobCol == TRUE) && (mBindParamAttr.actualDataSize[cols][0] >= 0)){
+            //Load lob string with the actual length
+            *mBindParam.pDataLen[cols] = (mBindParamAttr.paraValueLen[cols] == SQL_DEFAULT) ? mBindParamAttr.actualDataSize[cols][0] : SQL_NTS;
+            if(mBindParamAttr.actualDataSize[cols][0] != lobSize){
+                *mBindParam.pDataLen[cols] = lobSize;
+            }
+        }
         else{
             if(mBindParamAttr.actualDataSize[cols][0] <= 0){
                 *mBindParam.pDataLen[cols] = 32;
             }
             else{
                 //
+                *mBindParam.pDataLen[cols] = SQL_NTS;
             }
         }
         mBindParam.lenTextSize[cols] = SQL_LEN_DATA_AT_EXEC(*mBindParam.pDataLen[cols]);
-        LogMsgEx(fpLog, NONE, _T("SQLBindParameter(hstmt, %d, SQL_PARAM_INPUT, %s, %s, ...)\n"), 
+        LogMsgEx(fpLog, NONE, "SQLBindParameter(hstmt, %d, SQL_PARAM_INPUT, %s, %s, ...)\n", 
                             cols + 1,
                             SQLCTypeToChar(mBindParamAttr.sqlCType[cols], szBuf),
                             SQLTypeToChar(mBindParamAttr.sqlType[cols], szTmp)
@@ -1619,7 +1940,7 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
                                     );
         if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE, _T("SQLBindParameter %d fail.\n"), cols + 1);
+            LogMsgEx(fpLog, NONE, "SQLBindParameter %d fail.\n", cols + 1);
             break;
         }
     }    
@@ -1631,21 +1952,22 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
         beginVal = pLoadParam->beginVal;
         for(rows = 0; rows < (pLoadParam->totalBatch * pLoadParam->batchSize); rows++,beginVal++){
             initDataTime = 0;
-            LogMsgEx(fpLog, NONE, _T("SQLExecute(hstmt)\n"));
+            if(rows == 0) LogMsgEx(fpLog, NONE, "SQLExecute(hstmt)\n");
             gettimeofday(&tv1,NULL);
             retcode = SQLExecute(hstmt);
             if (retcode != SQL_NEED_DATA){
                 LOG_HEAD(fpLog);
-                LogMsgEx(fpLog, NONE, _T("SQLExecute fail:rows:%d id:%d\n"), rows, beginVal);
+                LogMsgEx(fpLog, NONE, "SQLExecute fail:rows:%d id:%d\n", rows + 1, beginVal);
                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                 ret = -1;
                 break;
             }
             gettimeofday(&tv2,NULL);
-            if((rows < 3000) || ((rows > 3000) && (rows % 1000 == 0))){
-                LogMsgEx(fpLog, NONE, _T("insert row %d\n"), rows + 1);
-            }
-            setBindParamData(mBindParamAttr, &mBindParam, beginVal, 1, fpLog);
+            setBindParamData(mBindParamAttr, 
+                            &mBindParam, 
+                            beginVal, 
+                            1, 
+                            (rows == 0) ? fpLog : NULL);
             gettimeofday(&tv3,NULL);
             initDataTime += (tv3.tv_sec*1000 + tv3.tv_usec/1000) - (tv2.tv_sec*1000 + tv2.tv_usec/1000);
             for(cols = 0; cols < mBindParamAttr.totalCols; cols++){
@@ -1656,23 +1978,27 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
                         for(i = 0; i < mBindParamAttr.numLobCols; i++){
                             if(cols == mBindParamAttr.idLobCols[i]){
                                 isBlobCol = TRUE;
+                                lobCType = pLoadParam->mTable.sqlCType[cols];
+                                if(lobSize > 0) lenLob = lobSize;
+                                else lenLob = pLoadParam->mTable.actualDataSize[cols][0];
                                 break;
                             }
                         }
                     }
                     if(isBlobCol && (lobSize > 0) && (mBindParamAttr.actualDataSize[cols][0] >= 0)){
-                        LogMsgEx(fpLog, NONE, _T("columns:%d SQLPutData(hstmt, pLobData, %d)  lob size:%d bytes\n"), cols + 1, lobSize, lobSize);
+                        dataTypeLob = lobSize;
+                        if(rows == 0) LogMsgEx(fpLog, NONE, "columns:%d SQLPutData(hstmt, pLobData, %d)  lob size:%d bytes\n", cols + 1, lobSize, lobSize);
                         pLobData = mBindParam.pColData[cols];
                         for(offset = 0; offset < lobSize; ){
                             dataBatch = lobSize - offset;
                             if(dataBatch >= CONFIG_BLOB_SIZE) dataBatch = CONFIG_BLOB_SIZE;
                             if(dataBatch > pLoadParam->lenPutBatchSize) dataBatch = pLoadParam->lenPutBatchSize;
                             if(dataBatch == 0) dataBatch = 4096;
-                            LogMsgEx(fpLog, NONE, _T("lob size:%d bytes offset:%d, put size:%d bytes\n"), lobSize, offset, dataBatch);
+                            if(rows == 0) LogMsgEx(fpLog, NONE, "lob size:%d bytes offset:%d, put size:%d bytes\n", lobSize, offset, dataBatch);
                             retcode = SQLPutData(hstmt, &pLobData[offset], dataBatch);
                             if (retcode != SQL_SUCCESS){
                                 LOG_HEAD(fpLog);
-                                LogMsgEx(fpLog, NONE, _T("SQLPutData for lob fail !\n"));
+                                LogMsgEx(fpLog, NONE, "SQLPutData for lob fail !\n");
                                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                                 break;
                             }
@@ -1681,17 +2007,29 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
                     }
                     else{
                         if(mBindParamAttr.actualDataSize[cols][0] <= -1){
-                            LogMsgEx(fpLog, NONE, _T("columns:%d SQLPutData(hstmt, NULL, SQL_NULL_DATA)\n"), cols + 1);
+                            if(rows == 0) LogMsgEx(fpLog, NONE, "columns:%d SQLPutData(hstmt, NULL, SQL_NULL_DATA)\n", cols + 1);
                             retcode = SQLPutData(hstmt, mBindParam.pColData[cols], SQL_NULL_DATA);
+                            if(isBlobCol){ 
+                                dataTypeLob = SQL_NULL_DATA;
+                                lenLob = -1;
+                            }
                         }
                         else{
-                            LogMsgEx(fpLog, NONE, _T("columns:%d SQLPutData(hstmt, pStr, SQL_NTS)\n"), cols + 1);
-                            retcode = SQLPutData(hstmt, mBindParam.pColData[cols], SQL_NTS);
+                            if(isBlobCol && (mBindParamAttr.paraValueLen[cols] == SQL_DEFAULT) && (mBindParamAttr.actualDataSize[cols][0] >= 0)){
+                                dataTypeLob = 0;
+                                if(rows == 0) LogMsgEx(fpLog, NONE, "columns:%d SQLPutData(hstmt, pStr, %d)\n", cols + 1, mBindParamAttr.actualDataSize[cols][0]);
+                                retcode = SQLPutData(hstmt, mBindParam.pColData[cols], mBindParamAttr.actualDataSize[cols][0]);
+                            }
+                            else{
+                                if(isBlobCol) dataTypeLob = SQL_NTS;
+                                if(rows == 0) LogMsgEx(fpLog, NONE, "columns:%d SQLPutData(hstmt, pStr, SQL_NTS)\n", cols + 1);
+                                retcode = SQLPutData(hstmt, mBindParam.pColData[cols], SQL_NTS);
+                            }
                         }  
                     }
                     if (retcode != SQL_SUCCESS){
                         LOG_HEAD(fpLog);
-                        LogMsgEx(fpLog, NONE, _T("SQLPutData  fail: row:%d, columns:%d\n"), rows, cols + 1);
+                        LogMsgEx(fpLog, NONE, "SQLPutData  fail: row:%d, columns:%d\n", rows + 1, cols + 1);
                         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                         ret = -1;
                         break;
@@ -1699,7 +2037,7 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
                 }
                 else{
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("SQLParamData  fail: row:%d, columns:%d\n"), rows, cols);
+                    LogMsgEx(fpLog, NONE, "SQLParamData  fail: row:%d, columns:%d\n", rows + 1, cols + 1);
                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                     ret = -1;
                     break;
@@ -1709,24 +2047,35 @@ int loadExecPutLenData(sLoadParamInfo *pLoadParam)
                 retcode = SQLParamData(hstmt, &pToken);
                 if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("SQLPutData  fail: row:%d, columns:%d\n"), rows, cols);
+                    LogMsgEx(fpLog, NONE, "SQLPutData  fail: row:%d, columns:%d\n", rows + 1, cols + 1);
                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                     ret = -1;
                 }
             }
             gettimeofday(&tv2,NULL);
             exeTimes = (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000);
-            LogMsgEx(fpLog, NONE, _T("Lob test: row:%d val:%d insert:%s table:%s times:%d (ms) batch:%d (row) read data:%d ms\n"),
-                                                                                i,
-                                                                                beginVal,
-                                                                                pLoadParam->szInsertType,
-                                                                                pLoadParam->mTable.szTableName,
-                                                                                exeTimes - initDataTime,
-                                                                                1,
-                                                                                initDataTime);
+           
+            mloadResult.row = rows + 1;
+            mloadResult.beginVal = beginVal;
+            if(dataTypeLob == SQL_NULL_DATA) sprintf(mloadResult.szDataType, "%s", "SQL_NULL_DATA");
+            else if(dataTypeLob == SQL_NTS) sprintf(mloadResult.szDataType, "%s", "SQL_NTS");
+            else if((dataTypeLob == 0) && (lobSize == 0)) sprintf(mloadResult.szDataType, "%s", "string");
+            else if(dataTypeLob > 0) sprintf(mloadResult.szDataType, "%s(%s)", "hex", szCharset);
+            else sprintf(mloadResult.szDataType, "%s", "SQL_NTS");
+            mloadResult.batchSize = 1;
+            mloadResult.numOfBatch = rows + 1;
+            sprintf(mloadResult.szInsertType, "%s", pLoadParam->szInsertType);
+            sprintf(mloadResult.szTableName, "%s", pLoadParam->mTable.szTableName);
+            mloadResult.timeInit = initDataTime;
+            mloadResult.timeExecute = exeTimes - initDataTime;
+            mloadResult.sizeLob = lenLob;
+            sprintf(mloadResult.szParaSQLBind, "%s", "SQL_LEN_DATA_AT_EXEC");
+            mloadResult.sqlCType = lobCType;
+            mloadResult.ret = ret;
+            putLoadResultset(fpLog, &mloadResult, (rows == 0) ? TRUE : FALSE);
         }
     }
-    LogMsgEx(fpLog, NONE, _T("complete insert...,total rows:%d\n"), rows);
+    LogMsgEx(fpLog, NONE, "complete insert...,total rows:%d\n", rows);
 LOAD_EXEC_PUT_DATA_FAIL:    
     FullDisconnectEx(fpLog, &mTestInfo);
     deleteBindParamStruct(&mBindParam);
@@ -1744,17 +2093,18 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
     SQLHANDLE hstmt = SQL_NULL_HANDLE;
     SQLINTEGER i, numCol, cols, idLob;
     int beginVal = 0;
-    TCHAR szBuf[256] = {0};
+    char szBuf[256] = {0};
+    TCHAR szQuery[256] = {0};
     int totalRows = 0;
-    SQLLEN len, batchLen;
+    SQLLEN len;
     FILE *fpLog = pLoadParam->fpLog;
     TestInfo mTestInfo;
-    TCHAR szUpdateStr[128] = {0};
+    char szUpdateStr[128] = {0};
     int updateWhere = -1;
     BOOL isLobCol = FALSE;
     PTR pToken;
     #define CONFIG_LOB_UPDATE_BUFFER_SIZE   102400
-    TCHAR *pLobData = NULL;
+    unsigned char *pLobData = NULL;
     unsigned int lobDataLen, lobDataOffset;
     FILE *fpLob;
     sBindParamAttr mBindParamAttr;
@@ -1768,7 +2118,7 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
     mBindParamAttr.totalCols = pLoadParam->mTable.columNum;
     mBindParamAttr.isLobTable = pLoadParam->mTable.isLobTable;
     mBindParamAttr.isLobFile = pLoadParam->mTable.isLobFile;
-    _stprintf(mBindParamAttr.szLobFile, _T("%s"), pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
     mBindParamAttr.numLobCols = pLoadParam->mTable.numLobCols;
     memcpy(mBindParamAttr.idLobCols, pLoadParam->mTable.idLobCols, sizeof(mBindParamAttr.idLobCols));
     for(cols = 0; cols < mBindParamAttr.totalCols; cols++){
@@ -1779,10 +2129,12 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
         mBindParamAttr.actualDataSize[cols][0] = pLoadParam->mTable.actualDataSize[cols][0];
         mBindParamAttr.actualDataSize[cols][1] = pLoadParam->mTable.actualDataSize[cols][1];
         mBindParamAttr.lenType[cols] = pLoadParam->lenType[cols];
+        mBindParamAttr.paraValueLen[cols] = pLoadParam->mTable.paraValueLen[cols];
     }
     mBindParamAttr.isLobTable = pLoadParam->mTable.isLobTable;
     mBindParamAttr.isLobFile = pLoadParam->mTable.isLobFile;
-    _stprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szCharsetOfFile, "%s", pLoadParam->mTable.szCharsetOfLobFile);
     mBindParamAttr.numLobCols = pLoadParam->mTable.numLobCols;
     memcpy(mBindParamAttr.idLobCols, pLoadParam->mTable.idLobCols, sizeof(mBindParamAttr.idLobCols));
     for(numCol = 0; numCol < pLoadParam->mTable.columNum; numCol++){
@@ -1796,18 +2148,18 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
     }
     if(mBindParamAttr.totalCols >= CONFIG_SQL_COLUMNS_MAX){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("The column width defined by the table is out of range. The largest column value is %d\n"), CONFIG_SQL_COLUMNS_MAX);
+        LogMsgEx(fpLog, NONE, "The column width defined by the table is out of range. The largest column value is %d\n", CONFIG_SQL_COLUMNS_MAX);
         return -1;
     }
-    _stprintf(szBuf, _T("DSN=%s;UID=%s;PWD=%s;%s"), 
+    sprintf(szBuf, "DSN=%s;UID=%s;PWD=%s;%s", 
                         mTestInfo.DataSource, 
                         mTestInfo.UserID, 
                         mTestInfo.Password, 
                         pLoadParam->szConnStr);
-    LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
+    LogMsgEx(fpLog, NONE, "%s\n", szBuf);
     if(!FullConnectWithOptionsEx(&mTestInfo, CONNECT_ODBC_VERSION_3, pLoadParam->szConnStr, fpLog)){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("connect fail.\n"));
+        LogMsgEx(fpLog, NONE, "connect fail.\n");
 		LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         return -1;
     }
@@ -1817,12 +2169,12 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
     retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
     if (!SQL_SUCCEEDED(retcode)){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n"));
-        LogMsgEx(fpLog, NONE,_T("Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n"));
+        LogMsgEx(fpLog, NONE, "SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n");
+        LogMsgEx(fpLog, NONE,"Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n");
         retcode = SQLAllocStmt((SQLHANDLE)hdbc, &hstmt);
         if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE,_T("SQLAllocStmt hstmt fail.\n"));
+            LogMsgEx(fpLog, NONE,"SQLAllocStmt hstmt fail.\n");
             FullDisconnectEx(fpLog, &mTestInfo);
             return -1;
         }
@@ -1831,12 +2183,13 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
 
     addInfoSessionEx(hstmt, fpLog);
     for(i = 0; i < CONFIG_NUM_CQD_SIZE; i++){
-        if(_tcslen(pLoadParam->mTable.szCqd[i]) > 0){
-            LogMsgEx(fpLog, NONE, _T("%s\n"), pLoadParam->mTable.szCqd[i]);
-            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)pLoadParam->mTable.szCqd[i], SQL_NTS);
+        if(strlen(pLoadParam->mTable.szCqd[i]) > 0){
+            LogMsgEx(fpLog, NONE, "%s\n", pLoadParam->mTable.szCqd[i]);
+            charToTChar(pLoadParam->mTable.szCqd[i], szQuery);
+            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szQuery, SQL_NTS);
             if(retcode != SQL_SUCCESS){
                 LOG_HEAD(fpLog);
-                LogMsgEx(fpLog, NONE, _T("set cqd fail !\n"));
+                LogMsgEx(fpLog, NONE, "set cqd fail !\n");
                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt); 
             }
         }
@@ -1848,13 +2201,13 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
     pLobData = (TCHAR *)malloc(CONFIG_LOB_UPDATE_BUFFER_SIZE * 3);
     if(pLobData == NULL){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("malloc fail.\n"));
+        LogMsgEx(fpLog, NONE, "malloc fail.\n");
         FullDisconnectEx(fpLog, &mTestInfo);
         return -1;
     }
     memset(pLobData, 0, CONFIG_LOB_UPDATE_BUFFER_SIZE + 2);
     
-    _stprintf(pLobData, _T("%s into %s values("), 
+    sprintf(pLobData, "%s into %s values(", 
                         pLoadParam->szInsertType, 
                         pLoadParam->mTable.szTableName);
     isLobCol = FALSE;
@@ -1869,7 +2222,7 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
         }
         if(isLobCol){
             isLobCol = FALSE;
-            _tcscat(pLobData, _T("?"));
+            strcat(pLobData, "?");
         }
         else{
             setSqlData(szBuf, 
@@ -1893,28 +2246,28 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                 mBindParamAttr.sqlCType[numCol] == SQL_C_SHORT
                 )
                 {
-                _tcscat(pLobData, szBuf);
+                strcat(pLobData, szBuf);
             }
             else{
-                _tcscat(pLobData, _T("'"));
-                _tcscat(pLobData, szBuf);
-                _tcscat(pLobData, _T("'"));
+                strcat(pLobData, "'");
+                strcat(pLobData, szBuf);
+                strcat(pLobData, "'");
             }
             if(updateWhere < 0){
                 if(mBindParamAttr.sqlCType[numCol] == SQL_C_SLONG ||
                     mBindParamAttr.sqlCType[numCol] == SQL_C_ULONG){
                     updateWhere = numCol; 
-                    _stprintf(szUpdateStr, _T("%s"), szBuf);
+                    sprintf(szUpdateStr, "%s", szBuf);
                 }
                 if(mBindParamAttr.sqlCType[numCol] == SQL_C_SBIGINT ||
                     mBindParamAttr.sqlCType[numCol] == SQL_C_UBIGINT){
                     updateWhere = numCol;
-                    _stprintf(szUpdateStr, _T("%s"), szBuf);
+                    sprintf(szUpdateStr, "%s", szBuf);
                 } 
                 if((mBindParamAttr.sqlCType[numCol] == SQL_C_TCHAR ||
                     mBindParamAttr.sqlCType[numCol] == SQL_C_CHAR) &&
                     (mBindParamAttr.actualDataSize[numCol][0] < sizeof(szUpdateStr))){
-                    _stprintf(szUpdateStr, _T("%s"), szBuf);
+                    sprintf(szUpdateStr, "%s", szBuf);
                     updateWhere = numCol;
                 } 
             }
@@ -1922,22 +2275,22 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
         }
         if(numCol < (mBindParamAttr.totalCols - 1))
         {
-            _tcscat(pLobData, _T(","));
+            strcat(pLobData, ",");
         }
     }
-    _tcscat(pLobData, _T(")"));
-    LogMsgEx(fpLog, NONE, _T("%s\n"), pLobData);
+    strcat(pLobData, ")");
+    LogMsgEx(fpLog, NONE, "%s\n", pLobData);
     retcode = SQLPrepare(hstmt, (SQLCHAR *)pLobData, SQL_NTS);
     if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLPrepare fail.\n"));
+        LogMsgEx(fpLog, NONE, "SQLPrepare fail.\n");
 		LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto LOAD_LOB_UPDATE_FAIL;
     }
     isLobCol = FALSE;
     idLob = 1;
-    _stprintf(szBuf, _T("lobdata=%d"), pLoadParam->beginVal);
+    sprintf(szBuf, "lobdata=%d", pLoadParam->beginVal);
     for(numCol = 0; numCol < mBindParamAttr.totalCols; numCol++){
         if(mBindParamAttr.isLobTable){
             for(cols = 0; cols < pLoadParam->mTable.numLobCols; cols++){
@@ -1948,7 +2301,7 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
             }
         }
         if(isLobCol){
-            len = _tcslen(szBuf);
+            len = strlen(szBuf);
             isLobCol = FALSE;
             retcode = SQLBindParameter(hstmt, 
                                 idLob, 
@@ -1962,7 +2315,7 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                                 &len);
             if(retcode != SQL_SUCCESS){
                 LOG_HEAD(fpLog);
-                LogMsgEx(fpLog, NONE, _T("Call SQLBindParameter fail. col:%d\n"), idLob);
+                LogMsgEx(fpLog, NONE, "Call SQLBindParameter fail. col:%d\n", idLob);
                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                 ret = -1;
                 goto LOAD_LOB_UPDATE_FAIL;
@@ -1976,17 +2329,17 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
     if (retcode != SQL_SUCCESS)
     {
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLExecute fail.\n"));
+        LogMsgEx(fpLog, NONE, "SQLExecute fail.\n");
         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto LOAD_LOB_UPDATE_FAIL;
     }
-    LogMsgEx(fpLog, NONE, _T("do lob update......\n"));
-    //SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
+    LogMsgEx(fpLog, NONE, "do lob update......\n");
+    //SQLExecDirect(hstmt, (SQLTCHAR*)"set FETCHSIZE 1"), SQL_NTS);
     mBindParamAttr.isLobTable = pLoadParam->mTable.isLobTable;
     if((mBindParamAttr.isLobTable) &&
         (updateWhere >= 0) && 
-        _tcslen(szUpdateStr) > 0){
+        strlen(szUpdateStr) > 0){
         isLobCol = FALSE;
         for(numCol = 0; numCol < pLoadParam->mTable.columNum; numCol++){
             for(cols = 0; cols < pLoadParam->mTable.numLobCols; cols++){
@@ -2000,26 +2353,26 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
             if(isLobCol){
                 isLobCol = FALSE;
                 
-                _stprintf(szBuf, _T("select %s from %s where %s = %s"), 
+                sprintf(szBuf, "select %s from %s where %s = %s", 
                                     pLoadParam->mTable.szColName[numCol],
                                     pLoadParam->mTable.szTableName,
                                     pLoadParam->mTable.szColName[updateWhere],
                                     szUpdateStr
                                     );
-                LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
+                LogMsgEx(fpLog, NONE, "%s\n", szBuf);
                 retcode = SQLExecDirect(hstmt, (SQLCHAR *)szBuf, SQL_NTS);
                 if (retcode != SQL_SUCCESS){
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("select fail.\n"));
+                    LogMsgEx(fpLog, NONE, "select fail.\n");
                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                     ret = -1;
                     goto LOAD_LOB_UPDATE_FAIL;
                 }
-                LogMsgEx(fpLog, NONE, _T("%s\n"), "SQLFetch");
+                LogMsgEx(fpLog, NONE, "%s\n", "SQLFetch");
                 retcode = SQLFetch(hstmt);
                 if (retcode != SQL_SUCCESS){
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("SQLFetch fail.\n"));
+                    LogMsgEx(fpLog, NONE, "SQLFetch fail.\n");
                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                     ret = -1;
                     goto LOAD_LOB_UPDATE_FAIL;
@@ -2027,25 +2380,25 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                 while (retcode == SQL_SUCCESS){
                     memset(szBuf, 0, sizeof(szBuf));
                     retcode = SQLGetData(hstmt, 1, SQL_C_TCHAR, pLobData, CONFIG_LOB_UPDATE_BUFFER_SIZE, &len);
-                    LogMsgEx(fpLog, NONE, _T("len = %d value:%s\n"), len, pLobData);
+                    LogMsgEx(fpLog, NONE, "len = %d value:%s\n", len, pLobData);
                     retcode = SQLFetch(hstmt);
                 }
                 //Update data by "LOBUPDATE"
-                LogMsgEx(fpLog, NONE, _T("call %s\n"), _T("SQLExecDirect(hstmt, \"LOBUPDATE\", SQL_NTS)"));
+                LogMsgEx(fpLog, NONE, "call %s\n", "SQLExecDirect(hstmt, \"LOBUPDATE\", SQL_NTS)");
                 retcode = SQLExecDirect(hstmt, (SQLCHAR *)"LOBUPDATE", SQL_NTS);
                 if (retcode == SQL_NEED_DATA){
-                    LogMsgEx(fpLog, NONE, _T("call \"LOBUPDATE\" success.\n"));
+                    LogMsgEx(fpLog, NONE, "call \"LOBUPDATE\" success.\n");
                 }
                 else if (retcode == SQL_ERROR){
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("call \"LOBUPDATE\" fail.\n"));
+                    LogMsgEx(fpLog, NONE, "call \"LOBUPDATE\" fail.\n");
                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                     ret = -1;
                     goto LOAD_LOB_UPDATE_FAIL;
                 }
                 else{
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("lob update failed , rc = %d\n"), retcode);
+                    LogMsgEx(fpLog, NONE, "lob update failed , rc = %d\n", retcode);
                 }
 
                 retcode = SQLParamData(hstmt,&pToken);
@@ -2055,7 +2408,7 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                     lobDataLen = mBindParamAttr.actualDataSize[numCol][0];
                     lobDataOffset = 0;
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("actualDataSize = %d %d numCol=%d\n"), lobDataLen, mBindParamAttr.actualDataSize[numCol][1], numCol);
+                    LogMsgEx(fpLog, NONE, "actualDataSize = %d %d numCol=%d\n", lobDataLen, mBindParamAttr.actualDataSize[numCol][1], numCol);
                     fpLob = NULL;
                     if(pLoadParam->mTable.isLobFile){
                         lobDataLen = calcFileSize(pLoadParam->mTable.szLobFile);
@@ -2068,18 +2421,18 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                         len = ((lobDataLen - lobDataOffset) > CONFIG_LOB_UPDATE_BUFFER_SIZE) ? CONFIG_LOB_UPDATE_BUFFER_SIZE : (lobDataLen - lobDataOffset);
                         if(fpLob){
                             len = fread(pLobData, 1, len, fpLob);
-                            LogMsgEx(fpLog, NONE, _T("read %s: nbytes=%d bytes\n"), pLoadParam->mTable.szLobFile, len);
+                            LogMsgEx(fpLog, NONE, "read %s: nbytes=%d bytes\n", pLoadParam->mTable.szLobFile, len);
                         }
                         else{
                             fillData(pLobData, len);
-                            LogMsgEx(fpLog, NONE, _T("SQLPutData: len=%d values:%s\n"), len, pLobData);
+                            LogMsgEx(fpLog, NONE, "SQLPutData: len=%d values:%s\n", len, pLobData);
                         }
                         if(len == 0) break;
-                        LogMsgEx(fpLog, NONE, _T("total:%d bytes offset:%d bytes  put:%d bytes\n"), lobDataLen, lobDataOffset, len);
+                        LogMsgEx(fpLog, NONE, "total:%d bytes offset:%d bytes  put:%d bytes\n", lobDataLen, lobDataOffset, len);
                         retcode = SQLPutData(hstmt, pLobData, len);
                         if (retcode != SQL_SUCCESS){
                             LOG_HEAD(fpLog);
-                            LogMsgEx(fpLog, NONE, _T("SQLPutData fail.\n"));
+                            LogMsgEx(fpLog, NONE, "SQLPutData fail.\n");
                             ret = -1;
                             goto LOAD_LOB_UPDATE_FAIL;
                         }
@@ -2091,24 +2444,24 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                     retcode = SQLParamData(hstmt,&pToken);
                     if (retcode != SQL_SUCCESS){
                         LOG_HEAD(fpLog);
-                        LogMsgEx(fpLog, NONE, _T("SQLParamData fail.\n"));
+                        LogMsgEx(fpLog, NONE, "SQLParamData fail.\n");
                         ret = -1;
                         goto LOAD_LOB_UPDATE_FAIL;
                     }
                 }
                 else{
                     LOG_HEAD(fpLog);
-                    LogMsgEx(fpLog, NONE, _T("SQLParamData fail. expect:SQL_NEED_DATA actual:%d\n"), retcode);
+                    LogMsgEx(fpLog, NONE, "SQLParamData fail. expect:SQL_NEED_DATA actual:%d\n", retcode);
                     ret = -1;
                 }
             }
         }
-        LogMsgEx(fpLog, NONE, _T("checkout lob update......\n"));
+        LogMsgEx(fpLog, NONE, "checkout lob update......\n");
         //check result
         if(ret == 0){
             //SQLFreeStmt(hstmt,SQL_UNBIND);
             //SQLFreeStmt(hstmt,SQL_CLOSE);
-            //SQLExecDirect(hstmt, (SQLTCHAR*)_T("set FETCHSIZE 1"), SQL_NTS);
+            //SQLExecDirect(hstmt, (SQLTCHAR*)"set FETCHSIZE 1"), SQL_NTS);
             for(numCol = 0; numCol < pLoadParam->mTable.columNum; numCol++){
                 for(cols = 0; cols < pLoadParam->mTable.numLobCols; cols++){
                     if(numCol == pLoadParam->mTable.idLobCols[cols]){
@@ -2118,17 +2471,17 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                 }
                 if(isLobCol){
                     isLobCol = FALSE;
-                    _stprintf(szBuf, _T("select %s from %s where %s = %s"), 
+                    sprintf(szBuf, "select %s from %s where %s = %s", 
                                         pLoadParam->mTable.szColName[numCol],
                                         pLoadParam->mTable.szTableName,
                                         pLoadParam->mTable.szColName[updateWhere],
                                         szUpdateStr
                                         );
-                    LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
+                    LogMsgEx(fpLog, NONE, "%s\n", szBuf);
                     retcode = SQLExecDirect(hstmt, (SQLCHAR *)szBuf, SQL_NTS);
                     if (retcode != SQL_SUCCESS){
                         LOG_HEAD(fpLog);
-                        LogMsgEx(fpLog, NONE, _T("select fail.\n"));
+                        LogMsgEx(fpLog, NONE, "select fail.\n");
                         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                         ret = -1;
                         goto LOAD_LOB_UPDATE_FAIL;
@@ -2136,7 +2489,7 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                     retcode = SQLFetch(hstmt);
                     if (retcode != SQL_SUCCESS){
                         LOG_HEAD(fpLog);
-                        LogMsgEx(fpLog, NONE, _T("SQLFetch fail.\n"));
+                        LogMsgEx(fpLog, NONE, "SQLFetch fail.\n");
                         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                         ret = -1;
                         goto LOAD_LOB_UPDATE_FAIL;
@@ -2157,20 +2510,20 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                         lobDataOffset = 0;
                         do{
                             len = 0;
-                            LogMsgEx(fpLog, NONE, _T("call SQLGetData buffser size=%d bytes\n"), CONFIG_LOB_UPDATE_BUFFER_SIZE);
+                            LogMsgEx(fpLog, NONE, "call SQLGetData buffser size=%d bytes\n", CONFIG_LOB_UPDATE_BUFFER_SIZE);
                             memset(pLobData, 0, sizeof(pLobData));
                             retcode = SQLGetData(hstmt, 1, SQL_C_TCHAR, pLobData, CONFIG_LOB_UPDATE_BUFFER_SIZE, &len);
                             if (retcode != SQL_SUCCESS && retcode != SQL_NO_DATA_FOUND && retcode != SQL_SUCCESS_WITH_INFO) {
                                 if(lobDataOffset == 0){
                                     LOG_HEAD(fpLog);
-                                    LogMsgEx(fpLog, NONE, _T("Call SQLGetData fail.\n"));
+                                    LogMsgEx(fpLog, NONE, "Call SQLGetData fail.\n");
                                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                                     ret = -1;
                                 }
                             }else if(retcode == SQL_NO_DATA_FOUND){
                                 if(lobDataOffset == 0){
                                     LOG_HEAD(fpLog);
-                                    LogMsgEx(fpLog, NONE, _T("no data found.\n"));
+                                    LogMsgEx(fpLog, NONE, "no data found.\n");
                                     LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                                     ret = -1;
                                 }
@@ -2178,26 +2531,26 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
                             }
                             else if (retcode == SQL_ERROR){
                                 LOG_HEAD(fpLog);
-                                LogMsgEx(fpLog, NONE, _T("call SQLGetData fail.\n"));
+                                LogMsgEx(fpLog, NONE, "call SQLGetData fail.\n");
                                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
                                 ret = -1;
                                 break;
                             }
-                            LogMsgEx(fpLog, NONE, _T("total:%d bytes offset:%d bytes  get:%d bytes\n"), lobDataLen, lobDataOffset, len);
+                            LogMsgEx(fpLog, NONE, "total:%d bytes offset:%d bytes  get:%d bytes\n", lobDataLen, lobDataOffset, len);
                             lobDataOffset += (unsigned int)len;
                             if(fpLob){
                                 fwrite(pLobData, len, 1, fpLob);
                             }
                             else if(len > 8){
-                                LogMsgEx(fpLog, NONE, _T("len = %d values:%s\n"), len, pLobData);
+                                LogMsgEx(fpLog, NONE, "len = %d values:%s\n", len, pLobData);
                                 crc = calcCRC32((unsigned char *)pLobData, len - 8);
                                 crc1 = 0;
                                 asciiToHex((unsigned char *)&pLobData[len - 9], (unsigned char *)&crc1, 8);
-                                LogMsgEx(fpLog, NONE, _T("columns:%d expect:0x%x  actual:0x%x\n"), 
+                                LogMsgEx(fpLog, NONE, "columns:%d expect:0x%x  actual:0x%x\n", 
                                                     numCol + 1, crc, crc1);
                                 if(crc != crc1){
                                     LOG_HEAD(fpLog);
-                                    LogMsgEx(fpLog, NONE, _T("columns:%d check crc fail, expect:0x%x  actual:0x%x\n"), 
+                                    LogMsgEx(fpLog, NONE, "columns:%d check crc fail, expect:0x%x  actual:0x%x\n", 
                                                     numCol + 1, crc, crc1);
                                     ret = -1;
                                 }
@@ -2217,7 +2570,7 @@ int loadLobUpdate(sLoadParamInfo *pLoadParam)
     }
     else{
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("No lob columns found to be updated.\n"));
+        LogMsgEx(fpLog, NONE, "No lob columns found to be updated.\n");
     }
 LOAD_LOB_UPDATE_FAIL: 
 
@@ -2238,12 +2591,14 @@ int loadRowset(sLoadParamInfo *pLoadParam)
     //linux:It may be a bug that you have to define this variable to complete the test.
     SQLUSMALLINT mpParamStatus[2] = {0};
 #endif
-    SQLINTEGER iParamsProcessed = 0;
+    SQLULEN iParamsProcessed = 0;
     SQLLEN RowsFetched = 0;
     SQLLEN nBindOffset = 0;
     SQLINTEGER i, numCol, cols;
     int beginVal = 0;
-    TCHAR szBuf[256] = {0};
+    char szBuf[512] = {0};
+    char szTmp[256] = {0};
+    TCHAR szQuery[256] = {0};
     int totalRows = 0;
     int totalInsert;
     SQLLEN len;
@@ -2254,17 +2609,22 @@ int loadRowset(sLoadParamInfo *pLoadParam)
     int lobSize = 0;
     FILE *fpBlob = NULL;
     unsigned int crc = 0;
-    TCHAR szCrc[10] = {0};
+    unsigned char szCrc[10] = {0};
     lobSize = 0;
+    SQLSMALLINT lobCType = SQL_C_TCHAR;
+    SQLLEN lenLob = 0, dataTypeLob = SQL_NTS;
+    char szCharset[32] = {0};
     
     FILE *fpLog = pLoadParam->fpLog;
     TestInfo mTestInfo;
     sBindParamStruct mBindParam;
     sBindParamAttr mBindParamAttr;
+    loadResult mloadResult;
     
     memset(&mBindParam, 0, sizeof(mBindParam));
     memset(&mBindParamAttr, 0, sizeof(mBindParamAttr));
     memcpy(&mTestInfo, &pLoadParam->mTestInfo, sizeof(TestInfo));
+    memset(&mloadResult, 0, sizeof(mloadResult));
     //init
     mBindParamAttr.inputOutputType = pLoadParam->inputOutputType;
     mBindParamAttr.totalCols = pLoadParam->mTable.columNum;
@@ -2276,56 +2636,69 @@ int loadRowset(sLoadParamInfo *pLoadParam)
         mBindParamAttr.actualDataSize[cols][0] = pLoadParam->mTable.actualDataSize[cols][0];
         mBindParamAttr.actualDataSize[cols][1] = pLoadParam->mTable.actualDataSize[cols][1];
         mBindParamAttr.lenType[cols] = pLoadParam->lenType[cols];
+        mBindParamAttr.paraValueLen[cols] = pLoadParam->mTable.paraValueLen[cols];
+        sprintf(mBindParamAttr.szColName[cols], pLoadParam->mTable.szColName[cols]);
     }
     mBindParamAttr.isLobTable = pLoadParam->mTable.isLobTable;
     mBindParamAttr.isLobFile = pLoadParam->mTable.isLobFile;
-    _stprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szLobFile, "%s", pLoadParam->mTable.szLobFile);
+    sprintf(mBindParamAttr.szCharsetOfFile, "%s", pLoadParam->mTable.szCharsetOfLobFile);
     mBindParamAttr.numLobCols = pLoadParam->mTable.numLobCols;
     memcpy(mBindParamAttr.idLobCols, pLoadParam->mTable.idLobCols, sizeof(mBindParamAttr.idLobCols));
     if(mBindParamAttr.isLobTable){
         lobSize = calcFileSize(mBindParamAttr.szLobFile);
+        getFileEncoding(mBindParamAttr.szLobFile, szCharset);
+        if(strcmp(szCharset, ENCODING_UCS2_BIG_ENDIAN) == 0){
+            lobSize -= 2;
+        }
+        else if(strcmp(szCharset, ENCODING_UCS2_LITTLE_ENDIAN) == 0){
+            lobSize -= 2;
+        }
+        else if(strcmp(szCharset, ENCODING_UTF8) == 0){
+            lobSize -= 3;
+        }
     }
     if(mBindParamAttr.totalCols >= CONFIG_SQL_COLUMNS_MAX){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("The column width defined by the table is out of range. The largest column value is %d\n"), CONFIG_SQL_COLUMNS_MAX);
+        LogMsgEx(fpLog, NONE, "The column width defined by the table is out of range. The largest column value is %d\n", CONFIG_SQL_COLUMNS_MAX);
         return -1;
     }
     for(numCol = 0; numCol < mBindParamAttr.totalCols; numCol++){
         if(mBindParamAttr.actualDataSize[numCol][0] > 16777216){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE, _T("The data loaded is too large and the maximum value is %d.Please use \"LOBUPDATE\" mode.\n"), 16777216);
+            LogMsgEx(fpLog, NONE, "The data loaded is too large and the maximum value is %d.Please use \"LOBUPDATE\" mode.\n", 16777216);
             return -1;
         }
     }
     pParamStatus = (SQLUSMALLINT *)calloc(1, sizeof(SQLUSMALLINT) * (pLoadParam->batchSize + 1));
     if(pParamStatus == NULL){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("prepare bind parameter data fail. line %d\n"));
+        LogMsgEx(fpLog, NONE, "prepare bind parameter data fail. line %d\n");
         return -1;
     }
     if(newBindParamStruct(mBindParamAttr, &mBindParam, pLoadParam->batchSize) != 0){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("prepare bind parameter data fail. line %d\n"));
+        LogMsgEx(fpLog, NONE, "prepare bind parameter data fail. line %d\n");
         if(pParamStatus) free(pParamStatus);
         return -1;
     }
     
-    LogMsgEx(fpLog, TIME_STAMP, _T("Prepare load......\n"));
-    LogMsgEx(fpLog, TIME_STAMP, _T("type:%s begin value:%d batch size:%d total batch:%d\n"),
+    LogMsgEx(fpLog, TIME_STAMP, "Prepare load......\n");
+    LogMsgEx(fpLog, TIME_STAMP, "type:%s begin value:%d batch size:%d total batch:%d\n",
                                     pLoadParam->szInsertType,
                                     pLoadParam->beginVal,
                                     pLoadParam->batchSize,
                                     pLoadParam->totalBatch
                                     );
-    _stprintf(szBuf, _T("DSN=%s;UID=%s;PWD=%s;%s"), 
+    sprintf(szBuf, "DSN=%s;UID=%s;PWD=%s;%s", 
                         mTestInfo.DataSource, 
                         mTestInfo.UserID, 
                         mTestInfo.Password, 
                         pLoadParam->szConnStr);
-    LogMsgEx(fpLog, NONE, _T("%s\n"), szBuf);
+    LogMsgEx(fpLog, NONE, "%s\n", szBuf);
     if(!FullConnectWithOptionsEx(&mTestInfo, CONNECT_ODBC_VERSION_3, pLoadParam->szConnStr, fpLog)){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("connect fail.\n"));
+        LogMsgEx(fpLog, NONE, "connect fail.\n");
 		LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         deleteBindParamStruct(&mBindParam);
         if(pParamStatus) free(pParamStatus);
@@ -2336,12 +2709,12 @@ int loadRowset(sLoadParamInfo *pLoadParam)
 
     retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt);
     if (!SQL_SUCCEEDED(retcode)){
-        LogMsgEx(fpLog, NONE, _T("SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n"));
-        LogMsgEx(fpLog, NONE,_T("Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n"));
+        LogMsgEx(fpLog, NONE, "SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &hstmt) fail.\n");
+        LogMsgEx(fpLog, NONE,"Try SQLAllocStmt((SQLHANDLE)hdbc, &hstmt)\n");
         retcode = SQLAllocStmt((SQLHANDLE)hdbc, &hstmt);
         if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO)){
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE,_T("SQLAllocStmt hstmt fail\n"));
+            LogMsgEx(fpLog, NONE,"SQLAllocStmt hstmt fail\n");
             FullDisconnectEx(fpLog, &mTestInfo);
             deleteBindParamStruct(&mBindParam);
             if(pParamStatus) free(pParamStatus);
@@ -2352,12 +2725,13 @@ int loadRowset(sLoadParamInfo *pLoadParam)
     addInfoSessionEx(hstmt, fpLog);
 
     for(i = 0; i < CONFIG_NUM_CQD_SIZE; i++){
-        if(_tcslen(pLoadParam->mTable.szCqd[i]) > 0){
-            LogMsgEx(fpLog, NONE, _T("%s\n"), pLoadParam->mTable.szCqd[i]);
-            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)pLoadParam->mTable.szCqd[i], SQL_NTS);
+        if(strlen(pLoadParam->mTable.szCqd[i]) > 0){
+            LogMsgEx(fpLog, NONE, "%s\n", pLoadParam->mTable.szCqd[i]);
+            charToTChar(pLoadParam->mTable.szCqd[i], szQuery);
+            retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szQuery, SQL_NTS);
             if(retcode != SQL_SUCCESS){
                 LOG_HEAD(fpLog);
-                LogMsgEx(fpLog, NONE, _T("set cqd fail !\n"));
+                LogMsgEx(fpLog, NONE, "set cqd fail !\n");
                 LogAllErrorsEx(fpLog, henv, hdbc, hstmt); 
             }
         }
@@ -2365,25 +2739,81 @@ int loadRowset(sLoadParamInfo *pLoadParam)
             break;
         }
     }
-    LogMsgEx(fpLog, NONE, _T("SQLPrepare -- > SQLBindParameter --> SQLExecute.\n"));
-    _stprintf(szBuf, _T("%s INTO %s VALUES("), 
+    LogMsgEx(fpLog, NONE, "SQLPrepare -- > SQLBindParameter --> SQLExecute.\n");
+    if(strcmp(pLoadParam->szInsertType, "INSERT") == 0 ||
+        strcmp(pLoadParam->szInsertType, "insert") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPSERT") == 0 ||
+        strcmp(pLoadParam->szInsertType, "upsert") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPSERT USING LOAD") == 0 ||
+        strcmp(pLoadParam->szInsertType, "upsert using load") == 0
+        ){
+        sprintf(szBuf, "%s INTO %s VALUES(", 
                         pLoadParam->szInsertType, 
                         pLoadParam->mTable.szTableName);
-    for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
-    {
-        _tcscat(szBuf, _T("?"));
-        if(cols < (mBindParamAttr.totalCols - 1))
+        for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
         {
-            _tcscat(szBuf, _T(","));
+            strcat(szBuf, "?");
+            if(cols < (mBindParamAttr.totalCols - 1))
+            {
+                strcat(szBuf, ",");
+            }
         }
+        strcat(szBuf, ")");
     }
-    _tcscat(szBuf, _T(")"));
-    LogMsgEx(fpLog, NONE, _T("SQLPrepare(hstmt, \"%s\", SQL_NTS)\n"), szBuf);
+    else if(strcmp(pLoadParam->szInsertType, "UPDATE") == 0 ||
+        strcmp(pLoadParam->szInsertType, "update") == 0
+        ){
+        sprintf(szBuf, "UPDATE %s set ", pLoadParam->szTable);
+        for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
+        {
+            memset(szTmp, 0, sizeof(szTmp));
+            sprintf(szTmp, "%s=?", mBindParamAttr.szColName[cols]);
+            if(cols < (mBindParamAttr.totalCols - 1))
+            {
+                strcat(szTmp, ",");
+            }
+            else{
+                if(strlen(pLoadParam->szInsertWhere) > 0)
+                    strcat(szTmp, "  ");
+            }
+            strcat(szBuf, szTmp);
+        }
+        strcat(szBuf, pLoadParam->szInsertWhere);
+    }
+    else if(strcmp(pLoadParam->szInsertType, "DELETE") == 0 ||
+        strcmp(pLoadParam->szInsertType, "delete") == 0
+        ){
+        sprintf(szBuf, "DELETE FROM %s WHERE ", pLoadParam->szTable);
+        for(cols = 0; cols < mBindParamAttr.totalCols; cols++)
+        {
+            sprintf(szTmp, "%s=?", mBindParamAttr.szColName[cols]);
+            if(cols < (mBindParamAttr.totalCols - 1))
+            {
+                strcat(szTmp, ",");
+            }
+            else{
+                if(strlen(pLoadParam->szInsertWhere) > 0)
+                    strcat(szTmp, "  ");
+            }
+            strcat(szBuf, szTmp);
+        }
+        strcat(szBuf, pLoadParam->szInsertWhere);
+    }
+    else{
+        LOG_HEAD(fpLog);
+        LogMsgEx(fpLog, NONE,"Unknown insertion type:%s\n", pLoadParam->szInsertType);
+        FullDisconnectEx(fpLog, &mTestInfo);
+        deleteBindParamStruct(&mBindParam);
+        if(pParamStatus) free(pParamStatus);
+        return -1;
+    }
+    sprintf(mloadResult.szQuery, "%s", szBuf);
+    LogMsgEx(fpLog, NONE, "SQLPrepare(hstmt, \"%s\", SQL_NTS)\n", szBuf);
     retcode = SQLPrepare(hstmt, (SQLTCHAR *)szBuf , SQL_NTS);
     if (!SQL_SUCCEEDED(retcode))
     {
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLPrepare  fail.\n"));
+        LogMsgEx(fpLog, NONE, "SQLPrepare  fail.\n");
         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto LOAD_ROWSET_FAIL;
@@ -2395,7 +2825,7 @@ int loadRowset(sLoadParamInfo *pLoadParam)
    
     if (!SQL_SUCCEEDED(retcode))
     {
-        LogMsgEx(fpLog, NONE, _T("SQLSetStmtAttr  fail.\n"));
+        LogMsgEx(fpLog, NONE, "SQLSetStmtAttr  fail.\n");
         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto LOAD_ROWSET_FAIL;
@@ -2405,17 +2835,26 @@ int loadRowset(sLoadParamInfo *pLoadParam)
         for(i = 0; i < mBindParamAttr.numLobCols; i++){
             if(numCol == pLoadParam->mTable.idLobCols[i]){
                 isBlobCol = (pLoadParam->mTable.isLobTable == TRUE) ? TRUE : FALSE;
+                lobCType = pLoadParam->mTable.sqlCType[numCol];
+                if(lobSize > 0) lenLob = lobSize;
+                else lenLob = pLoadParam->mTable.actualDataSize[numCol][0];
                 break;
             }
         }
-        if(mBindParamAttr.actualDataSize[numCol][0] <= -1){
+        if(mBindParamAttr.actualDataSize[numCol][0] == SQL_NULL_DATA){
             *mBindParam.pDataLen[numCol] = SQL_NULL_DATA;
+            if(isBlobCol == TRUE) dataTypeLob = SQL_NULL_DATA;
         }
         else if((isBlobCol) && (lobSize > 0)){
             /*if(lobSize > mBindParamAttr.columnSize[numCol]){
                 lobSize = mBindParamAttr.columnSize[numCol];
             }*/
             *mBindParam.pDataLen[numCol] = lobSize;
+            dataTypeLob = lobSize;
+        }
+        else if((isBlobCol) && (mBindParamAttr.actualDataSize[numCol][0] >= 0)){
+            *mBindParam.pDataLen[numCol] = (mBindParamAttr.paraValueLen[numCol] == SQL_DEFAULT) ? mBindParamAttr.actualDataSize[numCol][0] : SQL_NTS;
+            dataTypeLob = (mBindParamAttr.paraValueLen[numCol] == SQL_DEFAULT) ? 0 : SQL_NTS;
         }
         else{
             *mBindParam.pDataLen[numCol] = SQL_NTS;
@@ -2423,43 +2862,61 @@ int loadRowset(sLoadParamInfo *pLoadParam)
     }
     if(bindLoadParam(hstmt, &mBindParamAttr, &mBindParam, fpLog) != 0){
         LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("Call SQLBindParameter fail.\n"));
+        LogMsgEx(fpLog, NONE, "Call SQLBindParameter fail.\n");
         LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
         ret = -1;
         goto LOAD_ROWSET_FAIL;
     }
-    LogMsgEx(fpLog, NONE, _T("Start rowset...\n"));
+    LogMsgEx(fpLog, NONE, "Start rowset...\n");
+    
     beginVal = pLoadParam->beginVal;
     totalInsert = 0;
     for(i = 0; i < pLoadParam->totalBatch; i++, beginVal+=pLoadParam->batchSize)
     {
-        if((i < 3000) || ((i > 3000) && (i % 1000 == 0))){
-            LogMsgEx(fpLog, NONE, _T("num of batch %d\n"), i + 1);
-        }
-        setBindParamData(mBindParamAttr, &mBindParam, beginVal, pLoadParam->batchSize, fpLog);
+        setBindParamData(mBindParamAttr, 
+                        &mBindParam, 
+                        beginVal, 
+                        pLoadParam->batchSize, 
+                        (i == 0) ? fpLog : NULL);
         //printBindData(mBindParamAttr, &mBindParam, pLoadParam->batchSize);
-        LogMsgEx(fpLog, NONE, _T("SQLExecute(hstmt)\n"));
+        if(i == 0) LogMsgEx(fpLog, NONE, "SQLExecute(hstmt)\n");
         gettimeofday(&tv1,NULL);
         retcode = SQLExecute(hstmt);
         if (retcode != SQL_SUCCESS)
         {
             LOG_HEAD(fpLog);
-            LogMsgEx(fpLog, NONE, _T("SQLExecute fail\n"));
+            LogMsgEx(fpLog, NONE, "SQLExecute fail\n");
             LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
             ret = -1;
-            break;
         }
         gettimeofday(&tv2,NULL);
         exeTimes = (tv2.tv_sec*1000 + tv2.tv_usec/1000) - (tv1.tv_sec*1000 + tv1.tv_usec/1000);
-        LogMsgEx(fpLog, NONE, _T("SQLExecute rowset: insert:%s table:%s %d (ms) batch size:%d num:%d\n"), 
-                                                                            pLoadParam->szInsertType,
-                                                                            pLoadParam->mTable.szTableName,
-                                                                            exeTimes, 
-                                                                            pLoadParam->batchSize, 
-                                                                            i);
+
+        mloadResult.row = beginVal;
+        mloadResult.beginVal = beginVal;
+        if(dataTypeLob == SQL_NULL_DATA) sprintf(mloadResult.szDataType, "%s", "SQL_NULL_DATA");
+        else if(dataTypeLob == SQL_NTS) sprintf(mloadResult.szDataType, "%s", "SQL_NTS");
+        else if((dataTypeLob == 0) && (lobSize == 0)) sprintf(mloadResult.szDataType, "%s", "string");
+        else if(dataTypeLob > 0) sprintf(mloadResult.szDataType, "%s(%s)", "hex", szCharset);
+        else sprintf(mloadResult.szDataType, "%s", "SQL_NTS");
+        mloadResult.batchSize = pLoadParam->batchSize;
+        mloadResult.numOfBatch = i;
+        sprintf(mloadResult.szInsertType, "%s", pLoadParam->szInsertType);
+        sprintf(mloadResult.szTableName, "%s", pLoadParam->mTable.szTableName);
+        mloadResult.timeInit = 0;
+        mloadResult.timeExecute = exeTimes;
+        mloadResult.sizeLob = lenLob;
+        if(dataTypeLob == SQL_NULL_DATA) sprintf(mloadResult.szParaSQLBind, "%s", "SQL_NULL_DATA");
+        else if(dataTypeLob == SQL_NTS) sprintf(mloadResult.szParaSQLBind, "%s", "SQL_NTS");
+        else if((dataTypeLob == 0) && (lobSize == 0)) sprintf(mloadResult.szParaSQLBind, "%s", "string");
+        else sprintf(mloadResult.szParaSQLBind, "%s", "SQL_NTS");
+        mloadResult.sqlCType = lobCType;
+        mloadResult.ret = ret;
+        putLoadResultset(fpLog, &mloadResult, (i == 0) ? TRUE : FALSE);
+        if(ret != 0) break;
         totalInsert += pLoadParam->batchSize;
     }
-    LogMsgEx(fpLog, NONE, _T("Total insert rows: %d\n"), totalInsert);
+    LogMsgEx(fpLog, NONE, "Total insert rows: %d\n", totalInsert);
     if(totalInsert == 0){
         ret = -1;
         goto LOAD_ROWSET_FAIL;
@@ -2468,38 +2925,48 @@ int loadRowset(sLoadParamInfo *pLoadParam)
 
     SQLFreeStmt(hstmt, SQL_UNBIND);
     SQLFreeStmt(hstmt, SQL_CLOSE);
-   
-    LogMsgEx(fpLog, NONE, _T("check total insert\n"));
-    totalRows = 0;
-    retcode = SQLBindCol(hstmt, 1, SQL_C_ULONG, &totalRows, sizeof(totalRows), &len);
-    if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
-    {
-        LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLBindCol fail.\n"));
-        LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
-        ret = -1;
-        goto LOAD_ROWSET_FAIL;
+
+    if(strcmp(pLoadParam->szInsertType, "INSERT") == 0 ||
+        strcmp(pLoadParam->szInsertType, "insert") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPSERT") == 0 ||
+        strcmp(pLoadParam->szInsertType, "upsert") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPSERT USING LOAD") == 0 ||
+        strcmp(pLoadParam->szInsertType, "upsert using load") == 0 ||
+        strcmp(pLoadParam->szInsertType, "UPDATE") == 0 ||
+        strcmp(pLoadParam->szInsertType, "update") == 0
+        ){
+        LogMsgEx(fpLog, NONE, "check total insert\n");
+        totalRows = 0;
+        retcode = SQLBindCol(hstmt, 1, SQL_C_ULONG, &totalRows, sizeof(totalRows), &len);
+        if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
+        {
+            LOG_HEAD(fpLog);
+            LogMsgEx(fpLog, NONE, "SQLBindCol fail.\n");
+            LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
+            ret = -1;
+            goto LOAD_ROWSET_FAIL;
+        }
+        sprintf(szBuf, "SELECT COUNT(*) FROM %s\n", pLoadParam->mTable.szTableName);
+        LogMsgEx(fpLog, NONE,"%s\n", szBuf);
+        retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szBuf, SQL_NTS);
+        if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
+        {
+            LOG_HEAD(fpLog);
+            LogMsgEx(fpLog, NONE, "SQLExecDirect fail.\n");
+            LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
+            ret = -1;
+            goto LOAD_ROWSET_FAIL;
+        }
+        SQLFetch(hstmt);
+        if(totalRows < (pLoadParam->totalBatch * pLoadParam->batchSize))
+        {
+            ret = -1;
+        }
+        LogMsgEx(fpLog, NONE, "%s: expect rows:%d actual rows:%d\n", 
+                    (ret == 0) ? "Test pass" : "Test fail",
+                    (pLoadParam->totalBatch * pLoadParam->batchSize), 
+                    totalRows);
     }
-    _stprintf(szBuf, _T("SELECT COUNT(*) FROM %s\n"), pLoadParam->mTable.szTableName);
-    LogMsgEx(fpLog, NONE,_T("%s\n"), szBuf);
-    retcode = SQLExecDirect(hstmt, (SQLTCHAR*)szBuf, SQL_NTS);
-    if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
-    {
-        LOG_HEAD(fpLog);
-        LogMsgEx(fpLog, NONE, _T("SQLExecDirect fail.\n"));
-        LogAllErrorsEx(fpLog, henv, hdbc, hstmt);
-        ret = -1;
-        goto LOAD_ROWSET_FAIL;
-    }
-    SQLFetch(hstmt);
-    if(totalRows < (pLoadParam->totalBatch * pLoadParam->batchSize))
-    {
-        ret = -1;
-    }
-    LogMsgEx(fpLog, NONE, _T("%s: expect rows:%d actual rows:%d\n"), 
-                (ret == 0) ? _T("Test pass") : _T("Test fail"),
-                (pLoadParam->totalBatch * pLoadParam->batchSize), 
-                totalRows);
 
 LOAD_ROWSET_FAIL:
     FullDisconnectEx(fpLog, &mTestInfo);
@@ -2536,7 +3003,7 @@ int loadData(sLoadParamInfo *pLoadParam)
     }
     else{
         LOG_HEAD(pLoadParam->fpLog);
-        LogMsgEx(pLoadParam->fpLog, NONE, _T("Unknow load type. \n"));
+        LogMsgEx(pLoadParam->fpLog, NONE, "Unknow load type. \n");
     }
     return ret;
 }

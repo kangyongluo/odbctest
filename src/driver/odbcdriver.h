@@ -39,7 +39,7 @@ typedef struct
 
 typedef struct
 {
-    TCHAR szRgbDesc[128];
+    char szRgbDesc[128];
     SQLSMALLINT pcbDesc;
     SQLSMALLINT pfDesc;
     SQLLEN len;
@@ -47,18 +47,18 @@ typedef struct
 
 typedef struct
 {
-    TCHAR   szCatalog[128];
-	TCHAR   szSchema[128];
-	TCHAR   szTable[128];
-	TCHAR   szColname[128];
+    char   szCatalog[128];
+	char   szSchema[128];
+	char   szTable[128];
+	char   szColname[128];
 	SWORD oColDataType;
-	TCHAR   szColTypeName[128];
+	char   szColTypeName[128];
 	SQLSMALLINT oColPrec;
 	SQLSMALLINT oColLen;
 	SQLSMALLINT oColScale;
 	SQLSMALLINT oColRadix;
 	SQLSMALLINT oColNullable;
-	TCHAR   szRemark[128];
+	char   szRemark[128];
 }sSQLColumnsInfo;
 
 extern void LogAllErrors(SQLHANDLE henv,
@@ -72,32 +72,32 @@ extern void LogAllErrorsEx(FILE *fpLog,
                   SQLHANDLE hstmt
                   );
 extern TrueFalse FullConnectWithOptions(TestInfo *pTestInfo, int Options);
-extern TrueFalse FullConnectWithOptionsEx(TestInfo *pTestInfo, int Options, TCHAR *connStrEx, FILE *fpLog);
+extern TrueFalse FullConnectWithOptionsEx(TestInfo *pTestInfo, int Options, char *connStrEx, FILE *fpLog);
 extern int FullDisconnectEx(FILE *fpLog, TestInfo *pTestInfo);
 extern int addInfoSessionEx(SQLHSTMT hstmt, FILE *fpLog);
-extern int cleanupTableData(TestInfo *pTestInfo, TCHAR *szTableName, FILE *fpLog);
+extern int cleanupTableData(TestInfo *pTestInfo, char *szTableName, FILE *fpLog);
 
 //SQLColumns
 extern int SQLColumnsEx(TestInfo *pTestInfo,
                             sTestTableInfo *psTestTableInfo,
-                            TCHAR *pCatalog, 
-                            TCHAR *pSchema, 
-                            TCHAR *pTable, 
-                            TCHAR *pColumnName,
+                            char *pCatalog, 
+                            char *pSchema, 
+                            char *pTable, 
+                            char *pColumnName,
                             FILE *fpLog);
 extern int exeSQLColumns(SQLHANDLE hstmt,
                         sSQLColumnsInfo *pColInfo,
-                        TCHAR *pCatalog, 
-                        TCHAR *pSchema, 
-                        TCHAR *pTable, 
-                        TCHAR *pColumnName);
+                        char *pCatalog, 
+                        char *pSchema, 
+                        char *pTable, 
+                        char *pColumnName);
 //SQLTables
 extern int SQLTablesEx(TestInfo *pTestInfo,
                         sTestTableInfo *psTestTableInfo,
-                        TCHAR *pCatalog, 
-                        TCHAR *pSchema, 
-                        TCHAR *pTable, 
-                        TCHAR *pTableType,
+                        char *pCatalog, 
+                        char *pSchema, 
+                        char *pTable, 
+                        char *pTableType,
                         BOOL isView,
                         FILE *fpLog
                         );
